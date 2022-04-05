@@ -11,7 +11,7 @@ env:
   CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
 
 jobs:
-  terragrunt:
+  terraform:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -33,16 +33,11 @@ jobs:
         with:
           terraform_version: 1.1.7
 
-      - name: Install Terragrunt
-        uses: woffenden/github-actions/install-terragrunt@alpha
-        with:
-          terragrunt_version: v0.36.6
+      - name: Initialise Terraform
+        run: terraform init -upgrade
 
-      - name: Initialise Terragrunt
-        run: terragrunt init -upgrade
+      - name: Terraform Plan
+        run: terraform plan
 
-      - name: Terragrunt Plan
-        run: terragrunt plan
-
-      - name: Terragrunt Apply
-        run: terragrunt apply -auto-approve
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
