@@ -1,0 +1,41 @@
+---
+name: "aws-root-account-iam"
+
+on:
+  push:
+    branches:
+      - 'develop'
+
+env:
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  terragrunt:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/aws/accounts/root/iam
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Terraform
+        uses: woffenden/github-actions/install-terraform@alpha
+        with:
+          terraform_version: 1.1.7
+
+      - name: Install Terragrunt
+        uses: woffenden/github-actions/install-terragrunt@alpha
+        with:
+          terragrunt_version: v0.36.6
+
+      - name: Initialise Terragrunt
+        run: terragrunt init -upgrade
+
+      - name: Terragrunt Plan
+        run: terragrunt plan
+
+      - name: Terragrunt Apply
+        run: terragrunt apply -auto-approve
