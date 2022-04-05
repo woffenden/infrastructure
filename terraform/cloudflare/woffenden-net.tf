@@ -98,5 +98,5 @@ resource "cloudflare_record" "woffenden_net_ingress_kube_int_bny" {
   zone_id = module.woffenden_net_cloudflare_zone.id
   name    = "ingress.kube.int.bny"
   type    = "A"
-  value   = "10.100.0.10"
+  value   = "10.100.0.100"
 }
