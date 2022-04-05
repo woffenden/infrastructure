@@ -21,7 +21,7 @@ jobs:
       - name: Install Terragrunt
         uses: woffenden/github-actions/install-terragrunt@alpha
         with:
-          terraform_version: v0.36.6
+          terragrunt_version: v0.36.6
 
       - name: Test Terraform
         run: terraform version
