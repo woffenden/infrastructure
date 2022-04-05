@@ -86,3 +86,17 @@ resource "cloudflare_record" "woffenden_net_bny" {
   type    = "CNAME"
   value   = cloudflare_record.woffenden_net_plusdsl_ext_bny.hostname
 }
+
+resource "cloudflare_record" "woffenden_net_api_kube_int_bny" {
+  zone_id = module.woffenden_net_cloudflare_zone.id
+  name    = "api.kube.int.bny"
+  type    = "CNAME"
+  value   = cloudflare_record.woffenden_net_nuc01_int_bny.hostname
+}
+
+resource "cloudflare_record" "woffenden_net_ingress_kube_int_bny" {
+  zone_id = module.woffenden_net_cloudflare_zone.id
+  name    = "ingress.kube.int.bny"
+  type    = "A"
+  value   = "10.100.0.10"
+}
