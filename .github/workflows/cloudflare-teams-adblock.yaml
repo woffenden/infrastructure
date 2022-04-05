@@ -2,16 +2,15 @@
 name: "cloudflare-teams-adblock"
 
 on:
-  push:
-    branches:
-      - 'develop'
+  schedule:
+    - cron: '0 12 * * 1'
 
 env:
   CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
   CLOUDFLARE_API_TOKEN_TEAMS_ADBLOCK: ${{ secrets.CLOUDFLARE_API_TOKEN_TEAMS_ADBLOCK }}
 
 jobs:
-  terragrunt:
+  run-script:
     runs-on: ubuntu-latest
     defaults:
       run:
