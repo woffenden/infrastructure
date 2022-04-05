@@ -1,0 +1,32 @@
+#!/bin/sh
+
+##################################################
+# {{ ansible_managed }}
+##################################################
+
+# Variables
+export CONTAINER_IMAGE="ghcr.io/jacobwoffenden/doh-proxy:latest"
+export CONTAINER_NAME="cloudflare-teams-dns"
+
+export CLOUDFLARE_ZERO_TRUST_ID="{{ cloudflare_zero_trust_id }}"
+
+# Script
+echo "Pulling [ ${CONTAINER_IMAGE} ]"
+podman pull ${CONTAINER_IMAGE}
+
+echo "Stopping [ ${CONTAINER_NAME} ]"
+podman stop ${CONTAINER_NAME} 2>/dev/null 
+
+echo "Removing [ ${CONTAINER_NAME} ]"
+podman rm ${CONTAINER_NAME} 2>/dev/null 
+
+echo "Starting [ ${CONTAINER_NAME} ]"
+podman run \
+  --name ${CONTAINER_NAME} \
+  --detach \
+  --privileged \
+  --restart always \
+  --network dns \
+  --env PROVIDER="cloudflare-zero-trust" \
+  --env CLOUDFLARE_ZERO_TRUST_ID="${CLOUDFLARE_ZERO_TRUST_ID}" \
+  ${CONTAINER_IMAGE}

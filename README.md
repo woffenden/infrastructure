@@ -6,6 +6,10 @@
 ansible-galaxy collection install --force --requirements-file collections/requirements.yaml
 ```
 
+```bash
+ansible-vault encrypt_string --name 'secret_name' 'foobar' 
+```
+
 ---
 
 ## Terraform
