@@ -1,0 +1,19 @@
+---
+name: "composite-test"
+
+on:
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Terraform
+        uses: woffenden/github-actions/install-terraform@alpha
+        with:
+          terraform-version: 1.1.7
