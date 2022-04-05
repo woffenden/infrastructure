@@ -1,0 +1,9 @@
+# Ansible
+vault-password
+
+# Terraform / Terragrunt
+.terraform
+.terraform.lock.hcl
+terraform-backend.tf
+terraform-global-variables.tf
+terraform-provider.tf
