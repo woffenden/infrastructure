@@ -1,0 +1,34 @@
+---
+name: "dispatch-test"
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        description: 'Environment to deploy'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+        default: 'development'
+      app_version:
+        required: true
+        description: 'Version of application to deploy'
+        type: string
+        default: '1.0.0'
+      migrate_database:
+        required: true
+        description: 'Should the database be migrated?'
+        type: boolean
+        default: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do a thing
+        run: |
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Application Version: ${{ github.event.inputs.app_version }}"
