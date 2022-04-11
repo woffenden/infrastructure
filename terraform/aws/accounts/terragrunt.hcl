@@ -30,12 +30,12 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 4.4.0"
+      version = "~> 4.0"
     }
   }
 }
 
-variable woffenden_aws_iam_roles {
+variable "woffenden_aws_iam_roles" {
   type = map(string)
 }
 
