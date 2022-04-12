@@ -4,7 +4,6 @@ name: "cloudflare-teams-adblock"
 on:
   schedule:
     - cron: '0 12 * * 1'
-on:
   workflow_dispatch:
 
 env:
