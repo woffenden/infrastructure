@@ -1,0 +1,296 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: AWS Root Account Bootstrap
+
+Parameters:
+  AccountOwner:
+    Description: 'Account Owner (account-owner)'
+    Type: String
+    Default: 'ddat.aws@woffenden.io'
+  BusinessUnit:
+    Description: 'Business Unit (business-unit)'
+    Type: String
+    Default: 'platforms-infrastructure'
+  TechnicalContact:
+    Description: 'Technical Contact (technical-contact)'
+    Type: String
+    Default: 'ddat.aws@woffenden.io'
+  SourceCode:
+    Description: 'Source Code (source-code)'
+    Type: String
+    Default: 'https://github.com/jacobwoffenden/woffenden.net'
+  IsProduction:
+    Description: 'Production (is-production)'
+    Type: String
+    Default: 'true'
+  Environment:
+    Description: 'Environment Name (environment)'
+    Type: String
+    Default: 'root-account'
+
+Resources:
+  AutomationServiceGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: automation-group
+
+  AutomationServiceAccountUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: automation-service-account
+      Groups:
+        - !Ref AutomationServiceGroup
+      Tags:
+        - Key: account-owner
+          Value: !Ref AccountOwner
+        - Key: business-unit
+          Value: !Ref BusinessUnit
+        - Key: technical-contact
+          Value: !Ref TechnicalContact
+        - Key: source-code
+          Value: !Ref SourceCode
+        - Key: is-production
+          Value: !Ref IsProduction
+        - Key: environment
+          Value: !Ref Environment
+
+  AutomationServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: automation-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AllowAccountDelegation
+            Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action:
+              - sts:AssumeRole
+            Condition:
+              StringNotLike:
+                "aws:UserAgent": "console.amazonaws.com"
+          - Sid: AllowGitHubOIDC
+            Effect: Allow
+            Principal:
+              Federated: !Ref GitHubOIDCProvider
+            Action:
+              - sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringLike:
+                token.actions.githubusercontent.com:sub: repo:woffenden/infrastructure:*
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      Tags:
+        - Key: account-owner
+          Value: !Ref AccountOwner
+        - Key: business-unit
+          Value: !Ref BusinessUnit
+        - Key: technical-contact
+          Value: !Ref TechnicalContact
+        - Key: source-code
+          Value: !Ref SourceCode
+        - Key: is-production
+          Value: !Ref IsProduction
+        - Key: environment
+          Value: !Ref Environment
+
+  AutomationServiceManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: automation-policy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AssumeAutomationServiceRole
+            Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Resource:
+              - !GetAtt AutomationServiceRole.Arn
+          - Sid: AllowTerraformDynamoDBActions
+            Effect: Allow
+            Action:
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:DeleteItem
+              - dynamodb:DescribeTable
+            Resource:
+              - !GetAtt TerraformDynamoDBTable.Arn
+          - Sid: AllowTerraformS3BucketActions
+            Effect: Allow
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetBucketVersioning'
+            Resource:
+              - !Sub '${TerraformS3Bucket.Arn}'
+          - Sid: AllowTerraformS3ObjectActions
+            Effect: Allow
+            Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+            Resource:
+              - !Sub '${TerraformS3Bucket.Arn}/*'
+          - Sid: AllowTerraformKMSActions
+            Effect: Allow
+            Action:
+              - kms:DescribeKey
+              - kms:Encrypt
+              - kms:Decrypt
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey
+              - kms:GenerateDataKeyWithoutPlaintext
+            Resource:
+              - !Sub '${TerraformKmsKey.Arn}'
+      Groups:
+        - !Ref AutomationServiceGroup
+
+  TerraformKmsKey:
+    Type: AWS::KMS::Key
+    Properties:
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: '2012-10-17'
+        Id: terraform-kms-policy
+        Statement:
+          - Sid: AllowAccountDelegation
+            Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: kms:*
+            Resource: '*'
+          - Sid: AllowAutomationServiceRole
+            Effect: Allow
+            Principal:
+              AWS:
+                - !GetAtt AutomationServiceRole.Arn
+            Action:
+              - kms:DescribeKey
+              - kms:Encrypt
+              - kms:Decrypt
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey
+              - kms:GenerateDataKeyWithoutPlaintext
+            Resource: '*'
+      Tags:
+        - Key: account-owner
+          Value: !Ref AccountOwner
+        - Key: business-unit
+          Value: !Ref BusinessUnit
+        - Key: technical-contact
+          Value: !Ref TechnicalContact
+        - Key: source-code
+          Value: !Ref SourceCode
+        - Key: is-production
+          Value: !Ref IsProduction
+        - Key: environment
+          Value: !Ref Environment
+
+  TerraformKmsKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: alias/terraform-kms-key
+      TargetKeyId: !Ref TerraformKmsKey
+
+  TerraformS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: woffenden-terraform
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID: !GetAtt TerraformKmsKey.Arn
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: account-owner
+          Value: !Ref AccountOwner
+        - Key: business-unit
+          Value: !Ref BusinessUnit
+        - Key: technical-contact
+          Value: !Ref TechnicalContact
+        - Key: source-code
+          Value: !Ref SourceCode
+        - Key: is-production
+          Value: !Ref IsProduction
+        - Key: environment
+          Value: !Ref Environment
+
+  TerraformS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref TerraformS3Bucket
+      PolicyDocument:
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Action: 's3:*'
+            Principal: '*'
+            Resource: !Sub '${TerraformS3Bucket.Arn}/*'
+            Condition:
+              Bool:
+                "aws:SecureTransport": "false"
+          - Sid: AllowAutomationServiceRoleS3BucketActions
+            Effect: Allow
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetBucketVersioning'
+            Principal:
+              AWS:
+                - !GetAtt AutomationServiceRole.Arn
+            Resource: !Sub '${TerraformS3Bucket.Arn}'
+          - Sid: AllowAutomationServiceRoleS3ObjectActions
+            Effect: Allow
+            Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+            Principal:
+              AWS:
+                - !GetAtt AutomationServiceRole.Arn
+            Resource: !Sub '${TerraformS3Bucket.Arn}/*'
+
+  TerraformDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: terraform
+      BillingMode: "PAY_PER_REQUEST"
+      KeySchema:
+        - AttributeName: "LockID"
+          KeyType: "HASH"
+      AttributeDefinitions:
+        - AttributeName: "LockID"
+          AttributeType: "S"
+      SSESpecification:
+        SSEEnabled: True
+        SSEType: KMS
+        KMSMasterKeyId: !Ref TerraformKmsKeyAlias
+      Tags:
+        - Key: account-owner
+          Value: !Ref AccountOwner
+        - Key: business-unit
+          Value: !Ref BusinessUnit
+        - Key: technical-contact
+          Value: !Ref TechnicalContact
+        - Key: source-code
+          Value: !Ref SourceCode
+        - Key: is-production
+          Value: !Ref IsProduction
+        - Key: environment
+          Value: !Ref Environment
+
+  GitHubOIDCProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ThumbprintList: [ "6938fd4d98bab03faadb97b34396831e3780aea1" ]
+      ClientIdList:
+        - sts.amazonaws.com

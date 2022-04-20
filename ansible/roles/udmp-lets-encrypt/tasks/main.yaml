@@ -1,0 +1,24 @@
+---
+  - name: "Create udm-le directory"
+    ansible.builtin.file:
+      path: /mnt/data/udm-le
+      state: directory
+
+  - name: "Download udm-le release"
+    ansible.builtin.get_url: 
+      url : "https://github.com/kchristensen/udm-le/archive/refs/tags/{{ udm_le_version }}.tar.gz"
+      dest: "/mnt/data/udm-le/{{ udm_le_version }}.tar.gz"
+      mode: 0755
+
+  - name: "Extract udm-le release"
+    ansible.builtin.command: |
+      tar -zxvf /mnt/data/udm-le/{{ udm_le_version }}.tar.gz --strip-components=1 -C /mnt/data/udm-le
+
+  - name: "Create /mnt/data/udm-le/udm-le.env"
+    ansible.builtin.template:
+      src: mnt/data/udm-le/udm-le.env.j2
+      dest: /mnt/data/udm-le/udm-le.env
+
+  - name: "Run udm-le.sh"
+    ansible.builtin.command: |
+      /mnt/data/udm-le/udm-le.sh initial
