@@ -4,7 +4,7 @@ name: "aws-root-iam"
 on:
   workflow_run:
     workflows: ["aws-root-organisation"]
-    branches: [develop]
+    branches: [main]
     types: 
       - completed
 

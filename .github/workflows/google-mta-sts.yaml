@@ -4,7 +4,7 @@ name: "google-mta-sts"
 on:
   push:
     branches:
-      - 'develop'
+      - 'main'
 
 env:
   CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
