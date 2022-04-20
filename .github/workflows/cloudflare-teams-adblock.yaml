@@ -1,0 +1,25 @@
+---
+name: "cloudflare-teams-adblock"
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+
+env:
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  CLOUDFLARE_API_TOKEN_TEAMS_ADBLOCK: ${{ secrets.CLOUDFLARE_API_TOKEN_TEAMS_ADBLOCK }}
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: scripts/cloudflare-teams-adblock
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run Cloudflare Teams AdBlock Script
+        run: |
+          bash run.sh
