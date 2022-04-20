@@ -1,10 +1,12 @@
 ---
-name: "aws-root-account-organisation"
+name: "aws-root-iam"
 
 on:
-  push:
-    branches:
-      - 'develop'
+  workflow_run:
+    workflows: ["aws-root-organisation"]
+    branches: [develop]
+    types: 
+      - completed
 
 env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
@@ -13,23 +15,24 @@ env:
 
 jobs:
   terragrunt:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: terraform/aws/accounts/root/organisation
+        working-directory: terraform/aws/accounts/root/iam
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Terraform
         uses: woffenden/github-actions/install-terraform@alpha
         with:
-          terraform_version: 1.1.7
+          terraform_version: 1.1.8
 
       - name: Install Terragrunt
         uses: woffenden/github-actions/install-terragrunt@alpha
         with:
-          terragrunt_version: v0.36.6
+          terragrunt_version: v0.36.7
 
       - name: Initialise Terragrunt
         run: terragrunt init -upgrade
@@ -39,3 +42,9 @@ jobs:
 
       - name: Terragrunt Apply
         run: terragrunt apply -auto-approve
+
+  on-failure:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'The triggering workflow failed'

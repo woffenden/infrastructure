@@ -4,6 +4,6 @@ vault-password
 # Terraform / Terragrunt
 .terraform
 .terraform.lock.hcl
-terraform-backend.tf
-terraform-global-variables.tf
-terraform-provider.tf
+_terraform-backend.tf
+_terraform-global-variables.tf
+_terraform-provider.tf

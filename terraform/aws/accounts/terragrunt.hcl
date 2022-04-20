@@ -8,7 +8,7 @@ locals {
 remote_state {
   backend = "s3"
   generate = {
-    path      = "terraform-backend.tf"
+    path      = "_terraform-backend.tf"
     if_exists = "overwrite_terragrunt"
   }
   config = {
@@ -23,14 +23,14 @@ remote_state {
 }
 
 generate "provider" {
-  path      = "terraform-provider.tf"
+  path      = "_terraform-provider.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = "~> 4.10"
     }
   }
 }
@@ -50,7 +50,7 @@ EOF
 }
 
 generate "global_variables" {
-  path      = "terraform-global-variables.tf"
+  path      = "_terraform-global-variables.tf"
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 data "aws_region" "current" {}

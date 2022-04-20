@@ -79,7 +79,7 @@ Resources:
               - sts:AssumeRoleWithWebIdentity
             Condition:
               StringLike:
-                token.actions.githubusercontent.com:sub: repo:jacobwoffenden/woffenden.net:*
+                token.actions.githubusercontent.com:sub: repo:woffenden/infrastructure:*
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
       Tags:
