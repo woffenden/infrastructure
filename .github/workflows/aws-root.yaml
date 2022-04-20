@@ -1,10 +1,13 @@
 ---
-name: "aws-root-organisation"
+name: aws-root
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
-      - 'main'
+      - main
 
 env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
@@ -12,7 +15,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  terragrunt:
+  organisation:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -38,4 +41,35 @@ jobs:
         run: terragrunt plan
 
       - name: Terragrunt Apply
+        if: github.ref == 'refs/heads/main'
+        run: terragrunt apply -auto-approve
+
+  iam:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/aws/accounts/root/iam
+    needs: organisation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Terraform
+        uses: woffenden/github-actions/install-terraform@alpha
+        with:
+          terraform_version: 1.1.8
+
+      - name: Install Terragrunt
+        uses: woffenden/github-actions/install-terragrunt@alpha
+        with:
+          terragrunt_version: v0.36.7
+
+      - name: Initialise Terragrunt
+        run: terragrunt init -upgrade
+
+      - name: Terragrunt Plan
+        run: terragrunt plan
+
+      - name: Terragrunt Apply
+        if: github.ref == 'refs/heads/main'
         run: terragrunt apply -auto-approve
