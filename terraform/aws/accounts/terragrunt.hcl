@@ -67,10 +67,7 @@ terraform {
       "plan",
       "apply"
     ]
-
-    arguments = [
-      #"-var-file=${get_parent_terragrunt_dir()}/global.tfvars",
-    ]
+    arguments = []
   }
 }
 
