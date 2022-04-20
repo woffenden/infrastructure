@@ -13,6 +13,8 @@ env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TERRAFORM_VERSION: 1.1.8
+  TERRAGRUNT_VERSION: v0.36.7
 
 jobs:
   organisation:
@@ -24,25 +26,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install Terraform
-        uses: woffenden/github-actions/install-terraform@alpha
+      - name: Terragrunt Deployment
+        uses: woffenden/github-actions/standard-terragrunt-deployment@alpha
         with:
-          terraform_version: 1.1.8
-
-      - name: Install Terragrunt
-        uses: woffenden/github-actions/install-terragrunt@alpha
-        with:
-          terragrunt_version: v0.36.7
-
-      - name: Initialise Terragrunt
-        run: terragrunt init -upgrade
-
-      - name: Terragrunt Plan
-        run: terragrunt plan
-
-      - name: Terragrunt Apply
-        if: github.ref == 'refs/heads/main'
-        run: terragrunt apply -auto-approve
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terragrunt_version: ${{ env.TERRAGRUNT_VERSION }}
 
   iam:
     runs-on: ubuntu-latest
@@ -54,22 +42,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install Terraform
-        uses: woffenden/github-actions/install-terraform@alpha
+      - name: Terragrunt Deployment
+        uses: woffenden/github-actions/standard-terragrunt-deployment@alpha
         with:
-          terraform_version: 1.1.8
-
-      - name: Install Terragrunt
-        uses: woffenden/github-actions/install-terragrunt@alpha
-        with:
-          terragrunt_version: v0.36.7
-
-      - name: Initialise Terragrunt
-        run: terragrunt init -upgrade
-
-      - name: Terragrunt Plan
-        run: terragrunt plan
-
-      - name: Terragrunt Apply
-        if: github.ref == 'refs/heads/main'
-        run: terragrunt apply -auto-approve
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terragrunt_version: ${{ env.TERRAGRUNT_VERSION }}
