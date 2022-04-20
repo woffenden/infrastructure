@@ -118,14 +118,10 @@ resource "aws_iam_group_policy_attachment" "iam_self_serve_mfa_enforcement" {
 
 data "aws_iam_policy_document" "aws_administrator_assume_role" {
   statement {
-    sid = "AwsAdminAssumeRole"
-    actions = [
-      "sts:AssumeRole"
-    ]
-    effect = "Allow"
-    resources = [
-      aws_iam_role.aws_administrator.arn,
-    ]
+    sid       = "AwsAdminAssumeRole"
+    actions   = ["sts:AssumeRole"]
+    effect    = "Allow"
+    resources = [aws_iam_role.aws_administrator.arn]
   }
 }
 
@@ -139,33 +135,29 @@ resource "aws_iam_group_policy_attachment" "aws_administrator" {
   policy_arn = aws_iam_policy.aws_administrator.arn
 }
 
-# ###
+###
 
-# data "aws_iam_policy_document" "maglevlabs_org_admin_assume_role" {
-#   statement {
-#     sid = "AwsAdminAssumeRole"
-#     actions = [
-#       "sts:AssumeRole"
-#     ]
-#     effect = "Allow"
-#     resources = [
-#       "arn:aws:iam::${var.shared_services_account_id}:role/maglevlabs-organisations-admin@role.iam.aws.maglevlabs.com",
-#       "arn:aws:iam::${var.demo_account_id}:role/maglevlabs-organisations-admin@role.iam.aws.maglevlabs.com"
-#     ]
-#   }
-# }
+data "aws_iam_policy_document" "aws_organisation_administrator_assume_role" {
+  statement {
+    sid     = "AwsAdminAssumeRole"
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    /* TODO - Make this exclude the root account id */
+    resources = formatlist("arn:aws:iam::%s:role/organisation-administrator-role", values(var.woffenden_aws_account_ids))
+  }
+}
 
-# resource "aws_iam_policy" "maglevlabs_org_admin" {
-#   name   = "terraform-organisations-admin@policy.iam.aws.maglevlabs.com"
-#   policy = data.aws_iam_policy_document.maglevlabs_org_admin_assume_role.json
-#   path   = "/maglevlabs/"
-# }
+resource "aws_iam_policy" "aws_organisation_administrator" {
+  name   = "aws-organisation-administrator-policy"
+  policy = data.aws_iam_policy_document.aws_organisation_administrator_assume_role.json
+}
 
-# data "aws_iam_group" "terraform_svcacc_group" {
-#   group_name = "terraform@group.iam.aws.maglevlabs.com"
-# }
+resource "aws_iam_group_policy_attachment" "aws_organisation_administrator" {
+  group      = module.group_aws_administrators.name
+  policy_arn = aws_iam_policy.aws_organisation_administrator.arn
+}
 
-# resource "aws_iam_group_policy_attachment" "maglevlabs_org_admin_terraform_svcacc_group" {
-#   group      = data.aws_iam_group.terraform_svcacc_group.group_name
-#   policy_arn = aws_iam_policy.maglevlabs_org_admin.arn
-# }
+resource "aws_iam_group_policy_attachment" "aws_organisation_automation" {
+  group      = "automation-group"
+  policy_arn = aws_iam_policy.aws_organisation_administrator.arn
+}

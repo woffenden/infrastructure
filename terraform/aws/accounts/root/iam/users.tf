@@ -5,8 +5,7 @@ module "user_jacobwoffenden" {
   email_address = "jacob@woffenden.io"
   groups = [
     module.group_all_users.name,
-    module.group_aws_administrators.name,
-    "automation-group"
+    module.group_aws_administrators.name
   ]
 }
 
@@ -15,7 +14,5 @@ module "user_test" {
   enabled       = false
   full_name     = "Test User"
   email_address = "test@woffenden.io"
-  groups = [
-    module.group_offboarded_users.name
-  ]
+  groups = [module.group_offboarded_users.name]
 }
