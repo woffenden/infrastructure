@@ -1,5 +1,5 @@
 ---
-name: cloudflare
+name: google
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ env:
   TERRAFORM_VERSION: 1.1.8
 
 jobs:
-  cloudflare:
+  mta-sts:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,5 +32,5 @@ jobs:
       - name: Terraform Deployment
         uses: woffenden/github-actions/standard-terraform-deployment@alpha
         with:
-          working_directory: terraform/cloudflare
+          working_directory: terraform/google/woffenden/mta-sts
           terraform_version: ${{ env.TERRAFORM_VERSION }}
