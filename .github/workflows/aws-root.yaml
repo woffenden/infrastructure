@@ -19,9 +19,6 @@ env:
 jobs:
   organisation:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: terraform/aws/accounts/root/organisation
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,14 +26,12 @@ jobs:
       - name: Terragrunt Deployment
         uses: woffenden/github-actions/standard-terragrunt-deployment@alpha
         with:
+          working_directory: terraform/aws/accounts/root/organisation
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terragrunt_version: ${{ env.TERRAGRUNT_VERSION }}
 
   iam:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: terraform/aws/accounts/root/iam
     needs: organisation
     steps:
       - name: Checkout
@@ -45,5 +40,6 @@ jobs:
       - name: Terragrunt Deployment
         uses: woffenden/github-actions/standard-terragrunt-deployment@alpha
         with:
+          working_directory: terraform/aws/accounts/root/iam
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terragrunt_version: ${{ env.TERRAGRUNT_VERSION }}
