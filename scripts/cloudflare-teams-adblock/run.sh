@@ -8,7 +8,7 @@ export CF_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID}"
 export CF_BEARER_TOKEN="${CLOUDFLARE_API_TOKEN_TEAMS_ADBLOCK}"
 
 export TEMP_DIRECTORY="temp"
-export STEVENBLACK_HOSTS_VERSION="3.9.66" # https://github.com/StevenBlack/hosts/releases
+export STEVENBLACK_HOSTS_VERSION="3.10.0" # https://github.com/StevenBlack/hosts/releases
 export BLOCKLIST_DATA_REMOTE="https://raw.githubusercontent.com/StevenBlack/hosts/${STEVENBLACK_HOSTS_VERSION}/hosts"
 export BLOCKLIST_DATA_LOCAL="${TEMP_DIRECTORY}/hosts"
 export SANITISED_BLOCKLIST_DATA="${BLOCKLIST_DATA_LOCAL}-sanitised"
