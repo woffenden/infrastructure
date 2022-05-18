@@ -145,9 +145,9 @@ resource "aws_iam_group_policy_attachment" "aws_administrator" {
 
 data "aws_iam_policy_document" "aws_organisation_administrator_assume_role" {
   statement {
-    sid     = "AllowAssumeAWSOrgAdminRole"
-    actions = ["sts:AssumeRole"]
-    effect  = "Allow"
+    sid       = "AllowAssumeAWSOrgAdminRole"
+    actions   = ["sts:AssumeRole"]
+    effect    = "Allow"
     resources = formatlist("arn:aws:iam::%s:role/organisation-administrator-role", values(var.woffenden_aws_account_ids))
   }
 }
