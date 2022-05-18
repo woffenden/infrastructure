@@ -157,3 +157,28 @@ resource "aws_iam_group_policy_attachment" "aws_organisation_administrator" {
   group      = module.group_aws_administrators.name
   policy_arn = aws_iam_policy.aws_organisation_administrator.arn
 }
+
+##### AWS Administrator Automation Role
+
+data "aws_iam_role" "automation_role" {
+  name = "automation-role"
+}
+
+data "aws_iam_policy_document" "aws_administrator_automation_role_assume_role" {
+  statement {
+    sid       = "AwsAdminAssumeRole"
+    actions   = ["sts:AssumeRole"]
+    effect    = "Allow"
+    resources = [data.aws_iam_role.automation_role.arn]
+  }
+}
+
+resource "aws_iam_policy" "aws_administrator_automation_role" {
+  name   = "aws-administrator-automation-role-policy"
+  policy = data.aws_iam_policy_document.aws_administrator_automation_role_assume_role.json
+}
+
+resource "aws_iam_group_policy_attachment" "aws_administrator_automation_role" {
+  group      = module.group_aws_administrators.name
+  policy_arn = aws_iam_policy.aws_administrator_automation_role.arn
+}
