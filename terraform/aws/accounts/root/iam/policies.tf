@@ -1,3 +1,7 @@
+data "aws_iam_role" "automation_role" {
+  name = "automation-role"
+}
+
 ##### IAM Self Service with MFA
 
 data "aws_iam_policy_document" "iam_self_serve_mfa_enforcement" {
@@ -158,11 +162,12 @@ resource "aws_iam_group_policy_attachment" "aws_organisation_administrator" {
   policy_arn = aws_iam_policy.aws_organisation_administrator.arn
 }
 
-##### AWS Administrator Automation Role
-
-data "aws_iam_role" "automation_role" {
-  name = "automation-role"
+resource "aws_iam_role_policy_attachment" "aws_organisation_administrator_automation_role" {
+  role       = data.aws_iam_role.automation_role.name
+  policy_arn = aws_iam_policy.aws_organisation_administrator.arn
 }
+
+##### AWS Administrator Automation Role
 
 data "aws_iam_policy_document" "aws_administrator_automation_role_assume_role" {
   statement {
