@@ -1,4 +1,5 @@
 data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 ####
 
@@ -43,14 +44,33 @@ data "aws_iam_policy_document" "kms_key" {
     condition {
       test     = "StringEquals"
       variable = "kms:CallerAccount"
-      values = [
-        data.aws_caller_identity.current.account_id
-      ]
+      values   = [data.aws_caller_identity.current.account_id]
     }
     condition {
       test     = "StringLike"
       variable = "kms:EncryptionContext:aws:cloudtrail:arn"
       values   = ["arn:aws:cloudtrail:*:${data.aws_caller_identity.current.account_id}:trail/*"]
+    }
+  }
+  statement {
+    sid    = "AllowCloudWatchLogGroup"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt*",
+      "kms:Decrypt*",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:Describe*"
+    ]
+    principals {
+      type        = "Service"
+      identifiers = ["logs.${data.aws_region.current.name}.amazonaws.com"]
+    }
+    resources = ["*"]
+    condition {
+      test     = "ArnEquals"
+      variable = "kms:EncryptionContext:aws:logs:arn"
+      values   = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:woffenden-organisation-cloudtrail"]
     }
   }
 }
@@ -99,6 +119,57 @@ module "s3_bucket" {
 
 ####
 
+data "aws_iam_policy_document" "cloudtrail_assume" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "cloudtrail" {
+  statement {
+    sid       = "AWSCloudTrailCreateLogStream"
+    effect    = "Allow"
+    actions   = ["logs:CreateLogStream"]
+    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:woffenden-organisation-cloudtrail:log-stream:*"]
+  }
+  statement {
+    sid       = "AWSCloudTrailPutLogEvents"
+    effect    = "Allow"
+    actions   = ["logs:PutLogEvents"]
+    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:woffenden-organisation-cloudtrail:log-stream:*"]
+  }
+}
+
+resource "aws_iam_policy" "cloudtrail" {
+  name   = "woffenden-organisation-cloudtrail"
+  policy = data.aws_iam_policy_document.cloudtrail.json
+}
+
+resource "aws_iam_role" "cloudtrail" {
+  name               = "woffenden-organisation-cloudtrail"
+  assume_role_policy = data.aws_iam_policy_document.cloudtrail_assume.json
+}
+
+resource "aws_iam_role_policy_attachment" "cloudtrail" {
+  role       = aws_iam_role.cloudtrail.name
+  policy_arn = aws_iam_policy.cloudtrail.arn
+}
+
+####
+
+module "cloudwatch_log_group" {
+  source     = "../cloudwatch-log-group"
+  name       = "woffenden-organisation-cloudtrail"
+  kms_key_id = module.kms_key.arn
+}
+
+####
+
 resource "aws_cloudtrail" "this" {
   name                          = "woffenden-organisation-cloudtrail"
   s3_bucket_name                = "woffenden-organisation-cloudtrail"
@@ -106,8 +177,8 @@ resource "aws_cloudtrail" "this" {
   include_global_service_events = true
   enable_log_file_validation    = true
   is_multi_region_trail         = true
-  # cloud_watch_logs_group_arn    = "${aws_cloudwatch_log_group.cloudwatch.arn}:*"
-  # cloud_watch_logs_role_arn     = aws_iam_role.cloudwatch.arn
+  cloud_watch_logs_role_arn     = aws_iam_role.cloudtrail.arn
+  cloud_watch_logs_group_arn    = "${module.cloudwatch_log_group.arn}:*"
   kms_key_id                    = module.kms_key.arn
   event_selector {
     include_management_events = true

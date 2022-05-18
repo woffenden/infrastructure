@@ -12,13 +12,14 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
   config = {
-    bucket         = "${local.globals.inputs.woffenden_terraform_config.s3_bucket}"
-    key            = "${path_relative_to_include()}/terraform.tfstate"
-    region         = "${local.globals.inputs.woffenden_aws_region}"
-    encrypt        = true
-    kms_key_id     = "${local.globals.inputs.woffenden_terraform_config.kms_key_id}"
-    dynamodb_table = "${local.globals.inputs.woffenden_terraform_config.dynamodb_table}"
-    session_name   = local.session_name
+    disable_bucket_update = true
+    bucket                = "${local.globals.inputs.woffenden_terraform_config.s3_bucket}"
+    key                   = "${path_relative_to_include()}/terraform.tfstate"
+    region                = "${local.globals.inputs.woffenden_aws_region}"
+    encrypt               = true
+    kms_key_id            = "${local.globals.inputs.woffenden_terraform_config.kms_key_id}"
+    dynamodb_table        = "${local.globals.inputs.woffenden_terraform_config.dynamodb_table}"
+    session_name          = local.session_name
   }
 }
 
@@ -30,7 +31,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.10"
+      version = "~> 4.14"
     }
   }
 }

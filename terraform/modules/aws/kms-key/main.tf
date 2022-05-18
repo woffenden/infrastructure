@@ -1,21 +1,15 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "this" {
-  /* Extra policy passed in with var.policy */
   source_policy_documents = [var.policy]
 
-  /* Default statement giving `aws_caller_identity.current.account_id` access */
   statement {
-    sid    = "EnableIAMUserPermissions"
-    effect = "Allow"
-    actions = [
-      "kms:*"
-    ]
+    sid     = "EnableIAMUserPermissions"
+    effect  = "Allow"
+    actions = ["kms:*"]
     principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-      ]
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
     resources = ["*"]
   }

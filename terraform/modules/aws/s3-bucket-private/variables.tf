@@ -3,6 +3,6 @@ variable "bucket_name" {
 }
 
 variable "policy" {
-  type = string
+  type    = string
   default = ""
 }

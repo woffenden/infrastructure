@@ -14,5 +14,5 @@ module "user_test" {
   enabled       = false
   full_name     = "Test User"
   email_address = "test@woffenden.io"
-  groups = [module.group_offboarded_users.name]
+  groups        = [module.group_offboarded_users.name]
 }

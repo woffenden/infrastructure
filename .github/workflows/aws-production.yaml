@@ -1,5 +1,5 @@
 ---
-name: aws-root
+name: aws-production
 
 on:
   pull_request:
@@ -17,22 +17,8 @@ env:
   TERRAGRUNT_VERSION: v0.37.1
 
 jobs:
-  organisation:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Terragrunt Deployment
-        uses: woffenden/github-actions/standard-terragrunt-deployment@alpha
-        with:
-          working_directory: terraform/aws/accounts/root/organisation
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terragrunt_version: ${{ env.TERRAGRUNT_VERSION }}
-
   iam:
     runs-on: ubuntu-latest
-    needs: organisation
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -40,6 +26,6 @@ jobs:
       - name: Terragrunt Deployment
         uses: woffenden/github-actions/standard-terragrunt-deployment@alpha
         with:
-          working_directory: terraform/aws/accounts/root/iam
+          working_directory: terraform/aws/accounts/production/iam
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terragrunt_version: ${{ env.TERRAGRUNT_VERSION }}
