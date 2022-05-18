@@ -1,3 +1,5 @@
+##### IAM Self Service with MFA
+
 data "aws_iam_policy_document" "iam_self_serve_mfa_enforcement" {
   statement {
     sid = "AllowViewAccountInfo"
@@ -114,50 +116,44 @@ resource "aws_iam_group_policy_attachment" "iam_self_serve_mfa_enforcement" {
   policy_arn = aws_iam_policy.iam_self_serve_mfa_enforcement.arn
 }
 
+#### 
+
+# data "aws_iam_policy_document" "aws_administrator_assume_role" {
+#   statement {
+#     sid       = "AwsAdminAssumeRole"
+#     actions   = ["sts:AssumeRole"]
+#     effect    = "Allow"
+#     resources = [aws_iam_role.aws_administrator.arn]
+#   }
+# }
+
+# resource "aws_iam_policy" "aws_administrator" {
+#   name   = "aws-administrator-policy"
+#   policy = data.aws_iam_policy_document.aws_administrator_assume_role.json
+# }
+
+# resource "aws_iam_group_policy_attachment" "aws_administrator" {
+#   group      = module.group_aws_administrators.name
+#   policy_arn = aws_iam_policy.aws_administrator.arn
+# }
+
 ###
 
-data "aws_iam_policy_document" "aws_administrator_assume_role" {
-  statement {
-    sid       = "AwsAdminAssumeRole"
-    actions   = ["sts:AssumeRole"]
-    effect    = "Allow"
-    resources = [aws_iam_role.aws_administrator.arn]
-  }
-}
+# data "aws_iam_policy_document" "aws_organisation_administrator_assume_role" {
+#   statement {
+#     sid     = "AllowAssumeAWSOrgAdminRole"
+#     actions = ["sts:AssumeRole"]
+#     effect  = "Allow"
+#     resources = formatlist("arn:aws:iam::%s:role/organisation-administrator-role", values(var.woffenden_aws_account_ids))
+#   }
+# }
 
-resource "aws_iam_policy" "aws_administrator" {
-  name   = "aws-administrator-policy"
-  policy = data.aws_iam_policy_document.aws_administrator_assume_role.json
-}
+# resource "aws_iam_policy" "aws_organisation_administrator" {
+#   name   = "aws-organisation-administrator-policy"
+#   policy = data.aws_iam_policy_document.aws_organisation_administrator_assume_role.json
+# }
 
-resource "aws_iam_group_policy_attachment" "aws_administrator" {
-  group      = module.group_aws_administrators.name
-  policy_arn = aws_iam_policy.aws_administrator.arn
-}
-
-###
-
-data "aws_iam_policy_document" "aws_organisation_administrator_assume_role" {
-  statement {
-    sid     = "AwsAdminAssumeRole"
-    actions = ["sts:AssumeRole"]
-    effect  = "Allow"
-    /* TODO - Make this exclude the root account id */
-    resources = formatlist("arn:aws:iam::%s:role/organisation-administrator-role", values(var.woffenden_aws_account_ids))
-  }
-}
-
-resource "aws_iam_policy" "aws_organisation_administrator" {
-  name   = "aws-organisation-administrator-policy"
-  policy = data.aws_iam_policy_document.aws_organisation_administrator_assume_role.json
-}
-
-resource "aws_iam_group_policy_attachment" "aws_organisation_administrator" {
-  group      = module.group_aws_administrators.name
-  policy_arn = aws_iam_policy.aws_organisation_administrator.arn
-}
-
-resource "aws_iam_group_policy_attachment" "aws_organisation_automation" {
-  group      = "automation-group"
-  policy_arn = aws_iam_policy.aws_organisation_administrator.arn
-}
+# resource "aws_iam_group_policy_attachment" "aws_organisation_administrator" {
+#   group      = module.group_aws_administrators.name
+#   policy_arn = aws_iam_policy.aws_organisation_administrator.arn
+# }

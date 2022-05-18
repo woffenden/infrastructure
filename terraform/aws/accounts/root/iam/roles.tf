@@ -1,9 +1,7 @@
 data "aws_iam_policy_document" "aws_administrator_assume_account" {
   statement {
     sid = "AwsAdminAssume"
-    actions = [
-      "sts:AssumeRole"
-    ]
+    actions = ["sts:AssumeRole"]
     effect = "Allow"
     principals {
       type = "AWS"
