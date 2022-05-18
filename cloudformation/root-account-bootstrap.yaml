@@ -29,30 +29,13 @@ Parameters:
     Default: 'root-account'
 
 Resources:
-  AutomationServiceGroup:
-    Type: AWS::IAM::Group
+  GitHubOIDCProvider:
+    Type: AWS::IAM::OIDCProvider
     Properties:
-      GroupName: automation-group
-
-  AutomationServiceAccountUser:
-    Type: AWS::IAM::User
-    Properties:
-      UserName: automation-service-account
-      Groups:
-        - !Ref AutomationServiceGroup
-      Tags:
-        - Key: account-owner
-          Value: !Ref AccountOwner
-        - Key: business-unit
-          Value: !Ref BusinessUnit
-        - Key: technical-contact
-          Value: !Ref TechnicalContact
-        - Key: source-code
-          Value: !Ref SourceCode
-        - Key: is-production
-          Value: !Ref IsProduction
-        - Key: environment
-          Value: !Ref Environment
+      Url: https://token.actions.githubusercontent.com
+      ThumbprintList: [ "6938fd4d98bab03faadb97b34396831e3780aea1" ]
+      ClientIdList:
+        - sts.amazonaws.com
 
   AutomationServiceRole:
     Type: AWS::IAM::Role
@@ -145,8 +128,6 @@ Resources:
               - kms:GenerateDataKeyWithoutPlaintext
             Resource:
               - !Sub '${TerraformKmsKey.Arn}'
-      Groups:
-        - !Ref AutomationServiceGroup
 
   TerraformKmsKey:
     Type: AWS::KMS::Key
@@ -290,11 +271,3 @@ Resources:
           Value: !Ref IsProduction
         - Key: environment
           Value: !Ref Environment
-
-  GitHubOIDCProvider:
-    Type: AWS::IAM::OIDCProvider
-    Properties:
-      Url: https://token.actions.githubusercontent.com
-      ThumbprintList: [ "6938fd4d98bab03faadb97b34396831e3780aea1" ]
-      ClientIdList:
-        - sts.amazonaws.com
