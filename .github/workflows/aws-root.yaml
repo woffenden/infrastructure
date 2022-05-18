@@ -45,6 +45,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+          role-to-assume: arn:aws:iam::749019155605:role/automation-role
+
       - name: Terragrunt Deployment
         uses: woffenden/github-actions/standard-terragrunt-deployment@alpha
         with:
