@@ -31,15 +31,11 @@ resource "aws_network_interface" "nat" {
   subnet_id   = aws_subnet.public_aza.id
   private_ips = ["10.50.0.4"]
   source_dest_check = false
+  security_groups = [aws_security_group.nat.id]
 
   tags = {
     Name = "shared-services-nat"
   }
-}
-
-resource "aws_network_interface_sg_attachment" "nat" {
-  security_group_id    = aws_security_group.nat.id
-  network_interface_id = aws_network_interface.nat.id
 }
 
 resource "aws_eip" "nat" {
@@ -120,15 +116,11 @@ resource "aws_security_group" "test" {
 resource "aws_network_interface" "test" {
   subnet_id   = aws_subnet.private_aza.id
   private_ips = ["10.50.10.10"]
+  security_groups = [aws_security_group.test.id]
 
   tags = {
     Name = "shared-services-nat-TEST"
   }
-}
-
-resource "aws_network_interface_sg_attachment" "test" {
-  security_group_id    = aws_security_group.test.id
-  network_interface_id = aws_network_interface.test.id
 }
 
 resource "aws_instance" "test" {
