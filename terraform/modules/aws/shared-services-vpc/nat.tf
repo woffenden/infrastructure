@@ -1,5 +1,3 @@
-/* NAT resides in public_aza */
-
 resource "aws_security_group" "nat" {
   name = "shared-services-nat"
   vpc_id = aws_vpc.this.id
