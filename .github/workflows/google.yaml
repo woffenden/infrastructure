@@ -12,7 +12,7 @@ on:
 env:
   CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
   CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
-  TERRAFORM_VERSION: 1.2.5
+  TERRAFORM_VERSION: 1.2.7
 
 jobs:
   mta-sts:
