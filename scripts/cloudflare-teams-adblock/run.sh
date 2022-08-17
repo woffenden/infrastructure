@@ -1,203 +1,185 @@
 #!/usr/bin/env bash
 
-##################################################
-# Variables
-##################################################
+#####
 export _RUNTIME_DATE=$( date +'%Y-%m-%dT%H:%M:%S.00000Z' )
-export CF_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID}"
-export CF_BEARER_TOKEN="${CLOUDFLARE_API_TOKEN_TEAMS_ADBLOCK}"
+export _RUNTIME_TEMP="$( pwd )/tmp"
+export _RUNTIME_SPLIT_PREFIX="hosts-"
+export _RUNTIME_RULES_PREFIX="rule-"
 
-export TEMP_DIRECTORY="temp"
-export STEVENBLACK_HOSTS_VERSION="3.11.5" # https://github.com/StevenBlack/hosts/releases
-export BLOCKLIST_DATA_REMOTE="https://raw.githubusercontent.com/StevenBlack/hosts/${STEVENBLACK_HOSTS_VERSION}/hosts"
-export BLOCKLIST_DATA_LOCAL="${TEMP_DIRECTORY}/hosts"
-export SANITISED_BLOCKLIST_DATA="${BLOCKLIST_DATA_LOCAL}-sanitised"
+export ADBLOCK_SOURCE_VERSION=$( curl --silent https://api.github.com/repos/StevenBlack/hosts/releases/latest | jq -r '.tag_name' )
+export ADBLOCK_SOURCE_DL_URL="https://raw.githubusercontent.com/StevenBlack/hosts/${ADBLOCK_SOURCE_VERSION}/hosts"
 
-export SPLIT_DIRECTORY="${TEMP_DIRECTORY}/split"
-export SPLIT_LINES_NUM="1000"
-export SPLIT_SUFFIX_NUM="2"
-export SPLIT_PREFIX="hosts-"
+export ADBLOCK_CF_GATEWAY_RULE_PREFIX="managed-adblock-rule-"
+export ADBLOCK_CF_GATEWAY_LIST_PREFIX="managed-adblock-list-"
 
-export PROCESSED_DIRECTORY="${TEMP_DIRECTORY}/processed"
-export PROCESSED_LIST_PREFIX="list-"
-export PROCESSED_RULE_PREFIX="rule-"
+export CF_API_BASE_URL="https://api.cloudflare.com/client/v4"
+export CF_API_CURL_XGET=(--silent \
+                         --request GET \
+                         --header "Authorization: Bearer ${CF_BEARER_TOKEN}" \
+                         --header "Content-Type: application/json" \
+                         ${CF_API_BASE_URL}
+                        )
+export CF_API_CURL_XDEL=(--silent \
+                         --request DELETE \
+                         --header "Authorization: Bearer ${CF_BEARER_TOKEN}" \
+                         --header "Content-Type: application/json" \
+                         ${CF_API_BASE_URL}
+                        )
+export CF_API_CURL_XPOST=(--silent \
+                         --request POST \
+                         --header "Authorization: Bearer ${CF_BEARER_TOKEN}" \
+                         --header "Content-Type: application/json" \
+                         ${CF_API_BASE_URL}
+                        )
 
-export CF_LIST_PREFIX="adblock-hosts-"
-export CF_RULE_PREFIX="adblock-hosts-"
-
-##################################################
-# Script
-##################################################
-echo "Creating directory [ ${TEMP_DIRECTORY} ]"
-rm -rf ${TEMP_DIRECTORY}
-mkdir -p ${TEMP_DIRECTORY}
-
-echo "Downloading blacklist data [ ${BLOCKLIST_DATA_REMOTE} ] to [ ${BLOCKLIST_DATA_LOCAL} ]"
-rm -rf ${BLOCKLIST_DATA_LOCAL}
-curl --silent --location ${BLOCKLIST_DATA_REMOTE} --output ${BLOCKLIST_DATA_LOCAL}
-
-echo "Sanitising blacklist data [ ${BLOCKLIST_DATA_LOCAL} ] to [ ${SANITISED_BLOCKLIST_DATA} ]"
-cat ${BLOCKLIST_DATA_LOCAL} \
-  | sed '/^#/ d' \
-  | grep -v '127.0.0.1' \
-  | grep -v '255.255.255.255' \
-  | grep -v '::1' \
-  | grep -v 'fe80' \
-  | grep -v 'ff00' \
-  | grep -v 'ff02' \
-  | grep -v '0.0.0.0 0.0.0.0' \
-  | grep -v '\.a2z.com$' \
-  | grep -v '\.apple$' \
-  | grep -v '\.apple.com$' \
-  | grep -v '\.aaplimg.com$' \
-  | grep -v '\.apple-dns.net$' \
-  | grep -v '\.appleglobal.102.112.2o7.net$' \
-  | grep -v '\.apple.news$' \
-  | grep -v '\.cdn-apple.com$' \
-  | grep -v '\.mzstatic.com$' \
-  | grep -v '\.apple-cloudkit.com$' \
-  | grep -v '\.icloud.com$' \
-  | grep -v '\.icloud-content.com$' \
-  | grep -v '\.me.com$' \
-  | awk 'NF' \
-  | awk '{ print $2 }' > ${SANITISED_BLOCKLIST_DATA}
-
-
-echo "Splitting [ ${SANITISED_BLOCKLIST_DATA} ] into [ ${SPLIT_DIRECTORY} ] with chunks of [ ${SPLIT_LINES_NUM} ] and a prefix [ ${SPLIT_PREFIX} ]"
-rm -rf ${SPLIT_DIRECTORY}
-mkdir -p ${SPLIT_DIRECTORY}
-split --lines=${SPLIT_LINES_NUM} --numeric-suffixes --suffix-length=${SPLIT_SUFFIX_NUM} ${SANITISED_BLOCKLIST_DATA} ${SPLIT_DIRECTORY}/${SPLIT_PREFIX}
-
-echo "Processing split files in [ ${SPLIT_DIRECTORY} ]"
-rm -rf ${PROCESSED_DIRECTORY}
-mkdir -p ${PROCESSED_DIRECTORY}
-for filename in ${SPLIT_DIRECTORY}/*; do
-  chunkId=$( echo ${filename} | sed "s|${SPLIT_DIRECTORY}/${SPLIT_PREFIX}||" )
-	echo "Processing split file [ ${filename} ] with chunk ID [ ${chunkId} ]"
-	
-	while read hostname; do
-		printf '{"value": "%s","created_at": "%s"},' ${hostname} ${_RUNTIME_DATE} >> ${PROCESSED_DIRECTORY}/${SPLIT_PREFIX}${chunkId}
-	done <${filename}
-	truncate -s-1 ${PROCESSED_DIRECTORY}/${SPLIT_PREFIX}${chunkId} # Remove last character ','
-
-  echo "Rendering [ ${PROCESSED_DIRECTORY}/${PROCESSED_LIST_PREFIX}${chunkId}.json ] from [ ${PROCESSED_DIRECTORY}/${SPLIT_PREFIX}${chunkId} ]"
-	renderedHosts=$( cat ${PROCESSED_DIRECTORY}/${SPLIT_PREFIX}${chunkId} )
-cat > ${PROCESSED_DIRECTORY}/${PROCESSED_LIST_PREFIX}${chunkId}.json <<EOF
-{
-  "name": "${CF_LIST_PREFIX}${chunkId}",
-  "description": "Ad Block Hosts - Chunk ID: ${chunkId}",
-  "type": "DOMAIN",
-  "items": [
-    ${renderedHosts}
-  ]
+##### Functions
+function init() {
+  echo " ----- ⛅ Cloudflare Teams AdBlock ⛅ -----"
 }
-EOF
 
-#### API Stuff
-
-#### CLEAN RULES
-  echo "Looking for Gateway rule named [ ${CF_LIST_PREFIX}${chunkId} ]"
-  cfRuleId=$( curl --silent -X GET "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/gateway/rules" \
-                -H "Authorization: Bearer ${CF_BEARER_TOKEN}" \
-                -H "Content-Type: application/json" \
-                | jq -r --arg LISTID "${CF_LIST_PREFIX}${chunkId}" '.result[] | select(.name==$LISTID) | .id' 2>/dev/null )
-  if [[ -z "${cfRuleId}" ]]; then
-    echo "No Gateway rule found matching [ ${CF_LIST_PREFIX}${chunkId} ]"
+function detect_system() {
+  if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
+    echo "🐙 Running on GitHub Actions"
+    export CF_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID}"
+    export CF_BEARER_TOKEN="${CLOUDFLARE_API_TOKEN_TEAMS_ADBLOCK}"
   else
-    echo "Gateway rule found matching [ ${CF_LIST_PREFIX}${chunkId} ]"
-    echo "Deleting Gateway rule [ ${CF_LIST_PREFIX}${chunkId} ]"
-    deleteCfRule=$( curl --silent -X DELETE "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/gateway/rules/${cfRuleId}" \
-      -H "Authorization: Bearer ${CF_BEARER_TOKEN}" \
-      -H "Content-Type: application/json" | jq -r '.success' )
-    if [[ "${deleteCfRule}" == "true" ]]; then
-      echo "Successfully deleted Gateway rule [ ${CF_LIST_PREFIX}${chunkId} ]"
-    else
-      echo "Failed to delete Gateway rule [ ${CF_LIST_PREFIX}${chunkId} ]"
-    fi
+    echo "💻 Running locally"
+    export CF_ACCOUNT_ID="${CF_ACCOUNT_ID}"
+    export CF_BEARER_TOKEN="${CF_BEARER_TOKEN}"
   fi
-
-#### CLEAN LISTS
-  echo "Looking for Gateway list named [ ${CF_LIST_PREFIX}${chunkId} ]"
-  cfListId=$( curl --silent -X GET "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/gateway/lists" \
-                -H "Authorization: Bearer ${CF_BEARER_TOKEN}" \
-                -H "Content-Type: application/json" \
-                | jq -r --arg LISTID "${CF_LIST_PREFIX}${chunkId}" '.result[] | select(.name==$LISTID) | .id' 2>/dev/null )
-  if [[ -z "${cfListId}" ]]; then
-    echo "No Gateway list found matching [ ${CF_LIST_PREFIX}${chunkId} ]"
-  else
-    echo "Gateway list found matching [ ${CF_LIST_PREFIX}${chunkId} ]"
-    echo "Deleting Gateway list [ ${CF_LIST_PREFIX}${chunkId} ]"
-    deleteCfList=$( curl --silent -X DELETE "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/gateway/lists/${cfListId}" \
-      -H "Authorization: Bearer ${CF_BEARER_TOKEN}" \
-      -H "Content-Type: application/json" | jq -r '.success' )
-    if [[ "${deleteCfList}" == "true" ]]; then
-      echo "Successfully deleted Gateway list [ ${CF_LIST_PREFIX}${chunkId} ]"
-    else
-      echo "Failed to delete Gateway list [ ${CF_LIST_PREFIX}${chunkId} ]"
-    fi
-  fi
-
-#### UPLOAD LIST
-  uploadCfList=$( curl --silent -X POST "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/gateway/lists" \
-                    -H "Authorization: Bearer ${CF_BEARER_TOKEN}" \
-                    -H "Content-Type: application/json" \
-                    -d @${PROCESSED_DIRECTORY}/${PROCESSED_LIST_PREFIX}${chunkId}.json | jq -r '.success' )
-
-  if [[ "${uploadCfList}" == "true" ]]; then
-    cfListId=$( curl --silent -X GET "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/gateway/lists" \
-                  -H "Authorization: Bearer ${CF_BEARER_TOKEN}" \
-                  -H "Content-Type: application/json" \
-                  | jq -r --arg LISTID "${CF_LIST_PREFIX}${chunkId}" '.result[] | select(.name==$LISTID) | .id' )
-    cfListIdSanitised=$( echo "${cfListId}" | sed 's|-||g' )
-    echo "Successfully uploaded Gateway list [ ${CF_LIST_PREFIX}${chunkId} ] with ID [ ${cfListId} ]"
-  else
-    echo "Failed to upload Gateway list [ ${CF_LIST_PREFIX}${chunkId} ]"
-  fi
-
-#### RENDER LIST
-echo "Rendering [ ${PROCESSED_DIRECTORY}/${PROCESSED_RULE_PREFIX}${chunkId}.json ] with list [ ${cfListId} ]"
-cat > ${PROCESSED_DIRECTORY}/${PROCESSED_RULE_PREFIX}${chunkId}.json <<EOF
-{
-  "name": "${CF_RULE_PREFIX}${chunkId}",
-  "description": "Ad Block Hosts - Chunk ID: ${chunkId}",
-  "precedence": 1000${chunkId},
-  "enabled": true,
-  "action": "block",
-  "filters": [
-    "dns"
-  ],
-  "traffic": "any(dns.domains[*] in \$${cfListIdSanitised})",
-  "identity": "",
-  "device_posture": "",
-  "rule_settings": {
-    "block_page_enabled": false,
-    "block_reason": "",
-    "override_ips": null,
-    "override_host": "",
-    "l4override": null,
-    "biso_admin_controls": {
-      "dp": false,
-      "dcp": false,
-      "dd": false,
-      "du": false,
-      "dk": false
-    },
-    "add_headers": {},
-    "ip_categories": false,
-    "check_session": null,
-    "insecure_disable_dnssec_validation": false
-  }
 }
-EOF
 
-  echo "Creating Gateway rule [ ${CF_RULE_PREFIX}${chunkId} ] from [ ${PROCESSED_DIRECTORY}/${PROCESSED_RULE_PREFIX}${chunkId}.json ]"
-  createCfRule=$( curl --silent -X POST "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/gateway/rules" \
-                    -H "Authorization: Bearer ${CF_BEARER_TOKEN}" \
-                    -H "Content-Type: application/json" \
-                    -d @${PROCESSED_DIRECTORY}/${PROCESSED_RULE_PREFIX}${chunkId}.json | jq -r '.success' )
-  if [[ "${createCfRule}" == "true" ]]; then
-    echo "Successfully created Gateway rule [ ${CF_RULE_PREFIX}${chunkId} ]"
+function cloudflare_token_verify() {
+  local getCloudflareTokenVerification=$( curl "${CF_API_CURL_XGET[@]}"/user/tokens/verify | jq -r '.success' )
+  if [[ "${getCloudflareTokenVerification}" == "true" ]]; then
+    echo "✨ Cloudflare API Token is valid ✨"
   else
-    echo "Failed to created Gateway rule [ ${CF_RULE_PREFIX}${chunkId} ]"
+    echo "❗️ There is an issue with the Cloudflare API Token ❗️"
+    exit 1
   fi
-done
+}
+
+function cloudflare_gateway_cleanup() {
+  local type=${1}
+  local prefix=${2}
+
+  echo "🗑️  Cleaning up Cloudflare Gateway ${type}"
+
+  local getCloudflareGatewayItems=$( curl "${CF_API_CURL_XGET[@]}"/accounts/${CF_ACCOUNT_ID}/gateway/${type} | jq -r '.result[] | .name' 2>/dev/null | grep "${prefix}" | sort  )
+  
+  if [[ -z "${getCloudflareGatewayItems}" ]]; then
+    echo "  🔎 No items found"
+  else
+    local countCloudflareGatewayItems=$( echo ${getCloudflareGatewayItems} | awk '{ print NF }' )
+    echo "  🔎 Found ${countCloudflareGatewayItems} to cleanup"
+  fi
+
+  for item in ${getCloudflareGatewayItems}; do
+    echo "    ⚙️  Processing ${item}"
+    local getCloudflareGatewayItemId=$( curl "${CF_API_CURL_XGET[@]}"/accounts/${CF_ACCOUNT_ID}/gateway/${type}  | jq -r --arg ITEM "${item}" '.result[] | select(.name==$ITEM) | .id' )
+    local deleteCloudflareGatewayItem=$( curl "${CF_API_CURL_XDEL[@]}"/accounts/${CF_ACCOUNT_ID}/gateway/${type}/${getCloudflareGatewayItemId} | jq -r '.success' )
+    if [[ "${deleteCloudflareGatewayItem}" == "true" ]]; then
+      echo "      🎉 Successfully deleted ${item}"
+    else
+      echo "      😟 Failed to delete ${item}"
+      return 1
+    fi
+  done
+}
+
+function generate_adblock_data() {
+  echo "🧪 Generating AdBlock data"
+  mkdir --parents ${_RUNTIME_TEMP}
+  
+  echo "  📥 Downloading AdBlock source (${ADBLOCK_SOURCE_VERSION})"
+  curl \
+    --silent \
+    --location \
+    --output ${_RUNTIME_TEMP}/hosts \
+    ${ADBLOCK_SOURCE_DL_URL}
+  
+  echo "  🛁 Sanitising AdBlock data"
+  cat ${_RUNTIME_TEMP}/hosts \
+    | sed '/^#/ d' \
+    | grep -v '127.0.0.1' \
+    | grep -v '255.255.255.255' \
+    | grep -v '::1' \
+    | grep -v 'fe80' \
+    | grep -v 'ff00' \
+    | grep -v 'ff02' \
+    | grep -v '0.0.0.0 0.0.0.0' \
+    | grep -v '\.a2z.com$' \
+    | grep -v '\.apple$' \
+    | grep -v '\.apple.com$' \
+    | grep -v '\.aaplimg.com$' \
+    | grep -v '\.apple-dns.net$' \
+    | grep -v '\.appleglobal.102.112.2o7.net$' \
+    | grep -v '\.apple.news$' \
+    | grep -v '\.cdn-apple.com$' \
+    | grep -v '\.mzstatic.com$' \
+    | grep -v '\.apple-cloudkit.com$' \
+    | grep -v '\.icloud.com$' \
+    | grep -v '\.icloud-content.com$' \
+    | grep -v '\.me.com$' \
+    | awk 'NF' \
+    | awk '{ print $2 }' > ${_RUNTIME_TEMP}/hosts-sanitised
+
+  echo "  🪓 Splitting sanitised data"
+  mkdir --parents ${_RUNTIME_TEMP}/split
+  split --lines=1000 --numeric-suffixes --suffix-length=2 ${_RUNTIME_TEMP}/hosts-sanitised ${_RUNTIME_TEMP}/split/hosts- 2>/dev/null
+
+  rm --recursive --force ${_RUNTIME_TEMP}/processed
+  mkdir --parents ${_RUNTIME_TEMP}/processed
+
+  for splitfile in ${_RUNTIME_TEMP}/split/*; do
+    local splitId=$( echo ${splitfile} | sed "s|${_RUNTIME_TEMP}/split/${_RUNTIME_SPLIT_PREFIX}||" )
+    echo "    ⚙️  Processing split file "${splitfile##*/}""
+    while read hostname; do
+      printf '{"value": "%s","created_at": "%s"},' ${hostname} ${_RUNTIME_DATE} >> ${_RUNTIME_TEMP}/processed/${_RUNTIME_SPLIT_PREFIX}${splitId}
+    done <${splitfile}
+    truncate -s-1 ${_RUNTIME_TEMP}/processed/${_RUNTIME_SPLIT_PREFIX}${splitId} # Remove last character ','
+
+    echo "      🧬 Rendering list-${splitId}.json"
+    local renderedHosts=$( cat ${_RUNTIME_TEMP}/processed/${_RUNTIME_SPLIT_PREFIX}${splitId} )
+    printf '{"name": "%s",\n"description": "%s",\n"type": "DOMAIN",\n"items": [%s]}' \
+      "${ADBLOCK_CF_GATEWAY_LIST_PREFIX}${splitId}" \
+      "${ADBLOCK_CF_GATEWAY_LIST_PREFIX}${splitId}" \
+      "${renderedHosts}" > ${_RUNTIME_TEMP}/processed/list-${splitId}.json
+
+    echo "      📜 Creating list ${ADBLOCK_CF_GATEWAY_LIST_PREFIX}${splitId}"
+    local postCloudflareGatewayList=$( curl "${CF_API_CURL_XPOST[@]}"/accounts/${CF_ACCOUNT_ID}/gateway/lists --data @${_RUNTIME_TEMP}/processed/list-${splitId}.json | jq -r '.success' )
+    if [[ "${postCloudflareGatewayList}" == "true" ]]; then
+      local getCloudflareGatewayListId=$( curl "${CF_API_CURL_XGET[@]}"/accounts/${CF_ACCOUNT_ID}/gateway/lists | jq -r --arg LISTID "${ADBLOCK_CF_GATEWAY_LIST_PREFIX}${splitId}" '.result[] | select(.name==$LISTID) | .id' )
+      local sanitiseCloudflareGatewayListId=$( echo "${getCloudflareGatewayListId}" | sed 's|-||g' )
+      echo "        🎉 Successfully created list ${ADBLOCK_CF_GATEWAY_LIST_PREFIX}${splitId}"
+    else
+      echo "        😟 Failed to create list ${ADBLOCK_CF_GATEWAY_LIST_PREFIX}${splitId}"
+      return 1
+    fi
+
+    echo "      🛂 Creating rule ${ADBLOCK_CF_GATEWAY_RULE_PREFIX}${splitId}"
+    echo "        🧬 Rendering rule-${splitId}.json"
+    printf '{"name": "%s","description": "Rule %s","precedence": 1000%s,"enabled": true,"action": "block","filters": ["dns"],"traffic": "any(dns.domains[*] in $%s)","identity": "","device_posture": "","rule_settings": {"block_page_enabled": false,"block_reason": "","override_ips": null,"override_host": "","l4override": null,"biso_admin_controls": {"dp": false,"dcp": false,"dd": false,"du": false,"dk": false},"add_headers": {},"ip_categories": false,"check_session": null,"insecure_disable_dnssec_validation": false}}' \
+      "${ADBLOCK_CF_GATEWAY_RULE_PREFIX}${splitId}" \
+      "${splitId}" \
+      "${splitId}" \
+      "${sanitiseCloudflareGatewayListId}" > ${_RUNTIME_TEMP}/processed/rule-${splitId}.json
+
+    local postCloudflareGatewayRule=$( curl "${CF_API_CURL_XPOST[@]}"/accounts/${CF_ACCOUNT_ID}/gateway/rules --data @${_RUNTIME_TEMP}/processed/rule-${splitId}.json | jq -r '.success' )
+    if [[ "${postCloudflareGatewayList}" == "true" ]]; then
+      echo "        🎉 Successfully created rule ${ADBLOCK_CF_GATEWAY_RULE_PREFIX}${splitId}"
+    else
+      echo "        😟 Failed to create rule ${ADBLOCK_CF_GATEWAY_RULE_PREFIX}${splitId}"
+      return 1
+    fi
+  done
+}
+
+
+##### Script
+init
+detect_system
+cloudflare_token_verify
+cloudflare_gateway_cleanup "rules" "${ADBLOCK_CF_GATEWAY_RULE_PREFIX}"
+cloudflare_gateway_cleanup "lists" "${ADBLOCK_CF_GATEWAY_LIST_PREFIX}"
+generate_adblock_data
