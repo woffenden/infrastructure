@@ -59,13 +59,6 @@ resource "cloudflare_record" "woffenden_net_pi01_int_bny" {
   value   = "10.100.10.51"
 }
 
-resource "cloudflare_record" "woffenden_net_pi02_int_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "pi02.int.bny"
-  type    = "A"
-  value   = "10.100.0.52"
-}
-
 resource "cloudflare_record" "woffenden_net_wifi_guest_bny" {
   zone_id = module.woffenden_net_cloudflare_zone.id
   name    = "wifi.guest.bny"
