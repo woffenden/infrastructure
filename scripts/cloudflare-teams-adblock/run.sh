@@ -40,12 +40,8 @@ function init() {
 function detect_system() {
   if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
     echo "🐙 Running on GitHub Actions"
-    export CF_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID}"
-    export CF_BEARER_TOKEN="${CLOUDFLARE_API_TOKEN_TEAMS_ADBLOCK}"
   else
     echo "💻 Running locally"
-    export CF_ACCOUNT_ID="${CF_ACCOUNT_ID}"
-    export CF_BEARER_TOKEN="${CF_BEARER_TOKEN}"
   fi
 }
 
