@@ -1,4 +1,5 @@
 resource "cloudflare_zone" "this" {
+  account_id = var.account
   zone       = var.zone
   plan       = var.plan
   type       = var.type

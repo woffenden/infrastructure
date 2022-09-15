@@ -1,3 +1,7 @@
+variable "account" {
+  type = string
+}
+
 variable "zone" {
   type = string
 }
