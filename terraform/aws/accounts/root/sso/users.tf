@@ -14,6 +14,12 @@ resource "aws_identitystore_user" "jacobwoffenden" {
   }
 }
 
+resource "aws_identitystore_group_membership" "jacobwoffenden_aws_administrators" {
+  identity_store_id = tolist(data.aws_ssoadmin_instances.main.identity_store_ids)[0]
+  member_id         = aws_identitystore_user.jacobwoffenden.user_id
+  group_id          = aws_identitystore_group.aws_administrators.group_id
+}
+
 resource "aws_identitystore_group_membership" "jacobwoffenden_commonfate_administrators" {
   identity_store_id = tolist(data.aws_ssoadmin_instances.main.identity_store_ids)[0]
   member_id         = aws_identitystore_user.jacobwoffenden.user_id
