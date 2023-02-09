@@ -4,13 +4,13 @@ terraform {
     prefix = "mta-sts/"
   }
   required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 4.36"
-    }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 3.23"
+      version = "~> 3.34"
+    }
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 4.52"
     }
   }
 }
