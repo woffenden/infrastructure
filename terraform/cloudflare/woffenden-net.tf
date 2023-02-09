@@ -18,79 +18,9 @@ resource "cloudflare_record" "woffenden_net_udmp_int_bny" {
   value   = "10.100.0.1"
 }
 
-resource "cloudflare_record" "woffenden_net_usw01_int_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "usw01.int.bny"
-  type    = "A"
-  value   = "10.100.0.2"
-}
-
-resource "cloudflare_record" "woffenden_net_uap01_int_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "uap01.int.bny"
-  type    = "A"
-  value   = "10.100.0.3"
-}
-
-resource "cloudflare_record" "woffenden_net_uap02_int_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "uap02.int.bny"
-  type    = "A"
-  value   = "10.100.0.4"
-}
-
-resource "cloudflare_record" "woffenden_net_cam01_int_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "cam01.int.bny"
-  type    = "A"
-  value   = "10.100.0.5"
-}
-
 resource "cloudflare_record" "woffenden_net_nuc01_int_bny" {
   zone_id = module.woffenden_net_cloudflare_zone.id
   name    = "nuc01.int.bny"
   type    = "A"
   value   = "10.100.0.50"
-}
-
-resource "cloudflare_record" "woffenden_net_pi01_int_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "pi01.int.bny"
-  type    = "A"
-  value   = "10.100.10.51"
-}
-
-resource "cloudflare_record" "woffenden_net_wifi_guest_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "wifi.guest.bny"
-  type    = "A"
-  value   = "10.100.108.1"
-}
-
-resource "cloudflare_record" "woffenden_net_plusdsl_ext_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "plusdsl.ext.bny"
-  type    = "A"
-  value   = "212.159.121.150"
-}
-
-resource "cloudflare_record" "woffenden_net_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "bny"
-  type    = "CNAME"
-  value   = cloudflare_record.woffenden_net_plusdsl_ext_bny.hostname
-}
-
-resource "cloudflare_record" "woffenden_net_api_kube_int_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "api.kube.int.bny"
-  type    = "CNAME"
-  value   = cloudflare_record.woffenden_net_nuc01_int_bny.hostname
-}
-
-resource "cloudflare_record" "woffenden_net_ingress_kube_int_bny" {
-  zone_id = module.woffenden_net_cloudflare_zone.id
-  name    = "ingress.kube.int.bny"
-  type    = "A"
-  value   = "10.100.0.100"
 }
