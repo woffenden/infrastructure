@@ -58,3 +58,23 @@ jobs:
           working_directory: terraform/aws/accounts/root/iam
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terragrunt_version: ${{ env.TERRAGRUNT_VERSION }}
+
+  sso:
+    runs-on: ubuntu-latest
+    needs: organisation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ROOT_ACCOUNT_ID }}:role/automation-role
+
+      - name: Terragrunt Deployment
+        uses: woffenden/github-actions/standard-terragrunt-deployment@alpha
+        with:
+          working_directory: terraform/aws/accounts/root/sso
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terragrunt_version: ${{ env.TERRAGRUNT_VERSION }}
