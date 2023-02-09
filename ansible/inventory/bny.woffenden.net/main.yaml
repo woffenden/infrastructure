@@ -1,7 +1,0 @@
----
-all:
-  hosts:
-    udmp.int.bny.woffenden.net:
-    nuc01.int.bny.woffenden.net:
-    pi01.int.bny.woffenden.net:
-    pi02.int.bny.woffenden.net:

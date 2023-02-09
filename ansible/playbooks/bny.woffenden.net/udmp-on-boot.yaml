@@ -1,5 +1,0 @@
----
-  - hosts: udmp.int.bny.woffenden.net
-    become: true
-    roles:
-      - udmp-on-boot
