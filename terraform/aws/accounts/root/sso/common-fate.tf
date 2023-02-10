@@ -19,8 +19,8 @@ module "commonfate" {
    }
 
    /* tfscaffold crap */
-   project        = "woffenden"
-   environment    = "production"
+   project        = "sso"
+   environment    = "prod"
    component      = "sso"
    aws_account_id = data.aws_caller_identity.current.account_id
    region         = data.aws_region.current.name
