@@ -10,7 +10,8 @@ resource "aws_identitystore_user" "jacobwoffenden" {
   }
 
   emails {
-    value = "jacob@woffenden.io"
+    value   = "jacob@woffenden.io"
+    primary = true
   }
 }
 
