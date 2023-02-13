@@ -18,7 +18,6 @@ module "commonfate" {
     aws.us-east-1 = aws.us-east-1
    }
 
-   /* tfscaffold crap */
    project        = "cf"
    environment    = "test"
    component      = "sso"
@@ -29,9 +28,7 @@ module "commonfate" {
    aws_sso_instance_arn      = tolist(data.aws_ssoadmin_instances.main.arns)[0]
    aws_sso_region            = data.aws_region.current.name
 
-  #  public_hosted_zone_id = data.aws_route53_zone.main.zone_id
-
    sources_version        = "v0.12.2"
-   administrator_group_id = "commonfate-administrators"
+   administrator_group_id = "granted_administrators"
    identity_provider_type = "cognito"
 }
