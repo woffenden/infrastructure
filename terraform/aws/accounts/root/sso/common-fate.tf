@@ -35,5 +35,5 @@ module "commonfate" {
    administrator_group_id = "36829224-d021-7054-143f-5bd2c754e750" # commonfate-administrators
 
   saml_sso_metadata_content = ""
-  saml_sso_metadata_url = "https://portal.sso.eu-west-2.amazonaws.com/saml/metadata/NzQ5MDE5MTU1NjA1X2lucy00ZDY1NTQyZjUwMjgwNDNj"
+  saml_sso_metadata_url     = "https://portal.sso.eu-west-2.amazonaws.com/saml/metadata/NzQ5MDE5MTU1NjA1X2lucy00ZDY1NTQyZjUwMjgwNDNj"
 }
