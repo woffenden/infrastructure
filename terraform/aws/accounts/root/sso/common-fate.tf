@@ -11,7 +11,7 @@ data "aws_route53_zone" "main" {
 
 /* Module */
 module "commonfate" {
-  source = "github.com/chrnorm/terraform-aws-commonfate?ref=v0-11-update"
+  source = "github.com/chrnorm/terraform-aws-commonfate?ref=aws-sso-support"
 
   providers = {
     aws           = aws
@@ -29,6 +29,11 @@ module "commonfate" {
    aws_sso_region            = data.aws_region.current.name
 
    sources_version        = "v0.12.2"
-   administrator_group_id = "granted_administrators"
-   identity_provider_type = "cognito"
+
+   identity_provider_type = "aws-sso"
+   identity_provider_name = "AWS"
+   administrator_group_id = "36829224-d021-7054-143f-5bd2c754e750" # commonfate-administrators
+
+  saml_sso_metadata_content = ""
+  saml_sso_metadata_url = "https://portal.sso.eu-west-2.amazonaws.com/saml/metadata/NzQ5MDE5MTU1NjA1X2lucy00ZDY1NTQyZjUwMjgwNDNj"
 }
