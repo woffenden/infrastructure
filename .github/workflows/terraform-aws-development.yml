@@ -37,7 +37,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2.1.0
         with:
           aws-region: eu-west-2
-          role-to-assume: arn:aws:iam::749019155605:role/automation-role
+          role-to-assume: arn:aws:iam::749019155605:role/github-actions
 
       - name: Install Terraform
         id: install_terraform

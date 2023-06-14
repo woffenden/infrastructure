@@ -13,7 +13,7 @@ inputs = {
     production      = "655105654343"
   }
   woffenden_aws_iam_roles = {
-    root            = "arn:aws:iam::749019155605:role/automation-role"
+    root            = "arn:aws:iam::749019155605:role/github-actions"
     shared-services = "arn:aws:iam::568160031979:role/organisation-administrator-role"
     development     = "arn:aws:iam::258310932460:role/organisation-administrator-role"
     production      = "arn:aws:iam::655105654343:role/organisation-administrator-role"
