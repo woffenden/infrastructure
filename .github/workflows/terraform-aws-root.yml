@@ -44,25 +44,20 @@
           uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
           with:
             terraform_version: 1.5.0
-  
-        - name: Install Terragrunt
-          id: install_terragrunt
-          uses: autero1/action-terragrunt@22b4647f1263865cda4473831640e71d349db2cd # v1.3.2
-          with:
-            terragrunt_version: 0.46.3
-  
-        - name: Initialise Terragrunt
-          id: initialise_terragrunt
-          run: terragrunt init -upgrade
-  
-        - name: Terragrunt Plan
-          id: terragrunt_plan
-          run: terragrunt plan
-  
-        - name: Terragrunt Apply
-          if: github.ref == 'refs/heads/main'
-          run: terragrunt apply -auto-approve
 
+        - name: Initialise Terraform
+          id: initialise_terraform
+          run: terraform init -upgrade
+  
+        - name: Terraform Plan
+          id: terraform_plan
+          run: terraform plan
+  
+        - name: Terraform Apply
+          id: terraform_apply
+          if: github.ref == 'refs/heads/main'
+          run: terraform apply -auto-approve
+  
     iam:
       needs: [organisation]
       name: IAM
@@ -90,24 +85,19 @@
           uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
           with:
             terraform_version: 1.5.0
+
+        - name: Initialise Terraform
+          id: initialise_terraform
+          run: terraform init -upgrade
   
-        - name: Install Terragrunt
-          id: install_terragrunt
-          uses: autero1/action-terragrunt@22b4647f1263865cda4473831640e71d349db2cd # v1.3.2
-          with:
-            terragrunt_version: 0.46.3
+        - name: Terraform Plan
+          id: terraform_plan
+          run: terraform plan
   
-        - name: Initialise Terragrunt
-          id: initialise_terragrunt
-          run: terragrunt init -upgrade
-  
-        - name: Terragrunt Plan
-          id: terragrunt_plan
-          run: terragrunt plan
-  
-        - name: Terragrunt Apply
+        - name: Terraform Apply
+          id: terraform_apply
           if: github.ref == 'refs/heads/main'
-          run: terragrunt apply -auto-approve
+          run: terraform apply -auto-approve
       
     sso:
       needs: [organisation]
@@ -136,24 +126,19 @@
           uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
           with:
             terraform_version: 1.5.0
+
+        - name: Initialise Terraform
+          id: initialise_terraform
+          run: terraform init -upgrade
   
-        - name: Install Terragrunt
-          id: install_terragrunt
-          uses: autero1/action-terragrunt@22b4647f1263865cda4473831640e71d349db2cd # v1.3.2
-          with:
-            terragrunt_version: 0.46.3
+        - name: Terraform Plan
+          id: terraform_plan
+          run: terraform plan
   
-        - name: Initialise Terragrunt
-          id: initialise_terragrunt
-          run: terragrunt init -upgrade
-  
-        - name: Terragrunt Plan
-          id: terragrunt_plan
-          run: terragrunt plan
-  
-        - name: Terragrunt Apply
+        - name: Terraform Apply
+          id: terraform_apply
           if: github.ref == 'refs/heads/main'
-          run: terragrunt apply -auto-approve
+          run: terraform apply -auto-approve
 
     route53:
       name: Route 53
@@ -181,21 +166,16 @@
           uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
           with:
             terraform_version: 1.5.0
+
+        - name: Initialise Terraform
+          id: initialise_terraform
+          run: terraform init -upgrade
   
-        - name: Install Terragrunt
-          id: install_terragrunt
-          uses: autero1/action-terragrunt@22b4647f1263865cda4473831640e71d349db2cd # v1.3.2
-          with:
-            terragrunt_version: 0.46.3
+        - name: Terraform Plan
+          id: terraform_plan
+          run: terraform plan
   
-        - name: Initialise Terragrunt
-          id: initialise_terragrunt
-          run: terragrunt init -upgrade
-  
-        - name: Terragrunt Plan
-          id: terragrunt_plan
-          run: terragrunt plan
-  
-        - name: Terragrunt Apply
+        - name: Terraform Apply
+          id: terraform_apply
           if: github.ref == 'refs/heads/main'
-          run: terragrunt apply -auto-approve
+          run: terraform apply -auto-approve
