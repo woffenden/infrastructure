@@ -110,6 +110,7 @@
           run: terragrunt apply -auto-approve
       
     sso:
+      needs: [organisation]
       name: SSO
       runs-on: ubuntu-latest
       defaults:
