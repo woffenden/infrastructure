@@ -1,0 +1,181 @@
+---
+  name: Terraform - AWS - Root
+  
+  on:
+    pull_request:
+      branches:
+        - main
+      paths:
+        - .github/workflows/terraform-aws-root.yml
+        - terraform/aws/accounts/root/**
+    push:
+      branches:
+        - main
+      paths:
+        - .github/workflows/terraform-aws-root.yml
+        - terraform/aws/accounts/root/**
+  
+  permissions: read-all
+  
+  jobs:
+    organisation:
+      name: Organisation
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: terraform/aws/accounts/root/organisation
+      permissions:
+        contents: read
+        id-token: write
+      steps:
+        - name: Checkout
+          id: checkout
+          uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+  
+        - name: Configure AWS Credentials
+          id: configure_aws_credentials
+          uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2.1.0
+          with:
+            aws-region: eu-west-2
+            role-to-assume: arn:aws:iam::749019155605:role/github-actions
+  
+        - name: Install Terraform
+          id: install_terraform
+          uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+          with:
+            terraform_version: 1.5.0
+
+        - name: Initialise Terraform
+          id: initialise_terraform
+          run: terraform init -upgrade
+  
+        - name: Terraform Plan
+          id: terraform_plan
+          run: terraform plan
+  
+        - name: Terraform Apply
+          id: terraform_apply
+          if: github.ref == 'refs/heads/main'
+          run: terraform apply -auto-approve
+  
+    iam:
+      needs: [organisation]
+      name: IAM
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: terraform/aws/accounts/root/iam
+      permissions:
+        contents: read
+        id-token: write
+      steps:
+        - name: Checkout
+          id: checkout
+          uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+  
+        - name: Configure AWS Credentials
+          id: configure_aws_credentials
+          uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2.1.0
+          with:
+            aws-region: eu-west-2
+            role-to-assume: arn:aws:iam::749019155605:role/github-actions
+  
+        - name: Install Terraform
+          id: install_terraform
+          uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+          with:
+            terraform_version: 1.5.0
+
+        - name: Initialise Terraform
+          id: initialise_terraform
+          run: terraform init -upgrade
+  
+        - name: Terraform Plan
+          id: terraform_plan
+          run: terraform plan
+  
+        - name: Terraform Apply
+          id: terraform_apply
+          if: github.ref == 'refs/heads/main'
+          run: terraform apply -auto-approve
+      
+    sso:
+      needs: [organisation]
+      name: SSO
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: terraform/aws/accounts/root/sso
+      permissions:
+        contents: read
+        id-token: write
+      steps:
+        - name: Checkout
+          id: checkout
+          uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+  
+        - name: Configure AWS Credentials
+          id: configure_aws_credentials
+          uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2.1.0
+          with:
+            aws-region: eu-west-2
+            role-to-assume: arn:aws:iam::749019155605:role/github-actions
+  
+        - name: Install Terraform
+          id: install_terraform
+          uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+          with:
+            terraform_version: 1.5.0
+
+        - name: Initialise Terraform
+          id: initialise_terraform
+          run: terraform init -upgrade
+  
+        - name: Terraform Plan
+          id: terraform_plan
+          run: terraform plan
+  
+        - name: Terraform Apply
+          id: terraform_apply
+          if: github.ref == 'refs/heads/main'
+          run: terraform apply -auto-approve
+
+    route53:
+      name: Route 53
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: terraform/aws/accounts/root/route53
+      permissions:
+        contents: read
+        id-token: write
+      steps:
+        - name: Checkout
+          id: checkout
+          uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+  
+        - name: Configure AWS Credentials
+          id: configure_aws_credentials
+          uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2.1.0
+          with:
+            aws-region: eu-west-2
+            role-to-assume: arn:aws:iam::749019155605:role/github-actions
+  
+        - name: Install Terraform
+          id: install_terraform
+          uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+          with:
+            terraform_version: 1.5.0
+
+        - name: Initialise Terraform
+          id: initialise_terraform
+          run: terraform init -upgrade
+  
+        - name: Terraform Plan
+          id: terraform_plan
+          run: terraform plan
+  
+        - name: Terraform Apply
+          id: terraform_apply
+          if: github.ref == 'refs/heads/main'
+          run: terraform apply -auto-approve

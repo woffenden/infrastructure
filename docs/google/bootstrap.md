@@ -74,12 +74,6 @@ gcloud iam service-accounts create \
   --display-name="GitHub Actions Service Account"
 ```
 
-```bash
-gcloud iam service-accounts keys \
-  create github-actions-service-account-key.json \
-    --iam-account=github-actions@woffenden.iam.gserviceaccount.com
-```
-
 # Assign Roles
 
 ```bash
@@ -94,4 +88,40 @@ gcloud projects add-iam-policy-binding woffenden \
 gcloud projects add-iam-policy-binding woffenden \
     --member="serviceAccount:github-actions@woffenden.iam.gserviceaccount.com" \
     --role="roles/compute.admin"
+```
+
+# Configure Workload Identity
+
+```bash
+gcloud \
+  iam \
+  workload-identity-pools \
+  create \
+  "github-actions" \
+  --project="${PROJECT_ID}" \
+  --location="global" \
+  --display-name="GitHub Actions"
+
+gcloud \
+  iam \
+  workload-identity-pools \
+  providers \
+  create-oidc \
+  "github-actions" \
+  --project="${PROJECT_ID}" \
+  --location="global" \
+  --workload-identity-pool="github-actions" \
+  --display-name="GitHub Actions" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud,attribute.repository=assertion.repository" \
+  --issuer-uri="https://token.actions.githubusercontent.com"
+
+
+gcloud \
+  iam \
+  service-accounts \
+  add-iam-policy-binding \
+  "github-actions@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --project="${PROJECT_ID}" \
+  --role="roles/iam.workloadIdentityUser" \
+  --member="principalSet://iam.googleapis.com/projects/800000204119/locations/global/workloadIdentityPools/github-actions/attribute.repository/woffenden/infrastructure"
 ```

@@ -13,6 +13,7 @@ variable "aws_service_access_principals" {
     "health.amazonaws.com",
     "inspector2.amazonaws.com",
     "ipam.amazonaws.com",
+    "malware-protection.guardduty.amazonaws.com",
     "ram.amazonaws.com",
     "reporting.trustedadvisor.amazonaws.com",
     "securityhub.amazonaws.com",
