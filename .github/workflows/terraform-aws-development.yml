@@ -15,12 +15,6 @@ on:
       - .github/workflows/terraform-aws-development.yml
       - terraform/aws/accounts/development/iam/**
 
-env:
-  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-  AWS_ROOT_ACCOUNT_ID: ${{ secrets.AWS_ROOT_ACCOUNT_ID }}
-  TERRAFORM_VERSION: 1.5.0
-  TERRAGRUNT_VERSION: v0.46.3
-
 permissions: read-all
 
 jobs:
@@ -39,14 +33,32 @@ jobs:
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
       - name: Configure AWS Credentials
+        id: configure_aws_credentials
         uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2.1.0
         with:
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
-          role-to-assume: arn:aws:iam::${{ env.AWS_ROOT_ACCOUNT_ID }}:role/automation-role
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::749019155605:role/automation-role
 
-      # - name: Terragrunt Deployment
-      #   uses: woffenden/github-actions/standard-terragrunt-deployment@d9203a2156008639918f5d322ac8ed16e3d63988 # v0.0.1
-      #   with:
-      #     working_directory: terraform/aws/accounts/development/iam
-      #     terraform_version: ${{ env.TERRAFORM_VERSION }}
-      #     terragrunt_version: ${{ env.TERRAGRUNT_VERSION }}
+      - name: Install Terraform
+        id: install_terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: 1.5.0
+
+      - name: Install Terragrunt
+        id: install_terragrunt
+        uses: autero1/action-terragrunt@22b4647f1263865cda4473831640e71d349db2cd # v1.3.2
+        with:
+          terragrunt_version: 0.46.3
+
+      - name: Initialise Terragrunt
+        id: initialise_terragrunt
+        run: terragrunt init -upgrade
+
+      - name: Terragrunt Plan
+        id: terragrunt_plan
+        run: terragrunt plan
+
+      - name: Terragrunt Apply
+        if: github.ref == 'refs/heads/main'
+        run: terragrunt apply -auto-approve
