@@ -27,6 +27,9 @@
       permissions:
         contents: read
         id-token: write
+      env:
+        CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
+        CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
       steps:
         - name: Checkout
           id: checkout
