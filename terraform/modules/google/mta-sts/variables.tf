@@ -20,7 +20,3 @@ variable "uniform_bucket_level_access" {
 variable "cloudflare_zone_id" {
   type = string
 }
-
-locals {
-  gcs_bucket_name = "mta-sts.${var.domain}"
-}

@@ -38,3 +38,22 @@
           with:
             workload_identity_provider: principalSet://iam.googleapis.com/projects/800000204119/locations/global/workloadIdentityPools/github-actions/providers/github-actions
             service_account: github-actions@woffenden.iam.gserviceaccount.com
+
+        - name: Install Terraform
+          id: install_terraform
+          uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+          with:
+            terraform_version: 1.5.0
+
+        - name: Initialise Terraform
+          id: initialise_terraform
+          run: terraform init -upgrade
+
+        - name: Terraform Plan
+          id: terraform_plan
+          run: terraform plan
+
+        - name: Terraform Apply
+          id: terraform_apply
+          if: github.ref == 'refs/heads/main'
+          run: terraform apply -auto-approve
