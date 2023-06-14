@@ -23,7 +23,7 @@
       runs-on: ubuntu-latest
       defaults:
         run:
-          working-directory: terraform/google/mta-sts
+          working-directory: terraform/google/woffenden/mta-sts
       permissions:
         contents: read
         id-token: write
