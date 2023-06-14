@@ -45,20 +45,15 @@ jobs:
         with:
           terraform_version: 1.5.0
 
-      - name: Install Terragrunt
-        id: install_terragrunt
-        uses: autero1/action-terragrunt@22b4647f1263865cda4473831640e71d349db2cd # v1.3.2
-        with:
-          terragrunt_version: 0.46.3
+      - name: Initialise Terraform
+        id: initialise_terraform
+        run: terraform init -upgrade
 
-      - name: Initialise Terragrunt
-        id: initialise_terragrunt
-        run: terragrunt init -upgrade
+      - name: Terraform Plan
+        id: terraform_plan
+        run: terraform plan
 
-      - name: Terragrunt Plan
-        id: terragrunt_plan
-        run: terragrunt plan
-
-      - name: Terragrunt Apply
+      - name: Terraform Apply
+        id: terraform_apply
         if: github.ref == 'refs/heads/main'
-        run: terragrunt apply -auto-approve
+        run: terraform apply -auto-approve
