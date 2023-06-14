@@ -1,0 +1,65 @@
+---
+  name: Terraform - AWS - Production
+  
+  on:
+    pull_request:
+      branches:
+        - main
+      paths:
+        - .github/workflows/terraform-aws-production.yml
+        - terraform/aws/accounts/production/iam/**
+    push:
+      branches:
+        - main
+      paths:
+        - .github/workflows/terraform-aws-production.yml
+        - terraform/aws/accounts/production/iam/**
+  
+  permissions: read-all
+  
+  jobs:
+    iam:
+      name: IAM
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: terraform/aws/accounts/production/iam
+      permissions:
+        contents: read
+        id-token: write
+      steps:
+        - name: Checkout
+          id: checkout
+          uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+  
+        - name: Configure AWS Credentials
+          id: configure_aws_credentials
+          uses: aws-actions/configure-aws-credentials@5727f247b64f324ec403ac56ae05e220fd02b65f # v2.1.0
+          with:
+            aws-region: eu-west-2
+            role-to-assume: arn:aws:iam::749019155605:role/automation-role
+  
+        - name: Install Terraform
+          id: install_terraform
+          uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+          with:
+            terraform_version: 1.5.0
+  
+        - name: Install Terragrunt
+          id: install_terragrunt
+          uses: autero1/action-terragrunt@22b4647f1263865cda4473831640e71d349db2cd # v1.3.2
+          with:
+            terragrunt_version: 0.46.3
+  
+        - name: Initialise Terragrunt
+          id: initialise_terragrunt
+          run: terragrunt init -upgrade
+  
+        - name: Terragrunt Plan
+          id: terragrunt_plan
+          run: terragrunt plan
+  
+        - name: Terragrunt Apply
+          if: github.ref == 'refs/heads/main'
+          run: terragrunt apply -auto-approve
+  
