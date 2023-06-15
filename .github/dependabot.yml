@@ -1,4 +1,7 @@
 ---
+# This file is auto-generated, do not edit manually.
+# scripts/dependabot/configuration-generator.sh
+
 version: 2
 
 updates:
@@ -6,3 +9,107 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "github-actions"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/accounts/development/iam"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/accounts/production/iam"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/accounts/root/iam"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/accounts/root/organisation"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/accounts/root/route53"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/accounts/root/sso"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+
+  - package-ecosystem: "terraform"
+    directory: "terraform/cloudflare"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+
+  - package-ecosystem: "terraform"
+    directory: "terraform/google/woffenden/mta-sts"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+
