@@ -1,0 +1,92 @@
+---
+on:
+  workflow_call:
+    inputs:
+      ##### General
+      working-directory:
+        required: true
+        type: string
+      cloud-provider:
+        required: true
+        type: string
+      ##### AWS
+      aws-region:
+        default: eu-west-2
+        required: false
+        type: string
+      aws-role-to-assume:
+        required: false
+        type: string
+      ##### Google
+      google-workload-identity-pool:
+        required: false
+        type: string
+      google-service-account:
+        required: false
+        type: string
+      ##### Terraform
+      terraform-version:
+        required: false
+        type: string
+        default: latest
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Configure AWS Credentials
+        if: ${{ inputs.cloud-provider == 'aws' }}
+        id: configure_aws_credentials
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          aws-region: ${{ inputs.aws-region }}
+          role-to-assume: ${{ inputs.aws-role-to-assume }}
+
+      - name: Configure Google Credentials
+        if: ${{ inputs.cloud-provider == 'google' }}
+        id: configure_google_credentials
+        uses: google-github-actions/auth@35b0e87d162680511bf346c299f71c9c5c379033 # v1.1.1
+        with:
+          workload_identity_provider: ${{ inputs.google-workload-identity-pool }}
+          service_account: ${{ inputs.google-service-account }}
+
+      - name: Install Terraform
+        id: install_terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: ${{ inputs.terraform-version }}
+
+      - name: Prepare Terraform
+        id: prepare_terraform
+        shell: bash
+        run: |
+          echo "TF_IN_AUTOMATION=true" >>"${GITHUB_ENV}"
+
+      - name: Initialise Terraform
+        id: initialise_terraform
+        run: terraform init -upgrade -no-color
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Validate Terraform
+        id: validate_terraform
+        shell: bash
+        run: terraform validate -no-color
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Plan Terraform
+        id: plan_terraform
+        shell: bash
+        run: terraform plan -input=false -no-color
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Apply Terraform
+        if: github.ref == 'refs/heads/main'
+        id: apply_terraform
+        shell: bash
+        run: terraform apply -input=false -auto-approve -no-color
+        working-directory: ${{ inputs.working-directory }}
