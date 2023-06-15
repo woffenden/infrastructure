@@ -22,6 +22,7 @@ resource "aws_kms_key" "this" {
   bypass_policy_lockout_safety_check = var.bypass_policy_lockout_safety_check
   deletion_window_in_days            = var.deletion_window_in_days
   enable_key_rotation                = var.enable_key_rotation
+  multi_region                       = var.multi_region
   policy                             = data.aws_iam_policy_document.this.json
 }
 
