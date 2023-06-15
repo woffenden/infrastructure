@@ -25,7 +25,7 @@ jobs:
       id-token: write
     uses: ./.github/workflows/reusable-workflow-terraform.yml
     with:
-      working-directory: terraform/google/mta-sts
+      working-directory: terraform/google/woffenden/mta-sts
       cloud-provider: google
       google-workload-identity-pool: projects/800000204119/locations/global/workloadIdentityPools/github-actions/providers/github-actions
       google-service-account: github-actions@woffenden.iam.gserviceaccount.com
