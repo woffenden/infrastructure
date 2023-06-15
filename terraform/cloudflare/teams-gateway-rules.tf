@@ -1,5 +1,5 @@
 # resource "cloudflare_teams_rule" "cloudflare_curated" {
-#   account_id  = "af790e83102c7ab5347e7dfbf86ef021"
+#   account_id  = data.google_secret_manager_secret_version.cloudflare_account_id.secret_data
 #   enabled     = true
 #   name        = "cloudflare-curated-categories"
 #   description = "Cloudflare curated rules"

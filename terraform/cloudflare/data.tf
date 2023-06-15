@@ -5,3 +5,7 @@ data "google_secret_manager_secret_version" "cloudflare_email" {
 data "google_secret_manager_secret_version" "cloudflare_api_key" {
   secret = "cloudflare-api-key"
 }
+
+data "google_secret_manager_secret_version" "cloudflare_account_id" {
+  secret = "cloudflare-account-id"
+}

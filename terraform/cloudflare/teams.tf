@@ -1,5 +1,5 @@
 resource "cloudflare_teams_account" "woffenden" {
-  account_id           = "af790e83102c7ab5347e7dfbf86ef021"
+  account_id           = data.google_secret_manager_secret_version.cloudflare_account_id.secret_data
   tls_decrypt_enabled  = false
   activity_log_enabled = true
 
