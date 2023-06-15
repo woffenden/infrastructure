@@ -16,7 +16,7 @@ terraform {
 }
 
 provider "cloudflare" {
-  email = data.google_secret_manager_secret_version.cloudflare_email.secret_data
+  email   = data.google_secret_manager_secret_version.cloudflare_email.secret_data
   api_key = data.google_secret_manager_secret_version.cloudflare_api_key.secret_data
 }
 
