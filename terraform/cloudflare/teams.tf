@@ -18,8 +18,8 @@ resource "cloudflare_teams_account" "woffenden" {
   }
 
   proxy {
-    tcp = true
-    udp = true
+    tcp     = true
+    udp     = true
     root_ca = false
   }
 

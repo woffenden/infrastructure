@@ -1,11 +1,10 @@
 data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
 
 ####
 
 data "aws_iam_policy_document" "kms_key" {
   statement {
-    sid = "AWSConfigKMSPolicy"
+    sid    = "AWSConfigKMSPolicy"
     effect = "Allow"
     actions = [
       "kms:Decrypt",
@@ -49,8 +48,8 @@ data "aws_iam_policy_document" "s3_bucket" {
     }
   }
   statement {
-    sid = "AWSConfigBucketExistenceCheck"
-    effect = "Allow"
+    sid     = "AWSConfigBucketExistenceCheck"
+    effect  = "Allow"
     actions = ["s3:ListBucket"]
     principals {
       type        = "Service"
@@ -64,8 +63,8 @@ data "aws_iam_policy_document" "s3_bucket" {
     }
   }
   statement {
-    sid = "AWSConfigBucketDelivery"
-    effect = "Allow"
+    sid     = "AWSConfigBucketDelivery"
+    effect  = "Allow"
     actions = ["s3:PutObject"]
     principals {
       type        = "Service"
@@ -106,9 +105,9 @@ data "aws_iam_policy_document" "config_assume" {
 
 data "aws_iam_policy_document" "config" {
   statement {
-    sid       = "AWSConfigBucketS3Access"
-    effect    = "Allow"
-    actions   = ["s3:*"]
+    sid     = "AWSConfigBucketS3Access"
+    effect  = "Allow"
+    actions = ["s3:*"]
     resources = [
       "arn:aws:s3:::woffenden-organisation-config",
       "arn:aws:s3:::woffenden-organisation-config/*",
@@ -139,7 +138,7 @@ resource "aws_iam_role_policy_attachment" "organisation" {
 ####
 
 resource "aws_config_configuration_recorder" "this" {
-  name = "woffenden-organisation-config"
+  name     = "woffenden-organisation-config"
   role_arn = aws_iam_role.config.arn
 }
 
@@ -155,7 +154,7 @@ resource "aws_config_configuration_aggregator" "organisation" {
 }
 
 resource "aws_config_delivery_channel" "name" {
-  name = "woffenden-organisation-config-s3"
+  name           = "woffenden-organisation-config-s3"
   s3_bucket_name = module.s3_bucket.id
   s3_kms_key_arn = module.kms_key.arn
 }

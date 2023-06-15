@@ -1,28 +1,28 @@
 ---
-  name: Dependabot Configuration Generator
-  
-  on:
-    pull_request:
-      branches:
-        - main
-      paths:
-        - "**/.terraform.lock.hcl"
-  
-  permissions: read-all
-  
-  jobs:
-    dependabot-configuration-generator:
-      name: Dependabot Configuration Generator
-      runs-on: ubuntu-latest
-      permissions:
-        contents: write
-      steps:
-        - name: Checkout
-          id: checkout
-          uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-  
-        - name: Run Dependabot Configuration Generator
-          id: run_dependabot_configuration_generator
-          run: bash -x scripts/dependabot/configuration-generator.sh
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+name: Dependabot Configuration Generator
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "**/.terraform.lock.hcl"
+
+permissions: read-all
+
+jobs:
+  dependabot-configuration-generator:
+    name: Dependabot Configuration Generator
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Run Dependabot Configuration Generator
+        id: run_dependabot_configuration_generator
+        run: bash -x scripts/dependabot/configuration-generator.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

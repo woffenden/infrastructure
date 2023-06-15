@@ -12,11 +12,6 @@ variable "storage_class" {
   default = "STANDARD"
 }
 
-variable "uniform_bucket_level_access" {
-  type    = bool
-  default = true
-}
-
 variable "cloudflare_zone_id" {
   type = string
 }

@@ -16,7 +16,6 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-
   - package-ecosystem: "terraform"
     directory: "terraform/aws/accounts/development/iam"
     schedule:
@@ -28,7 +27,6 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-
   - package-ecosystem: "terraform"
     directory: "terraform/aws/accounts/production/iam"
     schedule:
@@ -40,7 +38,6 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-
   - package-ecosystem: "terraform"
     directory: "terraform/aws/accounts/root/iam"
     schedule:
@@ -52,7 +49,6 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-
   - package-ecosystem: "terraform"
     directory: "terraform/aws/accounts/root/organisation"
     schedule:
@@ -64,7 +60,6 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-
   - package-ecosystem: "terraform"
     directory: "terraform/aws/accounts/root/route53"
     schedule:
@@ -76,7 +71,6 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-
   - package-ecosystem: "terraform"
     directory: "terraform/aws/accounts/root/sso"
     schedule:
@@ -88,7 +82,6 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-
   - package-ecosystem: "terraform"
     directory: "terraform/cloudflare"
     schedule:
@@ -100,7 +93,6 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-
   - package-ecosystem: "terraform"
     directory: "terraform/google/woffenden/mta-sts"
     schedule:
@@ -112,4 +104,3 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-

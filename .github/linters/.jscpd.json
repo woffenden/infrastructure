@@ -1,0 +1,6 @@
+{
+    "absolute": true,
+    "ignore": ["**/.github/workflows/terraform-*","**/cloudformation/root-account-bootstrap.yaml"],
+    "reporters": ["consoleFull"],
+    "threshold": 0
+  }

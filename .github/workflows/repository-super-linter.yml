@@ -1,0 +1,38 @@
+---
+name: Super-Linter
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - edited
+      - opened
+      - reopened
+      - synchronize
+
+permissions: read-all
+
+jobs:
+  super-linter:
+    name: Super-Linter
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      statuses: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        with:
+          fetch-depth: 0
+
+      - name: Load Super-Linter Variables
+        id: load_super_linter_variables
+        run: cat .github/super-linter.env >>"${GITHUB_ENV}"
+
+      - name: Super-Linter
+        id: super_linter
+        uses: super-linter/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

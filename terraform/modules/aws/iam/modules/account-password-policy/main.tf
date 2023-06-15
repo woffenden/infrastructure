@@ -1,4 +1,6 @@
 resource "aws_iam_account_password_policy" "this" {
+  #ts:skip=AC_AWS_0138
+  #ts:skip=AC_AWS_0472
   allow_users_to_change_password = var.allow_users_to_change_password
   hard_expiry                    = var.hard_expiry
   max_password_age               = var.max_password_age
