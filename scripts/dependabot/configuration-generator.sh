@@ -25,7 +25,6 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
-
 EOL
 
 for folder in ${terraform}; do
@@ -40,7 +39,6 @@ for folder in ${terraform}; do
   printf "      include: \"scope\"\n" >> "${DEPENDABOT_CONFIGURATION_FILE}"
   printf "    reviewers:\n" >> "${DEPENDABOT_CONFIGURATION_FILE}"
   printf "      - \"jacobwoffenden\"\n" >> "${DEPENDABOT_CONFIGURATION_FILE}"
-  printf "\n" >> "${DEPENDABOT_CONFIGURATION_FILE}"
 done
 
 if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
