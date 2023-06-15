@@ -53,6 +53,9 @@ if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
     if [[ "${branchSha}" != "${mainSha}" ]]; then
       echo "Branch has already been updated, using branch data"
       export apiFieldSha="${branchSha}"
+    else
+      echo "Branch has not been updated, using main data"
+      export apiFieldSha="${mainSha}"
     fi
 
     gh api \
