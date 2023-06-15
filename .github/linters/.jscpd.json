@@ -1,0 +1,7 @@
+{
+    "absolute": true,
+    "ignore": ["**/.github/workflows/terraform-*"],
+    "reporters": ["consoleFull"],
+    "threshold": 0
+  }
+  
