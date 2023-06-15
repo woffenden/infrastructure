@@ -2,7 +2,7 @@ resource "google_storage_bucket" "this" {
   name                        = local.gcs_bucket_name
   location                    = var.location
   storage_class               = var.storage_class
-  uniform_bucket_level_access = "true"
+  uniform_bucket_level_access = true
 }
 
 resource "google_storage_bucket_object" "mta_sts" {

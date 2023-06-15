@@ -3,7 +3,7 @@ variable "bucket_name" {
 }
 
 variable "bucket_versioning" {
-  type = string
+  type    = string
   default = "Disabled"
 }
 
