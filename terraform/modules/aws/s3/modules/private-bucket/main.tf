@@ -20,6 +20,7 @@ data "aws_iam_policy_document" "this" {
 
 resource "aws_s3_bucket" "this" {
   bucket = var.bucket_name
+
 }
 
 resource "aws_s3_bucket_acl" "this" {
@@ -47,5 +48,13 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
       kms_master_key_id = "aws/s3"
       sse_algorithm     = "aws:kms"
     }
+  }
+}
+
+resource "aws_s3_bucket_versioning" {
+  bucket = aws_s3_bucket.this.id
+
+  versioning_configuration {
+    status = var.bucket_versioning
   }
 }
