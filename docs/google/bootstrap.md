@@ -1,6 +1,6 @@
 # Bootstrap Google Cloud Platform
 
-1. Launch a Cloud Shell (https://console.cloud.google.com)
+1. Launch a Cloud Shell (<https://console.cloud.google.com>)
 
 1. Create a project
 

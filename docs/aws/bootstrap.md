@@ -4,7 +4,7 @@
 
 1. Enable MFA on Root user credentials
 
-1. Generate an Access Keypair (https://console.aws.amazon.com/iam/home#/security_credentials)
+1. Generate an Access Keypair (<https://console.aws.amazon.com/iam/home#/security_credentials>)
 
 1. Launch an AWS CLI Container
 
@@ -46,7 +46,7 @@
       --capabilities CAPABILITY_NAMED_IAM
     ```
 
-1. Delete Root Access Keypair (https://console.aws.amazon.com/iam/home#/security_credentials)
+1. Delete Root Access Keypair (<https://console.aws.amazon.com/iam/home#/security_credentials>)
 
 ## Updating
 
