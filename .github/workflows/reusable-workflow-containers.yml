@@ -54,14 +54,14 @@ jobs:
         id: prepare_environment
         run: |
           echo "name=$(jq -r '.name' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
-          echo "name=$(jq -r '.version' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+          echo "version=$(jq -r '.version' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
 
       - name: Check if tag already exists
         id: check_if_tag_exists
         run: |
           imageTag=$(aws ecr describe-images \
-            --repository-name "${{ steps.prepare_environment.outputs.name }}" \
-            | jq -r --arg imageTag "${{ steps.prepare_environment.outputs.version }}" '.imageDetails[] | select(.imageTags[] == $imageTag) | .imageTags[]')
+            --repository-name "${{ env.name }}" \
+            | jq -r --arg imageTag "${{ env.version }}" '.imageDetails[] | select(.imageTags[] == $imageTag) | .imageTags[]')
           export imageTag
           if [[ -z "${imageTag}" ]]; then
             echo "tag_exists=false" >>"${GITHUB_ENV}"
