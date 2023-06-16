@@ -77,5 +77,5 @@ jobs:
             exit 1
           else
             echo "OK: ECR tag does not exist" >>"${GITHUB_STEP_SUMMARY}"
-            ext 0
+            exit 0
           fi
