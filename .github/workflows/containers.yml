@@ -39,7 +39,7 @@ jobs:
 
   container-workflow:
     needs: [detect-changes]
-    name: Reusable Container Workflow
+    name: Reusable Workflow
     permissions:
       contents: read
       id-token: write
