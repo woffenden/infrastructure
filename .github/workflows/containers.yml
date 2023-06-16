@@ -37,11 +37,9 @@ jobs:
         with:
           filters: .github/path-filters/containers.yml
 
-  build:
-    if: ${{ needs.detect-changes.outputs.images != '[]' }}
+  container-workflow:
     needs: [detect-changes]
-    name: Build
-    runs-on: ubuntu-latest
+    name: Reusable Container Workflow
     permissions:
       contents: read
       id-token: write
@@ -49,19 +47,6 @@ jobs:
       fail-fast: false
       matrix:
         image: ${{ fromJson(needs.detect-changes.outputs.images) }}
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-
-      - name: Prepare Environment
-        id: prepare_environment
-        run: |
-          echo "name=$(jq -r '.name' containers/${{ matrix.image }}/config.json)" >>"${GITHUB_ENV}"
-          echo "version=$(jq -r '.version' containers/${{ matrix.image }}/config.json)" >>"${GITHUB_ENV}"
-
-      - name: DEBUG
-        id: debug
-        run: |
-          echo "Container Image: ${{ env.name }}"
-          echo "Container Version: ${{ env.version }}"
+    uses: ./.github/workflows/reusable-workflow-containers.yml
+    with:
+      image: ${{ matrix.image }}

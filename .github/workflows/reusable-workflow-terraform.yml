@@ -27,8 +27,8 @@ on:
         default: latest
 
 jobs:
-  determine-terraform-mode:
-    name: Determine Terraform Mode
+  determine-workflow-mode:
+    name: Determine Workflow Mode
     runs-on: ubuntu-latest
     outputs:
       mode: ${{ steps.determine_mode.outputs.mode }}
@@ -43,8 +43,8 @@ jobs:
           fi
 
   terraform:
-    needs: [determine-terraform-mode]
-    name: Terraform ${{ needs.determine-terraform-mode.outputs.mode }}
+    needs: [determine-workflow-mode]
+    name: ${{ needs.determine-workflow-mode.outputs.mode }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

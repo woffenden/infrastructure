@@ -1,0 +1,37 @@
+---
+on:
+  workflow_call:
+    inputs:
+      image:
+        type: string
+        required: true
+
+jobs:
+  determine-workflow-mode:
+    name: Determine Workflow Mode
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.determine_mode.outputs.mode }}
+    steps:
+      - name: Determine Mode
+        id: determine_mode
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "mode=Build and Push" >>"${GITHUB_OUTPUT}"
+          else
+            echo "mode=Build" >>"${GITHUB_OUTPUT}"
+          fi
+
+  terraform:
+    needs: [determine-workflow-mode]
+    name: ${{ needs.determine-terraform-mode.outputs.mode }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: DEBUG
+        id: debug
+        run: |
+          echo "Image: ${{ inputs.image }}"
