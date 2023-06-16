@@ -1,8 +1,8 @@
-resource "cloudflare_teams_rule" "cloudflare_curated" {
+resource "cloudflare_teams_rule" "cloudflare_security_dns" {
   account_id  = data.google_secret_manager_secret_version.cloudflare_account_id.secret_data
   enabled     = true
-  name        = "cloudflare-curated-categories"
-  description = "Cloudflare curated categories"
+  name        = "cloudflare-security"
+  description = "Cloudflare Security"
   action      = "block"
   filters     = ["dns"]
   precedence  = "8"
