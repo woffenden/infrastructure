@@ -15,7 +15,7 @@ resource "aws_ecr_repository" "this" {
 
 data "aws_iam_policy_document" "this" {
   statement {
-    sid     = "AllowPull"
+    sid = "AllowPull"
     actions = [
       "ecr:GetDownloadUrlForLayer",
       "ecr:BatchGetImage",
@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "this" {
     }
   }
   statement {
-    sid     = "AllowPush"
+    sid = "AllowPush"
     actions = [
       "ecr:GetDownloadUrlForLayer",
       "ecr:BatchGetImage",
