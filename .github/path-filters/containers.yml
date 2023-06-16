@@ -1,0 +1,2 @@
+---
+aws-ssosync: ./containers/aws-ssosync/**

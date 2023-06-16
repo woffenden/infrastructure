@@ -1,0 +1,6 @@
+FROM public.ecr.aws/docker/library/alpine:3.18.2
+
+ARG AWS_SSO_SYNC_VERSION="2.0.2"
+
+RUN apk add --no-cache \
+      curl=8.1.2
