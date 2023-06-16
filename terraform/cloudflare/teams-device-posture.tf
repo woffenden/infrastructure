@@ -21,7 +21,7 @@ resource "cloudflare_device_posture_rule" "macos_version" {
   }
   input {
     operator = ">="
-    version  = "12.4.0"
+    version  = "13.4.0"
   }
 }
 
