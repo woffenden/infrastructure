@@ -18,8 +18,8 @@ on:
 permissions: read-all
 
 jobs:
-  iam:
-    name: IAM
+  ecr:
+    name: ECR
     permissions:
       contents: read
       id-token: write
