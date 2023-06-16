@@ -27,8 +27,24 @@ on:
         default: latest
 
 jobs:
+  determine-terraform-mode:
+    name: Determine Terraform Mode
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.determine_mode.outputs.mode }}
+    steps:
+      - name: Determine Mode
+        id: determine_mode
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "mode=Apply" >>"${GITHUB_OUTPUT}"
+          else
+            echo "mode=Plan" >>"${GITHUB_OUTPUT}"
+          fi
+
   terraform:
-    name: Terraform
+    needs: [determine-terraform-mode]
+    name: Terraform ${{ needs.determine-terraform-mode.outputs.mode }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
