@@ -56,7 +56,7 @@ jobs:
           echo "name=$(jq -r '.name' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
           echo "version=$(jq -r '.version' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
 
-      - name: Check if tag already exists
+      - name: Check if Tag Exists
         id: check_if_tag_exists
         run: |
           imageTag=$(aws ecr describe-images \
@@ -67,4 +67,15 @@ jobs:
             echo "tag_exists=false" >>"${GITHUB_ENV}"
           else
             echo "tag_exists=true" >>"${GITHUB_ENV}"
+          fi
+
+      - name: Evaluate Checks
+        id: evaluate_checks
+        run: |
+          if [[ "${{ env.tag_exists }}" == "true" ]]; then
+            echo "FAIL: ECR tag already exists" >>"${GITHUB_STEP_SUMMARY}"
+            exit 1
+          else
+            echo "OK: ECR tag does not exist" >>"${GITHUB_STEP_SUMMARY}"
+            ext 0
           fi
