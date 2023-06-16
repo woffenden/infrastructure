@@ -28,6 +28,17 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
+    directory: "terraform/aws/accounts/platform-services/ecr"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+  - package-ecosystem: "terraform"
     directory: "terraform/aws/accounts/production/iam"
     schedule:
       interval: "daily"
