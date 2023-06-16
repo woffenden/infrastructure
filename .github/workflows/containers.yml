@@ -36,33 +36,14 @@ jobs:
         with:
           filters: .github/path-filters/containers.yml
 
-  pre-flight-checks:
-    if: ${{ needs.detect-changes.outputs.images != '[]' }}
-    needs: [detect-changes]
-    name: Pre-Flight Checks
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ${{ fromJson(needs.detect-changes.outputs.images) }}
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-
-      - name: DEBUG
-        run: |
-          echo "Container Image: ${{ matrix.image }}"
-
   build:
     if: ${{ needs.detect-changes.outputs.images != '[]' }}
-    needs: [detect-changes, pre-flight-checks]
+    needs: [detect-changes]
     name: Build
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write
     strategy:
       fail-fast: false
       matrix:
@@ -72,6 +53,14 @@ jobs:
         id: checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
-      - name: DEBUG
+      - name: Prepare Environment
+        id: prepare_environment
         run: |
-          echo "Container Image: ${{ matrix.image }}"
+          echo "name=$(jq -r '.name' containers/${{ matrix.image }}/config.json)" >>"${GITHUB_ENV}"
+          echo "version=$(jq -r '.version' containers/${{ matrix.image }}/config.json)" >>"${GITHUB_ENV}"
+
+      - name: DEBUG
+        id: debug
+        run: |
+          echo "Container Image: ${{ env.name }}"
+          echo "Container Version: ${{ env.version }}"
