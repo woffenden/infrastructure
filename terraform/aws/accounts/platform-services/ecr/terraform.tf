@@ -15,10 +15,6 @@ terraform {
 }
 
 provider "aws" {
-  alias = "session"
-}
-
-provider "aws" {
   region = "eu-west-2"
   assume_role {
     role_arn = "arn:aws:iam::126246520815:role/organisation-administrator-role"
