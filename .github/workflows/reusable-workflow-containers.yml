@@ -56,8 +56,8 @@ jobs:
           echo "name=$(jq -r '.name' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
           echo "version=$(jq -r '.version' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
 
-      - name: Check if Tag Exists
-        id: check_if_tag_exists
+      - name: Check Tag Exists
+        id: check_tag_exists
         run: |
           imageTag=$(aws ecr describe-images \
             --repository-name "${{ env.name }}" \
