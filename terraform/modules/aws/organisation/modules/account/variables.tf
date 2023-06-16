@@ -22,3 +22,8 @@ variable "iam_user_access_to_billing" {
   type    = string
   default = "ALLOW"
 }
+
+variable "close_on_deletion" {
+  type    = bool
+  default = true
+}
