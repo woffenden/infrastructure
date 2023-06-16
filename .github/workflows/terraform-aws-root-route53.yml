@@ -1,0 +1,31 @@
+---
+name: Terraform - AWS - Root - Route 53
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terraform-aws-root-route53.yml
+      - terraform/aws/accounts/root/route53/**
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/terraform-aws-root-route53.yml
+      - terraform/aws/accounts/root/route53/**
+
+permissions: read-all
+
+jobs:
+  route53:
+    name: Route 53
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/reusable-workflow-terraform.yml
+    with:
+      working-directory: terraform/aws/accounts/root/route53
+      cloud-provider: aws
+      aws-region: eu-west-2
+      aws-role-to-assume: arn:aws:iam::749019155605:role/github-actions
