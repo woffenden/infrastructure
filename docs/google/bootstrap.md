@@ -103,20 +103,30 @@
     gcloud \
       projects \
       add-iam-policy-binding \
+      woffenden \
       --member="serviceAccount:github-actions@woffenden.iam.gserviceaccount.com" \
       --role="roles/resourcemanager.organizationAdmin"
 
     gcloud \
       projects \
       add-iam-policy-binding \
+      woffenden \
       --member="serviceAccount:github-actions@woffenden.iam.gserviceaccount.com" \
       --role="roles/storage.admin"
 
     gcloud \
       projects \
       add-iam-policy-binding \
+      woffenden \
       --member="serviceAccount:github-actions@woffenden.iam.gserviceaccount.com" \
       --role="roles/compute.admin"
+
+    gcloud \
+      projects \
+      add-iam-policy-binding \
+      woffenden \
+      --member="serviceAccount:github-actions@woffenden.iam.gserviceaccount.com" \
+      --role="roles/secretmanager.admin"
     ```
 
 1. Configure Workload Identity
