@@ -24,7 +24,7 @@ jobs:
 
   terraform:
     needs: [determine-workflow-mode]
-    name: ${{ needs.determine-terraform-mode.outputs.mode }}
+    name: ${{ needs.determine-workflow-mode.outputs.mode }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
