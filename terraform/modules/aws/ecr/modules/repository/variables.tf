@@ -21,12 +21,6 @@ variable "encryption_type" {
   default     = "KMS"
 }
 
-variable "kms_key" {
-  type        = string
-  description = "The ARN of the KMS key to use when encrypting the repository. If not specified, uses the default AWS managed key for ECR"
-  default     = "aws/ecr"
-}
-
 variable "scan_on_push" {
   type        = bool
   description = "If true, images will be scanned after being pushed to the repository"

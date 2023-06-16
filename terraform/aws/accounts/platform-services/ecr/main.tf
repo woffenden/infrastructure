@@ -1,4 +1,4 @@
-module "test" {
+module "ecr_repositories" {
   for_each = local.ecr_repositories
   source   = "../../../../modules/aws/ecr/modules/repository"
 
