@@ -71,6 +71,8 @@ jobs:
 
       - name: Check CHANGELOG Updates
         id: check_changelog_updates
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           mainSha=$(gh api --method GET /repos/"${GITHUB_REPOSITORY}"/contents/containers/${{ inputs.image }}/CHANGELOG.md --field ref="main" | jq -r '.sha')
           branchSha=$(gh api --method GET /repos/"${GITHUB_REPOSITORY}"/contents/containers/${{ inputs.image }}/CHANGELOG.md --field ref="${GITHUB_HEAD_REF}" | jq -r '.sha')
