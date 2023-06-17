@@ -100,17 +100,12 @@ jobs:
             export failBuild="true"
           else
             echo "OK: ECR tag does not exist" >>"${GITHUB_STEP_SUMMARY}"
-            exit 0
           fi
 
           if [[ "${{ env.changelog_updated }}" == "true" ]]; then
             echo "OK: CHANGELOG.md has been updated" >>"${GITHUB_STEP_SUMMARY}"
-            exit 0
           elif [[ "${{ env.changelog_updated }}" == "false" ]]; then
-            echo "FAIL: CHANGELOG.md does not need to be updated" >>"${GITHUB_STEP_SUMMARY}"
-            export failBuild="true"
-          elif [[ -z "${mainSha}" ]] && [[ -z "${branchSha}" ]]; then
-            echo "FAIL: CHANGELOG.md does not exist" >>"${GITHUB_STEP_SUMMARY}"
+            echo "FAIL: CHANGELOG.md needs to be updated" >>"${GITHUB_STEP_SUMMARY}"
             export failBuild="true"
           fi
 
