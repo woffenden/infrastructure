@@ -69,6 +69,25 @@ jobs:
             echo "tag_exists=true" >>"${GITHUB_ENV}"
           fi
 
+      - name: Check CHANGELOG Updates
+        id: check_changelog_updates
+        run: |
+          mainSha=$(gh api --method GET /repos/"${GITHUB_REPOSITORY}"/contents/containers/${{ inputs.image }}/CHANGELOG.md --field ref="main" | jq -r '.sha')
+          branchSha=$(gh api --method GET /repos/"${GITHUB_REPOSITORY}"/contents/containers/${{ inputs.image }}/CHANGELOG.md --field ref="${GITHUB_HEAD_REF}" | jq -r '.sha')
+
+          if [[ -z "${mainSha}" ]]; then
+            SHA not found for main branch, assuming CHANGELOG.md does not exist
+          elif [[ -z "${branchSha}" ]]; then
+            SHA not found for "${GITHUB_HEAD_REF}" branch, assuming CHANGELOG.md does not exist
+            "changelog_updated=false" >>"${GITHUB_ENV}"
+          elif [[ "${mainSha}" == "${branchSha}" ]]; then
+            echo "CHANGELOG.md matches main branch, neesd to be updated"
+            echo "changelog_updated=false" >>"${GITHUB_ENV}"
+          elif [[ "${mainSha}" != "${branchSha}" ]]; then
+            echo "CHANGELOG.md does not match main branch, does not need to be updated"
+            echo "changelog_updated=true" >>"${GITHUB_ENV}"
+          fi
+
       - name: Evaluate Checks
         id: evaluate_checks
         run: |
@@ -76,8 +95,23 @@ jobs:
 
           if [[ "${{ env.tag_exists }}" == "true" ]]; then
             echo "FAIL: ECR tag already exists" >>"${GITHUB_STEP_SUMMARY}"
-            exit 1
+            export failBuild="true"
           else
             echo "OK: ECR tag does not exist" >>"${GITHUB_STEP_SUMMARY}"
             exit 0
+          fi
+
+          if [[ "${{ env.changelog_updated }}" == "true" ]]; then
+            echo "OK: CHANGELOG.md has been updated" >>"${GITHUB_STEP_SUMMARY}"
+            exit 0
+          elif [[ "${{ env.changelog_updated }}" == "false" ]]; then
+            echo "FAIL: CHANGELOG.md does not need to be updated" >>"${GITHUB_STEP_SUMMARY}"
+            export failBuild="true"
+          elif [[ -z "${mainSha}" ]] && [[ -z "${branchSha}" ]]; then
+            echo "FAIL: CHANGELOG.md does not exist" >>"${GITHUB_STEP_SUMMARY}"
+            export failBuild="true"
+          fi
+
+          if [[ "${failBuild}" == "true" ]]; then
+            exit 1
           fi
