@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Bumping for ECR testing
 
-
 ## [0.0.1] - 2023-06-16
 
 ### Added
