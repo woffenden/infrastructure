@@ -7,24 +7,8 @@ on:
         required: true
 
 jobs:
-  determine-workflow-mode:
-    name: Determine Workflow Mode
-    runs-on: ubuntu-latest
-    outputs:
-      mode: ${{ steps.determine_mode.outputs.mode }}
-    steps:
-      - name: Determine Mode
-        id: determine_mode
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "mode=Build and Push" >>"${GITHUB_OUTPUT}"
-          else
-            echo "mode=Build" >>"${GITHUB_OUTPUT}"
-          fi
-
   preflight-checks:
     if: github.ref != 'refs/heads/main'
-    needs: [determine-workflow-mode]
     name: Preflight Checks
     runs-on: ubuntu-latest
     steps:
@@ -117,7 +101,7 @@ jobs:
 
   build:
     if: github.ref != 'refs/heads/main'
-    needs: [determine-workflow-mode, preflight-checks]
+    needs: [preflight-checks]
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -152,8 +136,7 @@ jobs:
 
   build-push:
     if: github.ref == 'refs/heads/main'
-    needs: [determine-workflow-mode]
-    name: ${{ needs.determine-workflow-mode.outputs.mode }}
+    name: Build and Push
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -177,6 +160,10 @@ jobs:
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
           role-skip-session-tagging: true
+
+      - name: Login to Amazon ECR
+        id: login_ecr
+        uses: aws-actions/amazon-ecr-login@2f9f10ea3fa2eed41ac443fee8bfbd059af2d0a4 # v1.6.0
 
       - name: Prepare Environment
         id: prepare_environment
