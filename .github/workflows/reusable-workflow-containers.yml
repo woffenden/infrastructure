@@ -132,6 +132,17 @@ jobs:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Containerfile
           push: false
+          load: true
+          tags: ${{ env.name }}:${{ env.version }}
+
+      - name: Scan
+        id: scan
+        uses: aquasecurity/trivy-action@41f05d9ecffa2ed3f1580af306000f734b733e54 # v0.11.2
+        with:
+          image-ref: ${{ env.name }}:${{ env.version }}
+          exit-code: 1
+          format: sarif
+          output: trivy-results.sarif
 
   # build-and-push:
   #   if: github.ref == 'refs/heads/main'

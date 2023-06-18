@@ -1,17 +1,16 @@
-FROM public.ecr.aws/docker/library/alpine:3.18.2
+FROM public.ecr.aws/docker/library/alpine:3.18.2 as BUILD
 
 ARG AWS_SSO_SYNC_VERSION="2.0.2"
 
-COPY src/usr/local/bin/ssosync.sh /usr/local/bin/ssosync.sh
-
 RUN apk add --no-cache \
-      aws-cli==2.12.1-r0 \
       curl==8.1.2-r0 \
     && curl --location "https://github.com/awslabs/ssosync/releases/download/v${AWS_SSO_SYNC_VERSION}/ssosync_Linux_x86_64.tar.gz" \
          --output ssosync_Linux_arm64.tar.gz \
-    && tar -xzf ssosync_Linux_arm64.tar.gz \
-    && mv ssosync /usr/local/bin/ssosync \
-    && rm -f ssosync_Linux_arm64.tar.gz README.md LICENSE CHANGELOG.md \
-    && chmod +x /usr/local/bin/ssosync.sh
+    && tar -xzf ssosync_Linux_arm64.tar.gz
 
-ENTRYPOINT ["/usr/local/bin/ssosync.sh"]
+FROM public.ecr.aws/docker/library/alpine:3.18.2
+
+COPY --from=BUILD /ssosync /usr/local/bin/ssosync
+COPY src/usr/local/bin/ssosync.sh /usr/local/bin/ssosync.sh
+
+ENTRYPOINT ["/bin/sh", "/usr/local/bin/ssosync.sh"]
