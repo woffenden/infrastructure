@@ -23,6 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read
     outputs:
       images: ${{ steps.detect_changes.outputs.changes }}
     steps:
@@ -36,42 +37,17 @@ jobs:
         with:
           filters: .github/path-filters/containers.yml
 
-  pre-flight-checks:
-    if: ${{ needs.detect-changes.outputs.images != '[]' }}
+  container-workflow:
     needs: [detect-changes]
-    name: Pre-Flight Checks
-    runs-on: ubuntu-latest
+    name: Reusable Workflow
     permissions:
       contents: read
+      id-token: write
+      security-events: write
     strategy:
       fail-fast: false
       matrix:
         image: ${{ fromJson(needs.detect-changes.outputs.images) }}
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-
-      - name: DEBUG
-        run: |
-          echo "Container Image: ${{ matrix.image }}"
-
-  build:
-    if: ${{ needs.detect-changes.outputs.images != '[]' }}
-    needs: [detect-changes, pre-flight-checks]
-    name: Build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        image: ${{ fromJson(needs.detect-changes.outputs.images) }}
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-
-      - name: DEBUG
-        run: |
-          echo "Container Image: ${{ matrix.image }}"
+    uses: ./.github/workflows/reusable-workflow-containers.yml
+    with:
+      image: ${{ matrix.image }}

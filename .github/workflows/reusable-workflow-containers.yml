@@ -1,0 +1,194 @@
+---
+on:
+  workflow_call:
+    inputs:
+      image:
+        type: string
+        required: true
+
+jobs:
+  determine-workflow-mode:
+    name: Determine Workflow Mode
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.determine_mode.outputs.mode }}
+    steps:
+      - name: Determine Mode
+        id: determine_mode
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "mode=Build and Push" >>"${GITHUB_OUTPUT}"
+          else
+            echo "mode=Build" >>"${GITHUB_OUTPUT}"
+          fi
+
+  preflight-checks:
+    if: github.ref != 'refs/heads/main'
+    needs: [determine-workflow-mode]
+    name: Preflight Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Configure AWS Credentials
+        id: configure_aws_credentials
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::749019155605:role/github-actions
+
+      - name: Assume Platform Services Organisation Administrator Role
+        id: assume_platform_services_organisation_administrator_role
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::126246520815:role/organisation-administrator-role
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+          role-skip-session-tagging: true
+
+      - name: Prepare Environment
+        id: prepare_environment
+        run: |
+          echo "name=$(jq -r '.name' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+          echo "version=$(jq -r '.version' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+
+      - name: Check Tag Exists
+        id: check_tag_exists
+        run: |
+          imageTag=$(aws ecr describe-images \
+            --repository-name "${{ env.name }}" \
+            | jq -r --arg imageTag "${{ env.version }}" '.imageDetails[] | select(.imageTags[] == $imageTag) | .imageTags[]')
+          export imageTag
+          if [[ -z "${imageTag}" ]]; then
+            echo "tag_exists=false" >>"${GITHUB_ENV}"
+          else
+            echo "tag_exists=true" >>"${GITHUB_ENV}"
+          fi
+
+      - name: Check CHANGELOG Updates
+        id: check_changelog_updates
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mainSha=$(gh api --method GET /repos/"${GITHUB_REPOSITORY}"/contents/containers/${{ inputs.image }}/CHANGELOG.md --field ref="main" | jq -r '.sha')
+          branchSha=$(gh api --method GET /repos/"${GITHUB_REPOSITORY}"/contents/containers/${{ inputs.image }}/CHANGELOG.md --field ref="${GITHUB_HEAD_REF}" | jq -r '.sha')
+
+          if [[ -z "${mainSha}" ]]; then
+            SHA not found for main branch, assuming CHANGELOG.md does not exist
+          elif [[ -z "${branchSha}" ]]; then
+            SHA not found for "${GITHUB_HEAD_REF}" branch, assuming CHANGELOG.md does not exist
+            "changelog_updated=false" >>"${GITHUB_ENV}"
+          elif [[ "${mainSha}" == "${branchSha}" ]]; then
+            echo "CHANGELOG.md matches main branch, neesd to be updated"
+            echo "changelog_updated=false" >>"${GITHUB_ENV}"
+          elif [[ "${mainSha}" != "${branchSha}" ]]; then
+            echo "CHANGELOG.md does not match main branch, does not need to be updated"
+            echo "changelog_updated=true" >>"${GITHUB_ENV}"
+          fi
+
+      - name: Evaluate Checks
+        id: evaluate_checks
+        run: |
+          echo "# Preflight Checks" >>"${GITHUB_STEP_SUMMARY}"
+
+          if [[ "${{ env.tag_exists }}" == "true" ]]; then
+            echo "FAIL: ECR tag already exists" >>"${GITHUB_STEP_SUMMARY}"
+            export failBuild="true"
+          else
+            echo "OK: ECR tag does not exist" >>"${GITHUB_STEP_SUMMARY}"
+            export failBuild="false"
+          fi
+
+          if [[ "${{ env.changelog_updated }}" == "true" ]]; then
+            echo "OK: CHANGELOG.md has been updated" >>"${GITHUB_STEP_SUMMARY}"
+            export failBuild="false"
+          elif [[ "${{ env.changelog_updated }}" == "false" ]]; then
+            echo "FAIL: CHANGELOG.md needs to be updated" >>"${GITHUB_STEP_SUMMARY}"
+            export failBuild="true"
+          fi
+
+          if [[ "${failBuild}" == "true" ]]; then
+            exit 1
+          fi
+
+  build:
+    if: github.ref != 'refs/heads/main'
+    needs: [determine-workflow-mode, preflight-checks]
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Prepare Environment
+        id: prepare_environment
+        run: |
+          echo "name=$(jq -r '.name' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+          echo "version=$(jq -r '.version' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+
+      - name: Build
+        id: build
+        uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825 # v4.1.1
+        with:
+          context: containers/${{ inputs.image }}
+          file: containers/${{ inputs.image }}/Containerfile
+          push: false
+          load: true
+          tags: ${{ env.name }}:${{ env.version }}
+
+      - name: Scan
+        id: scan
+        uses: aquasecurity/trivy-action@41f05d9ecffa2ed3f1580af306000f734b733e54 # v0.11.2
+        with:
+          image-ref: ${{ env.name }}:${{ env.version }}
+          exit-code: 1
+          format: sarif
+          output: trivy-results.sarif
+
+  build-push:
+    if: github.ref == 'refs/heads/main'
+    needs: [determine-workflow-mode]
+    name: ${{ needs.determine-workflow-mode.outputs.mode }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Configure AWS Credentials
+        id: configure_aws_credentials
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::749019155605:role/github-actions
+
+      - name: Assume Platform Services Organisation Administrator Role
+        id: assume_platform_services_organisation_administrator_role
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::126246520815:role/organisation-administrator-role
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+          role-skip-session-tagging: true
+
+      - name: Prepare Environment
+        id: prepare_environment
+        run: |
+          echo "name=$(jq -r '.name' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+          echo "version=$(jq -r '.version' containers/${{ inputs.image }}/config.json)" >>"${GITHUB_ENV}"
+
+      - name: Build
+        id: build
+        uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825 # v4.1.1
+        with:
+          context: containers/${{ inputs.image }}
+          file: containers/${{ inputs.image }}/Containerfile
+          push: true
+          tags: 126246520815.dkr.ecr.eu-west-2.amazonaws.com/${{ env.name }}:${{ env.version }}
