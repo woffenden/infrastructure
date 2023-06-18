@@ -93,7 +93,7 @@ jobs:
       - name: Evaluate Checks
         id: evaluate_checks
         run: |
-          echo "# Preflight Checks" >>"${GITHUB_STEP_SUMMARY}
+          echo "# Preflight Checks" >>"${GITHUB_STEP_SUMMARY}"
 
           if [[ "${{ env.tag_exists }}" == "true" ]]; then
             echo "FAIL: ECR tag already exists" >>"${GITHUB_STEP_SUMMARY}"
@@ -118,7 +118,7 @@ jobs:
   build:
     if: github.ref != 'refs/heads/main'
     needs: [determine-workflow-mode, preflight-checks]
-    name: ${{ needs.determine-workflow-mode.outputs.mode }}
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
