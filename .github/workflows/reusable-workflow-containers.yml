@@ -152,6 +152,7 @@ jobs:
 
   build-push:
     if: github.ref == 'refs/heads/main'
+    needs: [determine-workflow-mode]
     name: ${{ needs.determine-workflow-mode.outputs.mode }}
     runs-on: ubuntu-latest
     steps:
