@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 resource "aws_ecr_repository" "this" {
   name                 = var.name
   image_tag_mutability = var.image_tag_mutability
@@ -14,32 +16,30 @@ resource "aws_ecr_repository" "this" {
 
 data "aws_iam_policy_document" "this" {
   statement {
-    sid = "AllowPull"
+    sid = "CrossAccountPermission"
     actions = [
-      "ecr:GetDownloadUrlForLayer",
       "ecr:BatchGetImage",
-      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer"
     ]
     principals {
       type        = "AWS"
-      identifiers = var.pull_arns
+      identifiers = formatlist("arn:aws:iam::%s:root", var.pull_accounts)
     }
   }
   statement {
-    sid = "AllowPush"
+    sid = "LambdaECRImageCrossAccountRetrievalPolicy"
     actions = [
-      "ecr:GetDownloadUrlForLayer",
       "ecr:BatchGetImage",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:PutImage",
-      "ecr:InitiateLayerUpload",
-      "ecr:UploadLayerPart",
-      "ecr:CompleteLayerUpload",
-      "ecr:GetAuthorizationToken"
+      "ecr:GetDownloadUrlForLayer"
     ]
     principals {
-      type        = "AWS"
-      identifiers = var.push_arns
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+    condition {
+      test     = "StringLike"
+      variable = "aws:sourceArn"
+      values   = formatlist("arn:aws:lambda:${data.aws_region.current.name}:%s:function:*", var.pull_accounts)
     }
   }
 }

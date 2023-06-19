@@ -27,14 +27,8 @@ variable "scan_on_push" {
   default     = true
 }
 
-variable "pull_arns" {
+variable "pull_accounts" {
   type        = list(string)
-  description = "List of IAM ARNs that can pull images."
-  default     = []
-}
-
-variable "push_arns" {
-  type        = list(string)
-  description = "List of IAM ARNs that can push and pull images and tags."
+  description = "List of AWS accounts that can pull images."
   default     = []
 }
