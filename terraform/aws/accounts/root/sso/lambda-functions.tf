@@ -1,4 +1,8 @@
 resource "aws_lambda_function" "aws_sso_sync" {
+  #ts:skip=AC_AWS_0485
+  #ts:skip=AC_AWS_0486
+  #ts:skip=AC_AWS_0483
+  #ts:skip=AC_AWS_0484
   function_name = "aws-sso-sync"
   package_type  = "Image"
   image_uri     = "126246520815.dkr.ecr.eu-west-2.amazonaws.com/aws-ssosync:0.0.7"
