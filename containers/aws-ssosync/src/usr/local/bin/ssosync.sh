@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Writing AWS_SSO_SYNC_GOOGLE_CREDENTIALS to credentials.json"
-cat "${AWS_SSO_SYNC_GOOGLE_CREDENTIALS}" >/tmp/credentials.json
+echo "${AWS_SSO_SYNC_GOOGLE_CREDENTIALS}" >/tmp/credentials.json
 
 echo "Running ssosync"
 /usr/local/bin/ssosync \

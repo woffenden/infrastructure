@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Switched to `echo` instead of `cat` for writing credentials
+
+## [0.0.3] - 2023-06-19
+
+### Added
+
 - Set location of Google Credentials to `/tmp/credentials.json` as AWS Lambda can only write to `/tmp`
 
 ## [0.0.2] - 2023-06-18
