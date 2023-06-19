@@ -1,3 +1,6 @@
+#!/bin/sh
+# shellcheck disable=SC2181
+
 function handler() {
 
   echo "Writing AWS_SSO_SYNC_GOOGLE_CREDENTIALS to credentials.json"
