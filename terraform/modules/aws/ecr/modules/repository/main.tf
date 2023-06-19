@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "this" {
     condition {
       test     = "StringLike"
       variable = "aws:sourceArn"
-      values   = formatlist("arn:aws:lambda:${data.aws_region.current.name}:%s:function:*", var.account_id)
+      values   = formatlist("arn:aws:lambda:${data.aws_region.current.name}:%s:function:*", var.pull_accounts)
     }
   }
 }
