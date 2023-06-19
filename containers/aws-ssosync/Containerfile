@@ -14,4 +14,7 @@ COPY --from=BUILD /ssosync /usr/local/bin/ssosync
 COPY src/var/runtime/bootstrap ${LAMBDA_RUNTIME_DIR}
 COPY src/var/task/function.sh ${LAMBDA_TASK_ROOT}
 
+RUN chmod 755 ${LAMBDA_RUNTIME_DIR}/bootstrap \
+    && chmod 755 ${LAMBDA_TASK_ROOT}/function.sh
+
 CMD [ "function.handler" ]
