@@ -12,4 +12,5 @@ echo "Running ssosync"
   --endpoint "${AWS_SSO_SYNC_SCIM_ENDPOINT}" \
   --google-admin "${AWS_SSO_SYNC_GOOGLE_ADMIN}" \
   --google-credentials /tmp/credentials.json \
-  --sync-method "${AWS_SSO_SYNC_METHOD}"
+  --sync-method "groups" \
+  --group-match "${AWS_SSO_SYNC_GROUP_MATCH}"
