@@ -8,9 +8,10 @@ RUN apk add --no-cache \
          --output ssosync_Linux_arm64.tar.gz \
     && tar -xzf ssosync_Linux_arm64.tar.gz
 
-FROM public.ecr.aws/docker/library/alpine:3.18.2
+FROM public.ecr.aws/lambda/provided:al2
 
 COPY --from=BUILD /ssosync /usr/local/bin/ssosync
-COPY src/usr/local/bin/ssosync.sh /usr/local/bin/ssosync.sh
+COPY bootstrap ${LAMBDA_RUNTIME_DIR}
+COPY function.sh ${LAMBDA_TASK_ROOT}
 
-ENTRYPOINT ["/bin/sh", "/usr/local/bin/ssosync.sh"]
+CMD [ "function.handler" ]
