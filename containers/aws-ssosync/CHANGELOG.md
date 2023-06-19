@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] - 2023-06-19
+
+### Added
+
+- Switching to Lamba custom runtime image
+
 ## [0.0.5] - 2023-06-19
 
 ### Added
