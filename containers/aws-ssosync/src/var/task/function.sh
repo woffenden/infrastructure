@@ -1,4 +1,4 @@
-function handler () {
+function handler() {
 
   echo "Writing AWS_SSO_SYNC_GOOGLE_CREDENTIALS to credentials.json"
   echo "${AWS_SSO_SYNC_GOOGLE_CREDENTIALS}" >/tmp/credentials.json
