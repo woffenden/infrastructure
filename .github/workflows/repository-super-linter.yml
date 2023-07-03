@@ -33,6 +33,6 @@ jobs:
 
       - name: Super-Linter
         id: super_linter
-        uses: super-linter/super-linter/slim@45fc0d88288beee4701c62761281edfee85655d7 # v5.0.0
+        uses: super-linter/super-linter/slim@0dd6586c92763937f240eb0f8a713672386850df # v5.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
