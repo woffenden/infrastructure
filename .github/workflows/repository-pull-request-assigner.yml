@@ -5,6 +5,7 @@ on:
   pull_request:
     types:
       - opened
+  workflow_dispatch:
 
 permissions: read-all
 
@@ -13,6 +14,7 @@ jobs:
     name: Pull request assigner
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       issues: write
     steps:
       - name: Pull request assigner
