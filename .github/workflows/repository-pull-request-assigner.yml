@@ -10,11 +10,11 @@ permissions: read-all
 
 jobs:
   pull-request-assigner:
+    if: github.actor != 'dependabot[bot]'
     name: Pull request assigner
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      issues: write
+      pull-requests: write
     steps:
       - name: Pull request assigner
         id: pull_request_assigner
