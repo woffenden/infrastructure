@@ -37,7 +37,7 @@ jobs:
 
       - name: Prepare Environment
         id: prepare_environment
-        run:
+        run: |
           workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filters/terraform.yml | sed 's/.\{3\}$//')
           export workingDirectory
 
