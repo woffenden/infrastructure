@@ -37,6 +37,7 @@ jobs:
 
       - name: Prepare Environment
         id: prepare_environment
+        shell: bash
         run: |
           workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filters/terraform.yml | sed 's/.\{3\}$//')
           export workingDirectory
@@ -99,20 +100,21 @@ jobs:
 
       - name: Initialise Terraform
         id: initialise_terraform
-        run: terraform init -upgrade -no-color
         working-directory: ${{ env.working-directory }}
+        shell: bash
+        run: terraform init -upgrade -no-color
 
       - name: Validate Terraform
         id: validate_terraform
+        working-directory: ${{ env.working-directory }}
         shell: bash
         run: terraform validate -no-color
-        working-directory: ${{ env.working-directory }}
 
       - name: Plan Terraform
         id: plan_terraform
+        working-directory: ${{ env.working-directory }}
         shell: bash
         run: terraform plan -input=false -no-color
-        working-directory: ${{ env.working-directory }}
 
       - name: Add Summary
         if: github.ref != 'refs/heads/main'
@@ -130,6 +132,6 @@ jobs:
       - name: Apply Terraform
         if: github.ref == 'refs/heads/main'
         id: apply_terraform
+        working-directory: ${{ env.working-directory }}
         shell: bash
         run: terraform apply -input=false -auto-approve -no-color
-        working-directory: ${{ env.working-directory }}
