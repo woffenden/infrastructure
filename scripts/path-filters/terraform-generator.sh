@@ -27,7 +27,7 @@ for folder in ${terraformFolders}; do
 done
 
 if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
-  if git diff --exit-code ${PATH_FILTER_CONFIGURATION_FILE} > /dev/null 2>&1; then
+  if git diff --exit-code ${PATH_FILTER_CONFIGURATION_FILE} >/dev/null 2>&1; then
     echo "No difference in files, exiting."
     exit 0
   else
