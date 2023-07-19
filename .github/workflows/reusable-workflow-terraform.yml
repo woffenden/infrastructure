@@ -2,24 +2,8 @@
 on:
   workflow_call:
     inputs:
-      working-directory:
+      component:
         required: true
-        type: string
-      cloud-provider:
-        required: true
-        type: string
-      aws-region:
-        default: eu-west-2
-        required: false
-        type: string
-      aws-role-to-assume:
-        required: false
-        type: string
-      google-workload-identity-pool:
-        required: false
-        type: string
-      google-service-account:
-        required: false
         type: string
       terraform-version:
         required: false
@@ -51,21 +35,55 @@ jobs:
         id: checkout
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
+      - name: Prepare Environment
+        id: prepare_environment
+        run:
+          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/workflows/path-filter/terraform.yml | sed 's/.\{3\}$//')
+          export workingDirectory
+
+          cloudProvider=$(jq -r '.cloud_provider' ${workingDirectory}/config.json)
+          export cloudProvider
+
+          echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
+          echo "cloud-provider=${cloudProvider}" >>"${GITHUB_ENV}"
+
+          if [[ "${cloudProvider}" == "aws" ]]; then
+            awsRegion=$(jq -r '.aws.region' ${workingDirectory}/config.json)
+            export awsRegion
+
+            awsRoleToAssume=$(jq -r '.aws.role_to_assume' ${workingDirectory}/config.json)
+            export awsRoleToAssume
+
+            echo "aws-region=${awsRegion}" >>"${GITHUB_ENV}"
+            echo "aws-role-to-assume=${awsRoleToAssume}" >>"${GITHUB_ENV}"
+          fi
+
+          if [[ "${cloudProvider}" == "google" ]]; then
+            googleWorkloadIdentityPool=$(jq -r '.google.workload_identity_pool' ${workingDirectory}/config.json)
+            export googleWorkloadIdentityPool
+
+            googleServiceAccount=$(jq -r '.google.service_account' ${workingDirectory}/config.json)
+            export googleServiceAccount
+
+            echo "google-workload-identity-pool=${googleWorkloadIdentityPool}" >>"${GITHUB_ENV}"
+            echo "google-service-account=${googleServiceAccount}" >>"${GITHUB_ENV}"
+          fi
+
       - name: Configure AWS Credentials
-        if: ${{ inputs.cloud-provider == 'aws' }}
+        if: ${{ env.cloud-provider == 'aws' }}
         id: configure_aws_credentials
         uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2.2.0
         with:
-          aws-region: ${{ inputs.aws-region }}
-          role-to-assume: ${{ inputs.aws-role-to-assume }}
+          aws-region: ${{ env.aws-region }}
+          role-to-assume: ${{ env.aws-role-to-assume }}
 
       - name: Configure Google Credentials
-        if: ${{ inputs.cloud-provider == 'google' }}
+        if: ${{ env.cloud-provider == 'google' }}
         id: configure_google_credentials
         uses: google-github-actions/auth@35b0e87d162680511bf346c299f71c9c5c379033 # v1.1.1
         with:
-          workload_identity_provider: ${{ inputs.google-workload-identity-pool }}
-          service_account: ${{ inputs.google-service-account }}
+          workload_identity_provider: ${{ env.google-workload-identity-pool }}
+          service_account: ${{ env.google-service-account }}
 
       - name: Install Terraform
         id: install_terraform
@@ -82,23 +100,23 @@ jobs:
       - name: Initialise Terraform
         id: initialise_terraform
         run: terraform init -upgrade -no-color
-        working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ env.working-directory }}
 
       - name: Validate Terraform
         id: validate_terraform
         shell: bash
         run: terraform validate -no-color
-        working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ env.working-directory }}
 
       - name: Plan Terraform
         id: plan_terraform
         shell: bash
         run: terraform plan -input=false -no-color
-        working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ env.working-directory }}
 
       - name: Apply Terraform
         if: github.ref == 'refs/heads/main'
         id: apply_terraform
         shell: bash
         run: terraform apply -input=false -auto-approve -no-color
-        working-directory: ${{ inputs.working-directory }}
+        working-directory: ${{ env.working-directory }}

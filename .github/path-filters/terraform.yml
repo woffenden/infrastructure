@@ -1,0 +1,14 @@
+---
+# This file is auto-generated here, do not manually amend.
+# https://github.com/woffenden/infrastructure/blob/main/scripts/path-filters/terraform-generator.sh
+
+aws-accounts-development-iam: terraform/aws/accounts/development/iam/**
+aws-accounts-platform-services-ecr: terraform/aws/accounts/platform-services/ecr/**
+aws-accounts-platform-services-iam: terraform/aws/accounts/platform-services/iam/**
+aws-accounts-production-iam: terraform/aws/accounts/production/iam/**
+aws-accounts-root-iam: terraform/aws/accounts/root/iam/**
+aws-accounts-root-organisation: terraform/aws/accounts/root/organisation/**
+aws-accounts-root-route53: terraform/aws/accounts/root/route53/**
+aws-accounts-root-sso: terraform/aws/accounts/root/sso/**
+cloudflare: terraform/cloudflare/**
+google-woffenden-mta-sts: terraform/google/woffenden/mta-sts/**
