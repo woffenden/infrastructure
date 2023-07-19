@@ -42,17 +42,17 @@ jobs:
           workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filters/terraform.yml | sed 's/.\{3\}$//')
           export workingDirectory
 
-          cloudProvider=$(jq -r '.cloud_provider' ${workingDirectory}/config.json)
+          cloudProvider=$(jq -r '.cloud_provider' "${workingDirectory}"/config.json)
           export cloudProvider
 
           echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
           echo "cloud-provider=${cloudProvider}" >>"${GITHUB_ENV}"
 
           if [[ "${cloudProvider}" == "aws" ]]; then
-            awsRegion=$(jq -r '.aws.region' ${workingDirectory}/config.json)
+            awsRegion=$(jq -r '.aws.region' "${workingDirectory}"/config.json)
             export awsRegion
 
-            awsRoleToAssume=$(jq -r '.aws.role_to_assume' ${workingDirectory}/config.json)
+            awsRoleToAssume=$(jq -r '.aws.role_to_assume' "${workingDirectory}"/config.json)
             export awsRoleToAssume
 
             echo "aws-region=${awsRegion}" >>"${GITHUB_ENV}"
@@ -60,10 +60,10 @@ jobs:
           fi
 
           if [[ "${cloudProvider}" == "google" ]]; then
-            googleWorkloadIdentityPool=$(jq -r '.google.workload_identity_pool' ${workingDirectory}/config.json)
+            googleWorkloadIdentityPool=$(jq -r '.google.workload_identity_pool' "${workingDirectory}"/config.json)
             export googleWorkloadIdentityPool
 
-            googleServiceAccount=$(jq -r '.google.service_account' ${workingDirectory}/config.json)
+            googleServiceAccount=$(jq -r '.google.service_account' "${workingDirectory}"/config.json)
             export googleServiceAccount
 
             echo "google-workload-identity-pool=${googleWorkloadIdentityPool}" >>"${GITHUB_ENV}"
@@ -121,9 +121,9 @@ jobs:
         id: add_summary
         shell: bash
         run: |
-          if [[ "${{ steps.plan_terraform.outputs.stdout }}" == *"No changes. Your infrastructure matches the configuration."* ]]; then
+          if grep -q "No changes. Your infrastructure matches the configuration." <<< "$${{ steps.plan_terraform.outputs.stdout }}" ; then
             echo "Terraform Plan Summary: No changes detected." >>"${GITHUB_STEP_SUMMARY}"
-          elif [[ "${{ steps.plan_terraform.outputs.stdout }}" == *"No changes. Infrastructure is up-to-date."* ]]; then
+          elif grep -q "No changes. Infrastructure is up-to-date." <<< "$${{ steps.plan_terraform.outputs.stdout }}"; then
             echo "Terraform Plan Summary: No changes detected." >>"${GITHUB_STEP_SUMMARY}"
           else
             echo "Terraform Plan Summary: Changes detected." >>"${GITHUB_STEP_SUMMARY}"
