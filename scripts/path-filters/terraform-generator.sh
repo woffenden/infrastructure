@@ -23,7 +23,7 @@ for folder in ${terraformFolders}; do
   fi
 
   baseName=$(echo "${folder}" | sed 's|/|-|g' | sed 's|terraform-||')
-  printf "${baseName}: ${folder}/**\n" >>"${PATH_FILTER_CONFIGURATION_FILE}"
+  printf "%s: %s/**\n" "${baseName}" "${folder}" >>"${PATH_FILTER_CONFIGURATION_FILE}"
 done
 
 if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
@@ -42,11 +42,11 @@ if [[ "${GITHUB_ACTIONS}" == "true" ]]; then
       export apiFieldSha="${mainSha}"
     fi
 
-    gh api --method PUT /repos/${GITHUB_REPOSITORY}/contents/${PATH_FILTER_CONFIGURATION_FILE} \
+    gh api --method PUT /repos/"${GITHUB_REPOSITORY}"/contents/"${PATH_FILTER_CONFIGURATION_FILE}" \
       --field branch="${GITHUB_HEAD_REF}" \
       --field message="Committing updated path-filter configuration" \
       --field encoding="base64" \
-      --field content="$( base64 -w 0 ${PATH_FILTER_CONFIGURATION_FILE} )" \
+      --field content="$(base64 -w 0 ${PATH_FILTER_CONFIGURATION_FILE})" \
       --field sha="${apiFieldSha}"
   fi
 else
