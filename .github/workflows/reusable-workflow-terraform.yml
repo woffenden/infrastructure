@@ -38,7 +38,7 @@ jobs:
       - name: Prepare Environment
         id: prepare_environment
         run:
-          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/workflows/path-filter/terraform.yml | sed 's/.\{3\}$//')
+          workingDirectory=$(yq -e ".${{ inputs.component }}" .github/path-filters/terraform.yml | sed 's/.\{3\}$//')
           export workingDirectory
 
           cloudProvider=$(jq -r '.cloud_provider' ${workingDirectory}/config.json)
