@@ -114,6 +114,19 @@ jobs:
         run: terraform plan -input=false -no-color
         working-directory: ${{ env.working-directory }}
 
+      - name: Add Summary
+        if: github.ref != 'refs/heads/main'
+        id: add_summary
+        shell: bash
+        run: |
+          if [[ "${{ steps.plan_terraform.outputs.stdout }}" == *"No changes. Your infrastructure matches the configuration."* ]]; then
+            echo "Terraform Plan Summary: No changes detected." >>"${GITHUB_STEP_SUMMARY}"
+          elif [[ "${{ steps.plan_terraform.outputs.stdout }}" == *"No changes. Infrastructure is up-to-date."* ]]; then
+            echo "Terraform Plan Summary: No changes detected." >>"${GITHUB_STEP_SUMMARY}"
+          else
+            echo "Terraform Plan Summary: Changes detected." >>"${GITHUB_STEP_SUMMARY}"
+          fi
+
       - name: Apply Terraform
         if: github.ref == 'refs/heads/main'
         id: apply_terraform
