@@ -79,7 +79,7 @@ jobs:
           role-to-assume: ${{ env.aws-role-to-assume }}
 
       - name: Get GitHub Robot Token from AWS
-        if: ${{ env.cloud-provider == 'aws' }}
+        if: env.cloud-provider == 'aws'
         id: get_github_robot_token_aws
         uses: aws-actions/aws-secretsmanager-get-secrets@022e8919774ecb75e8e375656d7b1898936ab878 # v1.0.4
         with:
@@ -87,7 +87,7 @@ jobs:
             GITHUB_ROBOT_TOKEN_AWS, github-robot-token
 
       - name: Configure Google Credentials
-        if: ${{ env.cloud-provider == 'google' }}
+        if: env.cloud-provider == 'google'
         id: configure_google_credentials
         uses: google-github-actions/auth@35b0e87d162680511bf346c299f71c9c5c379033 # v1.1.1
         with:
@@ -95,7 +95,7 @@ jobs:
           service_account: ${{ env.google-service-account }}
 
       - name: Get GitHub Robot Token from Google
-        if: ${{ env.cloud-provider == 'google' }}
+        if: env.cloud-provider == 'google'
         id: get_github_robot_token_google
         uses: google-github-actions/get-secretmanager-secrets@4d6d3dfd94110800dda8d84109cb6da0f6a5919d # v1.0.1
         with:
@@ -109,11 +109,11 @@ jobs:
           if [[ "${{ env.cloud-provider }}" == "aws" ]]; then
             github_robot_token="${{ env.GITHUB_ROBOT_TOKEN_AWS }}"
             echo "::add-mask::${github_robot_token}"
-            echo "github_robot_token=${github_robot_token}" >>${GITHUB_ENV}
+            echo "github_robot_token=${github_robot_token}" >>"${GITHUB_ENV}"
           elif [[ "${{ env.cloud-provider }}" == "google" ]]; then
             github_robot_token="${{ steps.get_github_robot_token_google.outputs.token }}"
             echo "::add-mask::${github_robot_token}"
-            echo "github_robot_token=${github_robot_token}" >>${GITHUB_ENV}
+            echo "github_robot_token=${github_robot_token}" >>"${GITHUB_ENV}"
           fi
 
       - name: Install Terraform
