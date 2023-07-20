@@ -78,6 +78,14 @@ jobs:
           aws-region: ${{ env.aws-region }}
           role-to-assume: ${{ env.aws-role-to-assume }}
 
+      - name: Get GitHub Robot Token from AWS
+        if: ${{ env.cloud-provider == 'aws' }}
+        id: get_github_robot_token_aws
+        uses: aws-actions/aws-secretsmanager-get-secrets@022e8919774ecb75e8e375656d7b1898936ab878 # v1.0.4
+        with:
+          secret-ids: |
+            github_robot_token_aws, github-robot-token
+
       - name: Configure Google Credentials
         if: ${{ env.cloud-provider == 'google' }}
         id: configure_google_credentials
@@ -85,6 +93,28 @@ jobs:
         with:
           workload_identity_provider: ${{ env.google-workload-identity-pool }}
           service_account: ${{ env.google-service-account }}
+
+      - name: Get GitHub Robot Token from Google
+        if: ${{ env.cloud-provider == 'google' }}
+        id: get_github_robot_token_google
+        uses: google-github-actions/get-secretmanager-secrets@4d6d3dfd94110800dda8d84109cb6da0f6a5919d # v1.0.1
+        with:
+          secrets: |-
+            token:woffenden/github-robot-token
+
+      - name: Process GitHub Robot Token
+        id: process_github_robot_token
+        shell: bash
+        run: |
+          if [[ "${{ env.cloud-provider }}" == "aws" ]]; then
+            github_robot_token="${{ env.github_robot_token_aws }}"
+            echo "::add-mask::$github_robot_token"
+            echo "github_robot_token=$github_robot_token" >>${GITHUB_ENV}
+          elif [[ "${{ env.cloud-provider }}" == "google" ]]; then
+            github_robot_token="${{ steps.get_github_robot_token_google.outputs.token }}"
+            echo "::add-mask::$github_robot_token"
+            echo "github_robot_token=$github_robot_token" >>${GITHUB_ENV}
+          fi
 
       - name: Install Terraform
         id: install_terraform
@@ -130,11 +160,11 @@ jobs:
           fi
 
       - name: Automatic Approval for Dependabot
-        if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && contains(steps.plan_terraform.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.plan_terraform.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
-        id: automatic_approval
+        if: (github.event_name == 'pull_request' && github.actor == 'dependabot[bot]' && env.cloud-provider == 'aws' && contains(steps.plan_terraform.outputs.stdout, 'No changes. Your infrastructure matches the configuration.') || contains(steps.plan_terraform.outputs.stdout, 'No changes. Infrastructure is up-to-date.'))
+        id: automatic_approval_aws
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
-          github-token: ${{ secrets.WOFFENDEN_BOT_GITHUB_TOKEN }}
+          github-token: ${{ env.github_robot_token }}
           script: |
             github.rest.pulls.createReview({
               owner: context.repo.owner,
