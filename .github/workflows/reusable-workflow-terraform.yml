@@ -134,7 +134,7 @@ jobs:
         id: automatic_approval
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         with:
-          github-token: ${{ secrets.WOFFENDEN_BOT_GITHUB_TOKEN }}
+          github-token: ${{ secrets.DEPENDABOT_WOFFENDEN_BOT_GITHUB_TOKEN }}
           script: |
             github.rest.pulls.createReview({
               owner: context.repo.owner,
