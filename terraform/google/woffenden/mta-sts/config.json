@@ -1,0 +1,7 @@
+{
+  "cloud_provider": "google",
+  "google": {
+    "workload_identity_pool": "projects/800000204119/locations/global/workloadIdentityPools/github-actions/providers/github-actions",
+    "service_account": "github-actions@woffenden.iam.gserviceaccount.com"
+  }
+}
