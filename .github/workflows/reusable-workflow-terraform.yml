@@ -84,7 +84,7 @@ jobs:
         uses: aws-actions/aws-secretsmanager-get-secrets@022e8919774ecb75e8e375656d7b1898936ab878 # v1.0.4
         with:
           secret-ids: |
-            github_robot_token_aws, github-robot-token
+            GITHUB_ROBOT_TOKEN_AWS, github-robot-token
 
       - name: Configure Google Credentials
         if: ${{ env.cloud-provider == 'google' }}
@@ -107,13 +107,13 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ env.cloud-provider }}" == "aws" ]]; then
-            github_robot_token="${{ env.github_robot_token_aws }}"
-            echo "::add-mask::$github_robot_token"
-            echo "github_robot_token=$github_robot_token" >>${GITHUB_ENV}
+            github_robot_token="${{ env.GITHUB_ROBOT_TOKEN_AWS }}"
+            echo "::add-mask::${github_robot_token}"
+            echo "github_robot_token=${github_robot_token}" >>${GITHUB_ENV}
           elif [[ "${{ env.cloud-provider }}" == "google" ]]; then
             github_robot_token="${{ steps.get_github_robot_token_google.outputs.token }}"
-            echo "::add-mask::$github_robot_token"
-            echo "github_robot_token=$github_robot_token" >>${GITHUB_ENV}
+            echo "::add-mask::${github_robot_token}"
+            echo "github_robot_token=${github_robot_token}" >>${GITHUB_ENV}
           fi
 
       - name: Install Terraform
