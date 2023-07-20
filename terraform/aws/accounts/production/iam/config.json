@@ -1,0 +1,7 @@
+{
+  "cloud_provider": "aws",
+  "aws": {
+    "region": "eu-west-2",
+    "role_to_assume": "arn:aws:iam::749019155605:role/github-actions"
+  }
+}
