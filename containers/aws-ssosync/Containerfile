@@ -1,9 +1,9 @@
-FROM public.ecr.aws/docker/library/alpine:3.18.2 as BUILD
+FROM public.ecr.aws/docker/library/alpine:3.18.3 as BUILD
 
-ARG AWS_SSO_SYNC_VERSION="2.0.2"
+ARG AWS_SSO_SYNC_VERSION="2.0.3"
 
 RUN apk add --no-cache \
-      curl==8.1.2-r0 \
+      curl==8.2.1-r0 \
     && curl --location "https://github.com/awslabs/ssosync/releases/download/v${AWS_SSO_SYNC_VERSION}/ssosync_Linux_x86_64.tar.gz" \
          --output ssosync_Linux_arm64.tar.gz \
     && tar -xzf ssosync_Linux_arm64.tar.gz
@@ -17,4 +17,4 @@ COPY src/var/task/function.sh ${LAMBDA_TASK_ROOT}
 RUN chmod 755 ${LAMBDA_RUNTIME_DIR}/bootstrap \
     && chmod 755 ${LAMBDA_TASK_ROOT}/function.sh
 
-CMD [ "function.handler" ]
+CMD ["function.handler"]
