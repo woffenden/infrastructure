@@ -56,17 +56,19 @@ for ecosystem in docker pip terraform; do
     continue
   fi
 
-    printf "  - package-ecosystem: \"%s\"\n" "${ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "    directory: \"%s\"\n" "${folder}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "    schedule:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      interval: \"daily\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      time: \"09:00\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      timezone: \"Europe/London\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "    commit-message:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      prefix: \"%s\"\n" "${ecosystem}" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      include: \"scope\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "    reviewers:\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
-    printf "      - \"jacobwoffenden\"\n" >>"${DEPENDABOT_CONFIGURATION_FILE}"
+    {
+      printf "  - package-ecosystem: \"%s\"\n" "${ecosystem}"
+      printf "    directory: \"%s\"\n" "${folder}"
+      printf "    schedule:\n"
+      printf "      interval: \"daily\"\n"
+      printf "      time: \"09:00\"\n"
+      printf "      timezone: \"Europe/London\"\n"
+      printf "    commit-message:\n"
+      printf "      prefix: \"%s\"\n" "${ecosystem}"
+      printf "      include: \"scope\"\n"
+      printf "    reviewers:\n"
+      printf "      - \"jacobwoffenden\"\n"
+    } >>"${DEPENDABOT_CONFIGURATION_FILE}"
 
   done
 

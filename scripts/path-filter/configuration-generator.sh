@@ -46,5 +46,8 @@ for folder in ${folders}; do
     baseName=$(basename "${folder}")
   fi
 
-  printf "${baseName}: ${folder}/**\n" >>"${PATH_FILTER_CONFIGURATION_FILE}"
+  {
+    printf "%s: %s/**\n" "${baseName}" "${folder}"
+  }>>"${PATH_FILTER_CONFIGURATION_FILE}"
+
 done
