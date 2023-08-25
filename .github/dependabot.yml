@@ -16,6 +16,17 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
+  - package-ecosystem: "pip"
+    directory: "docs"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "pip"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
   - package-ecosystem: "terraform"
     directory: "terraform/aws/accounts/development/iam"
     schedule:
