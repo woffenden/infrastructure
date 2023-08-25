@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.3] - 2023-08-25
+
+### Changed
+
+- Aligned versioning with AWS SSO Sync binary
+
+- Updated Alpine and cURL version
+
 ## [0.0.7] - 2023-06-19
 
 ### Added
