@@ -3,19 +3,19 @@
 MODE="${1}"
 
 case ${MODE} in
-  containers)
-    PATH_FILTER_CONFIGURATION_FILE=".github/path-filters/containers.yml"
-    SEARCH_PATTERN="*Containerfile*"
-    SKIP_FILE=".containers-path-filter-ignore"
+containers)
+  PATH_FILTER_CONFIGURATION_FILE=".github/path-filters/containers.yml"
+  SEARCH_PATTERN="*Containerfile*"
+  SKIP_FILE=".containers-path-filter-ignore"
   ;;
-  terraform)
-    PATH_FILTER_CONFIGURATION_FILE=".github/path-filters/terraform.yml"
-    SEARCH_PATTERN=".terraform.lock.hcl"
-    SKIP_FILE=".terraform-path-filter-ignore"
+terraform)
+  PATH_FILTER_CONFIGURATION_FILE=".github/path-filters/terraform.yml"
+  SEARCH_PATTERN=".terraform.lock.hcl"
+  SKIP_FILE=".terraform-path-filter-ignore"
   ;;
-  *)
-    echo "Usage: ${0} [containers|terraform]"
-    exit 1
+*)
+  echo "Usage: ${0} [containers|terraform]"
+  exit 1
   ;;
 esac
 
@@ -48,6 +48,6 @@ for folder in ${folders}; do
 
   {
     printf "%s: %s/**\n" "${baseName}" "${folder}"
-  }>>"${PATH_FILTER_CONFIGURATION_FILE}"
+  } >>"${PATH_FILTER_CONFIGURATION_FILE}"
 
 done

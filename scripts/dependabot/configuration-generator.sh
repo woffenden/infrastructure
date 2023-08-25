@@ -29,17 +29,17 @@ for ecosystem in docker pip terraform; do
   echo "=== Ecosystem: ${ecosystem} ==="
 
   case ${ecosystem} in
-    docker)
-      SEARCH_PATTERN="*Dockerfile*"
-      SKIP_FILE=".dependabot-docker-ignore"
+  docker)
+    SEARCH_PATTERN="*Dockerfile*"
+    SKIP_FILE=".dependabot-docker-ignore"
     ;;
-    pip)
-      SEARCH_PATTERN="*requirements*.txt"
-      SKIP_FILE=".dependabot-pip-ignore"
+  pip)
+    SEARCH_PATTERN="*requirements*.txt"
+    SKIP_FILE=".dependabot-pip-ignore"
     ;;
-    terraform)
-      SEARCH_PATTERN=".terraform.lock.hcl"
-      SKIP_FILE=".dependabot-terraform-ignore"
+  terraform)
+    SEARCH_PATTERN=".terraform.lock.hcl"
+    SKIP_FILE=".dependabot-terraform-ignore"
     ;;
   esac
 
@@ -51,10 +51,10 @@ for ecosystem in docker pip terraform; do
 
   for folder in ${folders}; do
 
-  if [[ -f "${folder}/${SKIP_FILE}" ]]; then
-    echo "Ignoring ${folder}"
-    continue
-  fi
+    if [[ -f "${folder}/${SKIP_FILE}" ]]; then
+      echo "Ignoring ${folder}"
+      continue
+    fi
 
     {
       printf "  - package-ecosystem: \"%s\"\n" "${ecosystem}"
