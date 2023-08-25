@@ -93,3 +93,11 @@ resource "cloudflare_record" "woffenden_net_unifi_cname" {
   value   = cloudflare_tunnel.bny_woffenden_net.cname
   proxied = true
 }
+
+resource "cloudflare_record" "woffenden_io_infrastructure" {
+  zone_id = module.woffenden_io_cloudflare_zone.id
+  name    = "infrastructure"
+  type    = "CNAME"
+  value   = "woffenden.github.io"
+  proxied = false
+}
