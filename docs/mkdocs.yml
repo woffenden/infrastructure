@@ -1,0 +1,30 @@
+---
+site_name: Woffenden Infrastructure
+docs_dir: src
+repo_url: https://github.com/woffenden/infrastructure
+repo_name: GitHub
+edit_uri: blob/main/docs/src/
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      primary: black
+      accent: blue
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      primary: black
+      accent: blue
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - content.action.edit
+    - content.action.view
+    - navigation.footer
+  language: en
+  icon:
+    logo: material/cloud-braces
