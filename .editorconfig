@@ -5,7 +5,7 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[{*.sh,**/src/usr/local/bin/**}]
+[{**/*.sh,**/src/usr/local/bin/**}]
 indent_style = space
 indent_size = 2
 

@@ -11,7 +11,6 @@ devcontainer \
   features \
   test \
   --project-folder .devcontainer/features \
-  --features ${FEATURE_TO_TEST} \
+  --features "${FEATURE_TO_TEST}" \
   --skip-scenarios \
   --base-image devcontainer-test
-  
