@@ -4,10 +4,12 @@
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": { "configureZshAsDefaultShell": true },
     "./features/src/base": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/node:1": {}
   },
   "overrideFeatureInstallOrder": [
     "ghcr.io/devcontainers/features/common-utils",
     "./features/src/base"
-  ]
+  ],
+  "postCreateCommand": "npm install -g @devcontainers/cli"
 }
