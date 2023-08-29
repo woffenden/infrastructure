@@ -15,5 +15,5 @@ There are two options:
       --entrypoint /bin/bash \
       --volume $(pwd):/tmp/lint \
       --workdir /tmp/lint \
-      ghcr.io/github/super-linter:v5.0.0
+      ghcr.io/super-linter/super-linter:slim-v5
     ```
