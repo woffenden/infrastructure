@@ -16,7 +16,7 @@ if [[ "${VERSION}" == "latest" ]]; then
   VERSION="${GITHUB_LATEST_TAG}"
   VERSION_STRIP_V="${GITHUB_LATEST_TAG_STRIP_V}"
 else
-  VERSION="${VERSION}"
+  VERSION_STRIP_V="${VERSION#v}"
 fi
 
 curl --fail-with-body --location "https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}/gh_${VERSION_STRIP_V}_linux_${ARCHITECTURE}.tar.gz" \
@@ -28,4 +28,4 @@ mv "gh_${VERSION_STRIP_V}_linux_${ARCHITECTURE}/bin/gh" /usr/local/bin/gh
 
 rm --recursive --force "gh_${VERSION_STRIP_V}_linux_${ARCHITECTURE}" "gh_${VERSION_STRIP_V}_linux_${ARCHITECTURE}.tar.gz"
 
-gh completion -s zsh > /usr/local/share/zsh/site-functions/_gh
+gh completion -s zsh >/usr/local/share/zsh/site-functions/_gh
