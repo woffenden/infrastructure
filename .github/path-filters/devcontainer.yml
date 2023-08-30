@@ -3,3 +3,4 @@
 # bash scripts/path-filter/configuration-generator.sh devcontainer
 
 base: .devcontainer/features/src/base/**
+github: .devcontainer/features/src/github/**

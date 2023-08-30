@@ -7,7 +7,7 @@
 install --owner=vscode --group=vscode --mode=775 "$(dirname "${0}")"/src/usr/local/bin/devcontainer-utils /usr/local/bin/devcontainer-utils
 
 # shellcheck source=/dev/null
-# file not accessible by until built
+# file not accessible until being built
 source /usr/local/bin/devcontainer-utils
 
 ##################################################

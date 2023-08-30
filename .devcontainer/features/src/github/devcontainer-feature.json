@@ -2,7 +2,19 @@
   "id": "github",
   "version": "1.0.0",
   "name": "GitHub",
-  "description": "GitHub functionality",
+  "description": "GitHub functionality: Extensions and CLI",
+  "options": {
+    "installGitHubCli": {
+      "type": "boolean",
+      "description": "Install the GitHub CLI (https://github.com/cli/cli)",
+      "default": true
+    },
+    "githubCliVersion": {
+      "type": "string",
+      "description": "Version of the GitHub CLI to install",
+      "default": "latest"
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": ["GitHub.copilot", "GitHub.copilot-chat", "GitHub.vscode-pull-request-github", "github.vscode-github-actions"]

@@ -7,9 +7,7 @@ docker build \
   --tag devcontainer-test \
   .
 
-devcontainer \
-  features \
-  test \
+devcontainer features test \
   --project-folder .devcontainer/features \
   --features "${FEATURE_TO_TEST}" \
   --skip-scenarios \

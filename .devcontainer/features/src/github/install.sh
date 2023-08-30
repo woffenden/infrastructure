@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 # shellcheck source=/dev/null
-# file not accessible by until built
+# file not accessible until being built
 source /usr/local/bin/devcontainer-utils
 
-logger "info" "Nothing to install yet"
+if [[ "${INSTALLGITHUBCLI}" == "true" ]]; then
+  logger "info" "Installing GitHub CLI (version: ${GITHUBCLIVERSION})"
+  bash "$(dirname "${0}")"/install-github-cli.sh
+fi
