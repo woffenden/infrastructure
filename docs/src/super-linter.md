@@ -6,7 +6,7 @@ There are two options:
 
 This mdoe runs Super-Linter against the entire codebase, it might take a while!
 
-See https://github.com/super-linter/super-linter/blob/main/docs/run-linter-locally.md
+See <https://github.com/super-linter/super-linter/blob/main/docs/run-linter-locally.md>
 
 ``` bash
 bash scripts/super-linter/local.sh
