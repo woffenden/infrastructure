@@ -1,19 +1,22 @@
-# Super-Linter Local Debug
+# Super-Linter Local Debugging
 
 There are two options:
 
-1. Run Super-Linter in `RUN_LOCAL` mode
+## `RUN_LOCAL` (Default)
 
-    ```bash
-    bash scripts/super-linter/local/main.sh
-    ```
+This mdoe runs Super-Linter against the entire codebase, it might take a while!
 
-2. Launch Super-Linter as an interactive container
+See https://github.com/super-linter/super-linter/blob/main/docs/run-linter-locally.md
 
-    ```bash
-    docker run -it --rm \
-      --entrypoint /bin/bash \
-      --volume $(pwd):/tmp/lint \
-      --workdir /tmp/lint \
-      ghcr.io/super-linter/super-linter:slim-v5
-    ```
+``` bash
+bash scripts/super-linter/local.sh
+```
+
+## `INTERACTIVE`
+
+This mode launches an interactive terminal inside the Super-Linter container, allowing you to
+execute a linter individually
+
+``` bash
+bash scripts/super-linter/local.sh interactive
+```

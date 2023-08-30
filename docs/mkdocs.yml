@@ -4,6 +4,10 @@ docs_dir: src
 repo_url: https://github.com/woffenden/infrastructure
 repo_name: GitHub
 edit_uri: blob/main/docs/src/
+nav:
+  - Home: index.md
+  - Bootstrap / AWS : bootstrap/aws.md
+  - Bootstrap / Google : bootstrap/google.md
 theme:
   name: material
   palette:
@@ -24,7 +28,16 @@ theme:
   features:
     - content.action.edit
     - content.action.view
+    - content.code.annotate
     - navigation.footer
   language: en
   icon:
     logo: material/cloud-braces
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
