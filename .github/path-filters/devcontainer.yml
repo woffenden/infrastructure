@@ -5,3 +5,4 @@
 aws: .devcontainer/features/src/aws/**
 base: .devcontainer/features/src/base/**
 github: .devcontainer/features/src/github/**
+terraform: .devcontainer/features/src/terraform/**
