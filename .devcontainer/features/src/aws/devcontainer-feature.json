@@ -1,0 +1,19 @@
+{
+  "id": "aws",
+  "version": "1.0.0",
+  "name": "AWS",
+  "description": "AWS functionality: CLI",
+  "options": {
+    "installAwsCli": {
+      "type": "boolean",
+      "description": "Install the AWS CLI (https://github.com/aws/aws-cli)",
+      "default": true
+    },
+    "awsCliVersion": {
+      "type": "string",
+      "description": "Version of the AWS CLI to install",
+      "default": "latest"
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}

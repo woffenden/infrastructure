@@ -11,6 +11,13 @@ install --owner=vscode --group=vscode --mode=775 "$(dirname "${0}")"/src/usr/loc
 source /usr/local/bin/devcontainer-utils
 
 ##################################################
+# Dev Container Configuration
+##################################################
+
+install --owner=vscode --group=vscode --mode=644 "$(dirname "${0}")"/src/home/vscode/.zshrc /home/vscode/.zshrc
+install --directory --owner=vscode --group=vscode /home/vscode/.devcontainer/feature-completion
+
+##################################################
 # APT
 ##################################################
 
