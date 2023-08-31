@@ -2,7 +2,7 @@
 # Oh My ZSH Internals
 ####################
 export ZSH="${HOME}/.oh-my-zsh"
-export ZSH_THEME="devcontainers"
+export ZSH_THEME="woffenden"
 export plugins=(git)
 
 source "${ZSH}/oh-my-zsh.sh"
@@ -12,11 +12,6 @@ source "${ZSH}/oh-my-zsh.sh"
 ####################
 export DISABLE_AUTO_UPDATE="true"
 export DISABLE_UPDATE_PROMPT="true"
-
-####################
-# Shell Options
-####################
-export HISTFILE="${HOME}/.commandhistory/.zsh_history"
 
 ####################
 # Shell Completion

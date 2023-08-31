@@ -26,4 +26,5 @@ bash ./aws/install
 rm --recursive --force aws "${ARTEFACT}"
 
 install --owner=vscode --group=vscode --mode=775 "$(dirname "${0}")"/src/home/vscode/.devcontainer/feature-completion/aws.sh /home/vscode/.devcontainer/feature-completion/aws.sh
+install --directory --owner=vscode --group=vscode /home/vscode/.aws
 install --owner=vscode --group=vscode --mode=775 "$(dirname "${0}")"/src/home/vscode/.aws/config /home/vscode/.aws/config

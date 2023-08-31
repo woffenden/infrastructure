@@ -16,6 +16,7 @@ source /usr/local/bin/devcontainer-utils
 
 install --owner=vscode --group=vscode --mode=644 "$(dirname "${0}")"/src/home/vscode/.zshrc /home/vscode/.zshrc
 install --directory --owner=vscode --group=vscode /home/vscode/.devcontainer/feature-completion
+install --owner=vscode --group=vscode --mode=755 "$(dirname "${0}")"/src/home/vscode/.oh-my-zsh/custom/themes/woffenden.zsh-theme /home/vscode/.oh-my-zsh/custom/themes/woffenden.zsh-theme
 
 ##################################################
 # APT
