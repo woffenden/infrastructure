@@ -7,4 +7,5 @@ COPY .devcontainer/features/src/base/src/usr/local/bin/devcontainer-utils /usr/l
 RUN apt-get update \
     && apt-get install --yes \
          python3-pip \
-    && pip3 install --no-cache-dir --upgrade pip
+    && pip3 install --no-cache-dir --upgrade pip \
+    && install --directory --owner=vscode --group=vscode /home/vscode/.devcontainer/feature-completion
