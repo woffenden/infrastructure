@@ -6,8 +6,12 @@ repo_name: GitHub
 edit_uri: blob/main/docs/src/
 nav:
   - Home: index.md
-  - Bootstrap / AWS : bootstrap/aws.md
-  - Bootstrap / Google : bootstrap/google.md
+  - Architecture:
+    - architecture/index.md
+  - Cloud Provider Bootstrap:
+    - cloud-provider-bootstrap/index.md
+    - AWS : cloud-provider-bootstrap/aws.md
+    - Google : cloud-provider-bootstrap/google.md
 theme:
   name: material
   palette:
@@ -30,6 +34,7 @@ theme:
     - content.action.view
     - content.code.annotate
     - navigation.footer
+    - navigation.tabs
   language: en
   icon:
     logo: material/cloud-braces

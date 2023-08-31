@@ -1,8 +1,10 @@
 # Bootstrap AWS Root Account
 
-1. Log into AWS Root Account using Root user credentials
+1. Log into the AWS Root Account using the root account credentials from 1Password
 
 1. Enable MFA on Root user credentials
+
+    > Use 2 physical security keys
 
 1. Generate an Access Keypair (<https://console.aws.amazon.com/iam/home#/security_credentials>)
 
