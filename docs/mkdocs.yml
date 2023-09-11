@@ -12,6 +12,9 @@ nav:
     - cloud-provider-bootstrap/index.md
     - AWS : cloud-provider-bootstrap/aws.md
     - Google : cloud-provider-bootstrap/google.md
+  - Developing:
+    - developing/index.md
+    - Super-Linter : developing/super-linter.md
 theme:
   name: material
   palette:
@@ -39,6 +42,9 @@ theme:
   icon:
     logo: material/cloud-braces
 markdown_extensions:
+  - admonition
+  - footnotes
+  - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
