@@ -1,3 +1,3 @@
 module "organisation" {
-  source = "../../../../modules/aws/organisation"
+  source = "../../../modules/aws/organisation"
 }
