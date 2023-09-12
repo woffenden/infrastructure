@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket         = "woffenden-terraform"
-    key            = "platform-services/iam/terraform.tfstate"
+    key            = "platform-services/ecr/terraform.tfstate"
     dynamodb_table = "terraform"
     encrypt        = true
     kms_key_id     = "arn:aws:kms:eu-west-2:749019155605:key/e68a6c13-c02f-4bc2-bf92-03b0edf55b4d"
@@ -23,9 +23,9 @@ provider "aws" {
     tags = {
       "business-unit" = "platforms"
       "application"   = "infrastructure"
-      "component"     = "iam"
+      "component"     = "ecr"
       "owner"         = "ddat.aws@woffenden.io"
-      "source-code"   = "github.com/woffenden/infrastructure/terraform/aws/accounts/platform-services/iam"
+      "source-code"   = "github.com/woffenden/infrastructure/terraform/aws/platform-services/ecr"
       "environment"   = "management"
       "is-production" = "true"
       "managed-by"    = "terraform"
