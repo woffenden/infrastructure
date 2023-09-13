@@ -16,8 +16,19 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
+  - package-ecosystem: "pip"
+    directory: "docs"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "pip"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/accounts/development/iam"
+    directory: "terraform/aws/development/iam"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -28,7 +39,7 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/accounts/platform-services/ecr"
+    directory: "terraform/aws/platform-services/ecr"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -39,7 +50,7 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/accounts/platform-services/iam"
+    directory: "terraform/aws/platform-services/iam"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -50,7 +61,7 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/accounts/production/iam"
+    directory: "terraform/aws/production/iam"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -61,7 +72,7 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/accounts/root/iam"
+    directory: "terraform/aws/root/iam"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -72,7 +83,7 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/accounts/root/organisation"
+    directory: "terraform/aws/root/organisation"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -83,7 +94,7 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/accounts/root/route53"
+    directory: "terraform/aws/root/route53"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -94,7 +105,7 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/accounts/root/sso"
+    directory: "terraform/aws/root/sso"
     schedule:
       interval: "daily"
       time: "09:00"

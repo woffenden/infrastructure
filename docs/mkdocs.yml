@@ -1,0 +1,54 @@
+---
+site_name: Woffenden Infrastructure
+docs_dir: src
+repo_url: https://github.com/woffenden/infrastructure
+repo_name: GitHub
+edit_uri: blob/main/docs/src/
+nav:
+  - Home: index.md
+  - Architecture:
+    - architecture/index.md
+  - Cloud Provider Bootstrap:
+    - cloud-provider-bootstrap/index.md
+    - AWS : cloud-provider-bootstrap/aws.md
+    - Google : cloud-provider-bootstrap/google.md
+  - Developing:
+    - developing/index.md
+    - Super-Linter : developing/super-linter.md
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      primary: black
+      accent: blue
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      primary: black
+      accent: blue
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - navigation.footer
+    - navigation.tabs
+  language: en
+  icon:
+    logo: material/cloud-braces
+markdown_extensions:
+  - admonition
+  - footnotes
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

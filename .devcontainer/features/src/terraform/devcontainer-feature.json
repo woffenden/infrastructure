@@ -1,0 +1,24 @@
+{
+  "id": "terraform",
+  "version": "1.0.0",
+  "name": "Terraform",
+  "description": "Terraform functionality: Extensions and CLI",
+  "options": {
+    "installTerraformCli": {
+      "type": "boolean",
+      "description": "Install the Terraform CLI (https://github.com/hashicorp/terraform)",
+      "default": true
+    },
+    "terraformCliVersion": {
+      "type": "string",
+      "description": "Version of the Terraform CLI to install",
+      "default": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["hashicorp.terraform"]
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}

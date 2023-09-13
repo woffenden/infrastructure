@@ -8,13 +8,18 @@ containers)
   SEARCH_PATTERN="*Containerfile*"
   SKIP_FILE=".containers-path-filter-ignore"
   ;;
+devcontainer)
+  PATH_FILTER_CONFIGURATION_FILE=".github/path-filters/devcontainer.yml"
+  SEARCH_PATTERN="devcontainer-feature.json"
+  SKIP_FILE=".devcontainer-path-filter-ignore"
+  ;;
 terraform)
   PATH_FILTER_CONFIGURATION_FILE=".github/path-filters/terraform.yml"
   SEARCH_PATTERN=".terraform.lock.hcl"
   SKIP_FILE=".terraform-path-filter-ignore"
   ;;
 *)
-  echo "Usage: ${0} [containers|terraform]"
+  echo "Usage: ${0} [containers|devcontainer|terraform]"
   exit 1
   ;;
 esac

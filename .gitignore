@@ -48,6 +48,9 @@ Temporary Items
 # Built Visual Studio Code Extensions
 *.vsix
 
+# Super-Linter log
+super-linter.log
+
 ##################################################
 # Terraform
 # Source: https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore

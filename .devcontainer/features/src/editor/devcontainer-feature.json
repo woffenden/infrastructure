@@ -1,0 +1,12 @@
+{
+  "id": "editor",
+  "version": "1.0.0",
+  "name": "Editor",
+  "description": "Editor functionality",
+  "customizations": {
+    "vscode": {
+      "extensions": ["EditorConfig.EditorConfig"]
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}
