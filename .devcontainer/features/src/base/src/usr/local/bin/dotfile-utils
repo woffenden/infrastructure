@@ -4,7 +4,7 @@
 # file not accessible until being built
 source /usr/local/bin/devcontainer-utils
 
-if [[ ! -z "${CODESPACES}" ]]; then
+if [[ -n "${CODESPACES}" ]]; then
   logger "error" "This script is only intended to be run when using the dev container on your local machine, not with GitHub Codespaces"
   logger "info" "To use dotfiles in GitHub Codespaces, please see https://docs.github.com/en/codespaces/customizing-your-codespace/personalizing-github-codespaces-for-your-account#dotfiles"
   exit 1
@@ -15,22 +15,22 @@ DOTFILES_REPOSITORY="${2}"
 DOTFILES_DIRECTORY="${HOME}/.dotfiles"
 
 case "${MODE}" in
-  install)
-    logger "info" "Installing dotfiles from ${DOTFILES_REPOSITORY} to ${DOTFILES_DIRECTORY}"
-    if [[ ! -d "${DOTFILES_DIRECTORY}" ]]; then
-      git clone "${DOTFILES_REPOSITORY}" "${DOTFILES_DIRECTORY}"
-    fi
+install)
+  logger "info" "Installing dotfiles from ${DOTFILES_REPOSITORY} to ${DOTFILES_DIRECTORY}"
+  if [[ ! -d "${DOTFILES_DIRECTORY}" ]]; then
+    git clone "${DOTFILES_REPOSITORY}" "${DOTFILES_DIRECTORY}"
+  fi
   ;;
-  sync)
-    logger "info" "Syncing dotfiles from ${DOTFILES_REPOSITORY} to ${DOTFILES_DIRECTORY}"
-    if [[ -d "${DOTFILES_DIRECTORY}" ]]; then
-      cd "${DOTFILES_DIRECTORY}" || exit
-      git pull
-    fi
+sync)
+  logger "info" "Syncing dotfiles from ${DOTFILES_REPOSITORY} to ${DOTFILES_DIRECTORY}"
+  if [[ -d "${DOTFILES_DIRECTORY}" ]]; then
+    cd "${DOTFILES_DIRECTORY}" || exit
+    git pull
+  fi
   ;;
-  *)
-    logger "error" "Mode ${MODE} is not supported"
-    logger "error" "Usage: ${0} [install|sync] <dotfiles-repository>"
-    exit 1
+*)
+  logger "error" "Mode ${MODE} is not supported"
+  logger "error" "Usage: ${0} [install|sync] <dotfiles-repository>"
+  exit 1
   ;;
 esac
