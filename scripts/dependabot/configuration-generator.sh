@@ -64,7 +64,7 @@ for ecosystem in docker pip terraform; do
       printf "      time: \"09:00\"\n"
       printf "      timezone: \"Europe/London\"\n"
       printf "    commit-message:\n"
-      printf "      prefix: \"%s\"\n" "${ecosystem}"
+      printf "      prefix: \"📌 %s\"\n" "${ecosystem}"
       printf "      include: \"scope\"\n"
       printf "    reviewers:\n"
       printf "      - \"jacobwoffenden\"\n"
