@@ -4,7 +4,7 @@ data "aws_identitystore_group" "aws_administrators" {
   alternate_identifier {
     unique_attribute {
       attribute_path  = "DisplayName"
-      attribute_value = "AWS Administrators"
+      attribute_value = "aws-administrators"
     }
   }
 }
