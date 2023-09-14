@@ -3,7 +3,6 @@
 # bash scripts/path-filter/configuration-generator.sh terraform
 
 aws-cloud-platform-shared-services-ecr: terraform/aws/cloud-platform-shared-services/ecr/**
-aws-cloud-platform-shared-services-iam: terraform/aws/cloud-platform-shared-services/iam/**
 aws-root-iam: terraform/aws/root/iam/**
 aws-root-organisation: terraform/aws/root/organisation/**
 aws-root-route53: terraform/aws/root/route53/**
