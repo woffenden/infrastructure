@@ -132,19 +132,19 @@ jobs:
         id: initialise_terraform
         working-directory: ${{ env.working-directory }}
         shell: bash
-        run: terraform init -upgrade -no-color
+        run: terraform init -upgrade
 
       - name: Validate Terraform
         id: validate_terraform
         working-directory: ${{ env.working-directory }}
         shell: bash
-        run: terraform validate -no-color
+        run: terraform validate
 
       - name: Plan Terraform
         id: plan_terraform
         working-directory: ${{ env.working-directory }}
         shell: bash
-        run: terraform plan -input=false -no-color
+        run: terraform plan -input=false
 
       - name: Add Summary
         if: github.ref != 'refs/heads/main'
@@ -179,4 +179,4 @@ jobs:
         id: apply_terraform
         working-directory: ${{ env.working-directory }}
         shell: bash
-        run: terraform apply -input=false -auto-approve -no-color
+        run: terraform apply -input=false -auto-approve
