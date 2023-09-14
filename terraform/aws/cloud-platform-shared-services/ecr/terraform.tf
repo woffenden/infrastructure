@@ -24,7 +24,7 @@ provider "aws" {
       "business-unit" = "platforms"
       "application"   = "infrastructure"
       "component"     = "ecr"
-      "owner"         = "ddat.aws@woffenden.io"
+      "owner"         = "aws@woffenden.io"
       "source-code"   = "github.com/woffenden/infrastructure/terraform/aws/cloud-platform-shared-services/ecr"
       "environment"   = "management"
       "is-production" = "true"

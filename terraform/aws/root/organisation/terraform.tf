@@ -28,7 +28,7 @@ provider "aws" {
       "business-unit" = "platforms"
       "application"   = "infrastructure"
       "component"     = "organisation"
-      "owner"         = "ddat.aws@woffenden.io"
+      "owner"         = "aws@woffenden.io"
       "source-code"   = "github.com/woffenden/infrastructure/terraform/aws/root/organisation"
       "environment"   = "management"
       "is-production" = "true"
