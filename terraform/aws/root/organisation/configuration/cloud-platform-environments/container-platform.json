@@ -4,13 +4,13 @@
     "development": {
         "access": {
             "group": "aws-administrators",
-            "permission-set": "AdministratorAccess"
+            "permission_set": "AdministratorAccess"
         }
     },
     "production": {
         "access": {
             "group": "aws-administrators",
-            "permission-set": "AdministratorAccess"
+            "permission_set": "AdministratorAccess"
         }
     }
   }

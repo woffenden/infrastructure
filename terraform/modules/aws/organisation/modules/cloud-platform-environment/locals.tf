@@ -1,5 +1,4 @@
 locals {
-  name  = var.configuration.name
-  email = "${var.configuration.name}@woffenden.io"
+  name         = var.configuration.name
   environments = var.configuration.environments
 }

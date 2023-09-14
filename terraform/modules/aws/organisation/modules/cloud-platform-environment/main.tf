@@ -1,20 +1,8 @@
-resource "aws_organizations_account" "this" {
-
+module "cloud_platform_environment_account" {
   for_each = local.environments
 
-  name                       = "${local.name}-${each.key}"
-#   parent_id                  = var.organisational_unit
-  email                      = local.email
-#   role_name                  = var.role_name
-#   iam_user_access_to_billing = var.iam_user_access_to_billing
-#   close_on_deletion          = var.close_on_deletion
+  source = "../account"
 
-  lifecycle {
-    ignore_changes = [
-      name,
-      email,
-      iam_user_access_to_billing,
-      role_name
-    ]
-  }
+  name                = "${local.name}-${each.key}"
+  organisational_unit = var.organisational_unit
 }
