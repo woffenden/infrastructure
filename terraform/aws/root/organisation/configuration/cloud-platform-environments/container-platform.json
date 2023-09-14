@@ -1,0 +1,17 @@
+{
+  "name": "container-platform",
+  "environments": {
+    "development": {
+        "access": {
+            "group": "aws-administrators",
+            "permission-set": "AdministratorAccess"
+        }
+    },
+    "production": {
+        "access": {
+            "group": "aws-administrators",
+            "permission-set": "AdministratorAccess"
+        }
+    }
+  }
+}
