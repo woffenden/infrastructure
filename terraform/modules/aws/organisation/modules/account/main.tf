@@ -9,6 +9,7 @@ resource "aws_organizations_account" "this" {
     ignore_changes = [
       name,
       email,
+      parent_id,
       iam_user_access_to_billing,
       role_name
     ]

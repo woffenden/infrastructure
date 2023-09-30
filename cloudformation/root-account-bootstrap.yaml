@@ -18,7 +18,7 @@ Parameters:
   Owner:
     Description: 'Owner (owner)'
     Type: String
-    Default: 'ddat.aws@woffenden.io'
+    Default: 'aws@woffenden.io'
   SourceCode:
     Description: 'Source Code (source-code)'
     Type: String
