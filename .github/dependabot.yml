@@ -23,51 +23,18 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "pip"
+      prefix: "📌 pip"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/development/iam"
+    directory: "terraform/aws/cloud-platform-shared-services/ecr"
     schedule:
       interval: "daily"
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "jacobwoffenden"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/platform-services/ecr"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "jacobwoffenden"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/platform-services/iam"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
-      include: "scope"
-    reviewers:
-      - "jacobwoffenden"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/production/iam"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: "terraform"
+      prefix: "📌 terraform"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
@@ -78,7 +45,7 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "terraform"
+      prefix: "📌 terraform"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
@@ -89,7 +56,7 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "terraform"
+      prefix: "📌 terraform"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
@@ -100,7 +67,7 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "terraform"
+      prefix: "📌 terraform"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
@@ -111,7 +78,7 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "terraform"
+      prefix: "📌 terraform"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
@@ -122,7 +89,7 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "terraform"
+      prefix: "📌 terraform"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
@@ -133,7 +100,7 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "terraform"
+      prefix: "📌 terraform"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
