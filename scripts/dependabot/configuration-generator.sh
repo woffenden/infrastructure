@@ -18,7 +18,7 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "github-actions"
+      prefix: "📌 github-actions"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
