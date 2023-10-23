@@ -5,7 +5,7 @@ resource "aws_lambda_function" "aws_sso_sync" {
   #ts:skip=AC_AWS_0484
   function_name = "aws-sso-sync"
   package_type  = "Image"
-  image_uri     = "126246520815.dkr.ecr.eu-west-2.amazonaws.com/aws-ssosync:2.0.3"
+  image_uri     = "126246520815.dkr.ecr.eu-west-2.amazonaws.com/aws-ssosync:2.0.3.1"
   role          = aws_iam_role.aws_sso_sync.arn
   timeout       = 15
 
