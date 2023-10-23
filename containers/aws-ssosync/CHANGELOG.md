@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.3.1] - 2023-10-23
+
+### Changed
+
+- Updated Alpine and cURL version
+
 ## [2.0.3] - 2023-08-25
 
 ### Changed
