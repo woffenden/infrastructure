@@ -1,9 +1,9 @@
-FROM public.ecr.aws/docker/library/alpine:3.18.3 as BUILD
+FROM public.ecr.aws/docker/library/alpine:3.18.4 as BUILD
 
 ARG AWS_SSO_SYNC_VERSION="2.0.3"
 
 RUN apk add --no-cache \
-      curl==8.2.1-r0 \
+      curl==8.4.0-r0 \
     && curl --location "https://github.com/awslabs/ssosync/releases/download/v${AWS_SSO_SYNC_VERSION}/ssosync_Linux_x86_64.tar.gz" \
          --output ssosync_Linux_arm64.tar.gz \
     && tar -xzf ssosync_Linux_arm64.tar.gz
