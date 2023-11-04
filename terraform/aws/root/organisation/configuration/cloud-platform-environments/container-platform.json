@@ -5,7 +5,8 @@
       "name": "development",
       "access": [
         {
-          "group": "aws-administrators",
+          "github_team": "container-platform",
+          "google_group": "container-platform",
           "role": "administrator"
         }
       ]
@@ -14,7 +15,8 @@
       "name": "production",
       "access": [
         {
-          "group": "aws-administrators",
+          "github_team": "container-platform",
+          "google_group": "container-platform",
           "role": "administrator"
         }
       ]
