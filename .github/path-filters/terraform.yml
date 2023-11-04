@@ -6,7 +6,6 @@ aws-cloud-platform-shared-services-ecr: terraform/aws/cloud-platform-shared-serv
 aws-root-iam: terraform/aws/root/iam/**
 aws-root-organisation: terraform/aws/root/organisation/**
 aws-root-route53: terraform/aws/root/route53/**
-aws-root-sso: terraform/aws/root/sso/**
 cloudflare: terraform/cloudflare/**
 github: terraform/github/**
 google-woffenden-mta-sts: terraform/google/woffenden/mta-sts/**

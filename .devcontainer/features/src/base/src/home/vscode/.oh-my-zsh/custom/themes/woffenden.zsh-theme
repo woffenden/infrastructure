@@ -26,7 +26,7 @@ __zsh_prompt() {
     # AWS Vault Profile
     if command -v aws-vault &> /dev/null; then
       PROMPT+='`\
-          if [[ ${AWS_VAULT} == *"management"* || ${AWS_VAULT} == *"platform-services"* ]]; then \
+          if [[ ${AWS_VAULT} == *"root"* || ${AWS_VAULT} == *"cloud-platform"* ]]; then \
             echo -n "[ aws: %{$fg[yellow]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \
           elif [[ ${AWS_VAULT} == *"development"* ]]; then \
             echo -n "[ aws: %{$fg[green]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \

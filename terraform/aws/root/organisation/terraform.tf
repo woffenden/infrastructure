@@ -9,7 +9,11 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.23.1"
+      version = "5.24.0"
+    }
+    github = {
+      source  = "integrations/github"
+      version = "5.41.0"
     }
   }
 }
@@ -35,4 +39,9 @@ provider "aws" {
       "managed-by"    = "terraform"
     }
   }
+}
+
+provider "github" {
+  owner = "woffenden"
+  token = data.aws_secretsmanager_secret_version.github_token.secret_string
 }
