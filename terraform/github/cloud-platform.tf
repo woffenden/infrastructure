@@ -1,7 +1,7 @@
 resource "github_team" "cloud_platform" {
-  name        = "cloud-platform"
-  description = "Cloud Platform"
-  privacy     = "closed"
+  name                      = "cloud-platform"
+  description               = "Cloud Platform"
+  privacy                   = "closed"
   create_default_maintainer = true
 }
 

@@ -1,7 +1,7 @@
 resource "github_team" "container_platform" {
-  name        = "container-platform"
-  description = "Container Platform"
-  privacy     = "closed"
+  name                      = "container-platform"
+  description               = "Container Platform"
+  privacy                   = "closed"
   create_default_maintainer = true
 }
 
