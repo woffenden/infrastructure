@@ -2,16 +2,22 @@
   "name": "container-platform",
   "environments": {
     "development": {
-        "access": {
-            "group": "aws-administrators",
-            "permission_set": "AdministratorAccess"
+      "name": "development",
+      "access": [
+        {
+          "group": "aws-administrators",
+          "role": "administrator"
         }
+      ]
     },
     "production": {
-        "access": {
-            "group": "aws-administrators",
-            "permission_set": "AdministratorAccess"
+      "name": "production",
+      "access": [
+        {
+          "group": "aws-administrators",
+          "role": "administrator"
         }
+      ]
     }
   }
 }

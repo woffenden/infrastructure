@@ -17,7 +17,10 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["hashicorp.terraform"]
+      "extensions": ["hashicorp.terraform"],
+      "files.associations": {
+        "*.hcl": "terraform"
+      }
     }
   },
   "installsAfter": ["./features/src/base"]
