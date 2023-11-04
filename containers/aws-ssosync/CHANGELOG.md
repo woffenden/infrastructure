@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.3.2] - 2023-11-04
+
+### Changed
+
+- Remove `--group-match`, sync all the groups
+
 ## [2.0.3.1] - 2023-10-23
 
 ### Changed

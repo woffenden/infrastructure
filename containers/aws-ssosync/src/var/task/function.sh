@@ -15,8 +15,7 @@ function handler() {
     --endpoint "${AWS_SSO_SYNC_SCIM_ENDPOINT}" \
     --google-admin "${AWS_SSO_SYNC_GOOGLE_ADMIN}" \
     --google-credentials /tmp/credentials.json \
-    --sync-method "groups" \
-    --group-match "${AWS_SSO_SYNC_GROUP_MATCH}"
+    --sync-method "groups"
 
   if [ $? -eq 0 ]; then
     echo "Successfully synced groups"
