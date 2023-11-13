@@ -3,9 +3,9 @@
   "environments": {
     "development": {
       "name": "development",
+      "github_team": "container-platform",
       "access": [
         {
-          "github_team": "container-platform",
           "google_group": "container-platform",
           "role": "administrator"
         }
@@ -13,9 +13,9 @@
     },
     "production": {
       "name": "production",
+      "github_team": "container-platform",
       "access": [
         {
-          "github_team": "container-platform",
           "google_group": "container-platform",
           "role": "administrator"
         }
