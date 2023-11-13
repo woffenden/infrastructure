@@ -10,3 +10,9 @@ resource "github_team_membership" "jacobwoffenden_cloud_platform" {
   username = "jacobwoffenden"
   role     = "member"
 }
+
+resource "github_team_repository" "cloud_platform" {
+  team_id    = github_team.cloud_platform.id
+  repository = "infrastructure"
+  permission = "push"
+}
