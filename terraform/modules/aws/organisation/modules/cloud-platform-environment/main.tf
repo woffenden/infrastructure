@@ -10,7 +10,7 @@ module "cloud_platform_environment_account" {
 data "github_team" "this" {
   for_each = { for env in local.environments : env.name => env }
 
-  slug = "${each.value.github_team}"
+  slug = each.value.github_team
 }
 
 resource "github_repository_environment" "this" {
