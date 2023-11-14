@@ -19,12 +19,17 @@ jobs:
   terraform-plan:
     name: Plan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     defaults:
       run:
         working-directory: terraform/aws/cloud-platform-tenants/container-platform
     strategy:
       matrix:
         enviroment: ["development", "production"]
+    environment:
+      name: "cloud-platform-${{ matrix.enviroment }}"
     steps:
       - name: Checkout
         id: checkout
