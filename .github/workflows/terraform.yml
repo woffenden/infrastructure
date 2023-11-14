@@ -8,14 +8,14 @@ on:
     paths:
       - .github/workflows/terraform.yml
       - terraform/**
-      - '!terraform/aws/cloud-platform-environments/**'
+      - '!terraform/aws/cloud-platform-tenants/**'
   push:
     branches:
       - main
     paths:
       - .github/workflows/terraform.yml
       - terraform/**
-      - '!terraform/aws/cloud-platform-environments/**'
+      - '!terraform/aws/cloud-platform-tenants/**'
 
 permissions: read-all
 
