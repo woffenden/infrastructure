@@ -12,7 +12,6 @@ module "cloud_platform_environment_access" {
 
   source = "../cloud-platform-environment-access"
 
-  name    = "${local.name}-${each.key}"
   account = module.cloud_platform_environment_account[each.key].id
   access  = each.value.access
 }

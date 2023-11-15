@@ -1,7 +1,3 @@
-variable "name" {
-  type = string
-}
-
 variable "account" {
   type = string
 }
