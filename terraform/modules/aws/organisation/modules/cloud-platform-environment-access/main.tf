@@ -5,6 +5,11 @@ data "aws_ssoadmin_permission_set" "cloud_platform_administrator" {
   name         = "cloud-platform-administrator"
 }
 
+data "aws_ssoadmin_permission_set" "cloud_platform_view_only" {
+  instance_arn = tolist(data.aws_ssoadmin_instances.main.arns)[0]
+  name         = "cloud-platform-view-only"
+}
+
 data "aws_identitystore_group" "this" {
   for_each = { for i in var.access : i.google_group => i }
 
@@ -26,6 +31,22 @@ resource "aws_ssoadmin_account_assignment" "cloud_platform_administrator" {
 
   instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
   permission_set_arn = data.aws_ssoadmin_permission_set.cloud_platform_administrator.arn
+
+  principal_type = "GROUP"
+  principal_id   = data.aws_identitystore_group.this[each.key].group_id
+
+  target_type = "AWS_ACCOUNT"
+  target_id   = var.account
+}
+
+resource "aws_ssoadmin_account_assignment" "cloud_platform_view_only" {
+  for_each = {
+    for i in var.access : i.google_group => i
+    if i.role == "view-only"
+  }
+
+  instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
+  permission_set_arn = data.aws_ssoadmin_permission_set.cloud_platform_view_only.arn
 
   principal_type = "GROUP"
   principal_id   = data.aws_identitystore_group.this[each.key].group_id
