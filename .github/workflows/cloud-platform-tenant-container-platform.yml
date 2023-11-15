@@ -17,6 +17,7 @@ permissions: read-all
 
 jobs:
   terraform-plan:
+    if: github.ref != 'refs/heads/main'
     name: Plan
     runs-on: ubuntu-latest
     permissions:
@@ -70,8 +71,9 @@ jobs:
           terraform plan -out=${{ matrix.environment }}.tfplan -input=false -no-color
 
   terraform-apply-non-production:
+    if: github.ref != 'refs/heads/main'
     needs: [terraform-plan]
-    name: Apply
+    name: Apply Non-Production
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -133,7 +135,7 @@ jobs:
 
   terraform-plan-production:
     if: github.ref == 'refs/heads/main'
-    name: Plan
+    name: Plan Production
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -144,8 +146,6 @@ jobs:
     strategy:
       matrix:
         environment: ["production"]
-    environment:
-      name: "container-platform-${{ matrix.environment }}"
     steps:
       - name: Checkout
         id: checkout
@@ -190,7 +190,7 @@ jobs:
   terraform-apply-production:
     if: github.ref == 'refs/heads/main'
     needs: [terraform-plan-production]
-    name: Apply
+    name: Apply Production
     runs-on: ubuntu-latest
     permissions:
       contents: read
