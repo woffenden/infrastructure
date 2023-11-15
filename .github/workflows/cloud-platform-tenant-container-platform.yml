@@ -78,7 +78,7 @@ jobs:
         id: evaluate_terraform_plan
         shell: bash
         run: |
-          bash -x ${GITHUB_WORKSPACE}/scripts/terraform/plan-evaluator.sh ${{ matrix.environment }}.tfplan.json
+          bash -x "${GITHUB_WORKSPACE}/scripts/terraform/plan-evaluator.sh" ${{ matrix.environment }}.tfplan.json
 
       - name: Check Approvers
         id: check_approvers
@@ -114,17 +114,20 @@ jobs:
         id: comment_if_not_approved
         if: failure() && steps.check_approvers.outcome == 'failure'
         uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0 # v7.0.0
+        env:
+          MATRIX_ENVIRONMENT: ${{ matrix.environment }}
         with:
           github-token: ${{ secrets.WOFFENDEN_BOT_GITHUB_TOKEN }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
+            const matrixEnvironment = process.env.MATRIX_ENVIRONMENT;
 
             await github.rest.issues.createComment({
               owner: owner,
               repo: repo,
               issue_number: context.payload.pull_request.number,
-              body: `@${context.actor} Terraform plan evalaution detected changes to resources that require approval from a member of @woffenden/cloud-platform`
+              body: `@${context.actor} Terraform plan evalaution detected changes to resources in ${matrixEnvironment} that require approval from a member of @woffenden/cloud-platform`
             });
 
   terraform-apply-non-production:
