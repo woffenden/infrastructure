@@ -30,7 +30,7 @@ jobs:
         enviroment: ["development", "production"]
     # Commenting out for plan stage
     # environment:
-    #   name: "cloud-platform-${{ matrix.enviroment }}"
+    #   name: "container-platform-${{ matrix.enviroment }}"
     steps:
       - name: Checkout
         id: checkout
@@ -71,3 +71,65 @@ jobs:
         shell: bash
         run: |
           terraform plan -out=${{ matrix.enviroment }}.tfplan -input=false -no-color
+
+  terraform-apply-non-production:
+    needs: [terraform-plan]
+    name: Apply
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: terraform/aws/cloud-platform-tenants/container-platform
+    strategy:
+      matrix:
+        enviroment: ["development"]
+    environment:
+      name: "container-platform-${{ matrix.enviroment }}"
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Configure AWS Credentials
+        id: configure_aws_credentials
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::749019155605:role/github-actions
+
+      - name: Install Terraform
+        id: install_terraform
+        uses: hashicorp/setup-terraform@a1502cd9e758c50496cc9ac5308c4843bcd56d36 # v3.0.0
+        with:
+          terraform_version: latest
+
+      - name: Prepare Terraform
+        id: prepare_terraform
+        shell: bash
+        run: |
+          echo "TF_IN_AUTOMATION=true" >>"${GITHUB_ENV}"
+
+      - name: Initialise Terraform
+        id: initialise_terraform
+        shell: bash
+        run: terraform init -upgrade -input=false -no-color
+
+      - name: Terraform Workspace
+        id: terraform_workspace
+        shell: bash
+        run: |
+          terraform workspace select -or-create ${{ matrix.enviroment }} -no-color
+
+      - name: Terraform Plan
+        id: terraform_plan
+        shell: bash
+        run: |
+          terraform plan -out=${{ matrix.enviroment }}.tfplan -input=false -no-color
+
+      - name: Terraform Apply
+        id: terraform_apply
+        shell: bash
+        run: |
+          terraform apply -auto-approve -input=false ${{ matrix.enviroment }}.tfplan -no-color
