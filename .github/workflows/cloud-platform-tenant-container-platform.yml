@@ -71,11 +71,13 @@ jobs:
         run: |
           terraform plan -out=${{ matrix.environment }}.tfplan -input=false -no-color
 
+          terraform show -json ${{ matrix.environment }}.tfplan > ${{ matrix.environment }}.tfplan.json
+
       - name: Evaluate Terraform Plan
         id: evaluate_terraform_plan
         shell: bash
         run: |
-          bash -x ${GITHUB_WORKSPACE}/scripts/terraform/plan-evaluator.sh ${{ matrix.environment }}.tfplan
+          bash -x ${GITHUB_WORKSPACE}/scripts/terraform/plan-evaluator.sh ${{ matrix.environment }}.tfplan.json
 
       - name: Check Approvers
         id: check_approvers
