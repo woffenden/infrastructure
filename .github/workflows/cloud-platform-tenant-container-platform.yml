@@ -28,8 +28,9 @@ jobs:
     strategy:
       matrix:
         enviroment: ["development", "production"]
-    environment:
-      name: "cloud-platform-${{ matrix.enviroment }}"
+    # Commenting out for plan stage
+    # environment:
+    #   name: "cloud-platform-${{ matrix.enviroment }}"
     steps:
       - name: Checkout
         id: checkout
@@ -57,16 +58,16 @@ jobs:
       - name: Initialise Terraform
         id: initialise_terraform
         shell: bash
-        run: terraform init -upgrade
+        run: terraform init -upgrade -input=false -no-color
 
       - name: Terraform Workspace
         id: terraform_workspace
         shell: bash
         run: |
-          terraform workspace select -or-create ${{ matrix.enviroment }}
+          terraform workspace select -or-create ${{ matrix.enviroment }} -no-color
 
-      - name: DEBUG
-        id: debug
+      - name: Terraform Plan
+        id: terraform_plan
         shell: bash
         run: |
-          terraform workspace show
+          terraform plan -out=${{ matrix.enviroment }}.tfplan -input=false -no-color
