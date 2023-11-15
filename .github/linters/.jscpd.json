@@ -1,6 +1,7 @@
 {
     "absolute": true,
     "ignore": [
+        "**/.github/workflows/cloud-platform-tenant-*",
         "**/.github/workflows/reusable-workflow-containers.yml",
         "**/.github/workflows/terraform-*",
         "**/cloudformation/root-account-bootstrap.yaml"
