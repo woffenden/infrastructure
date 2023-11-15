@@ -63,7 +63,7 @@ jobs:
         id: terraform_workspace
         shell: bash
         run: |
-          terraform workspace select ${{ matrix.enviroment }} || terraform workspace new ${{ matrix.enviroment }}
+          terraform workspace select ${{ matrix.enviroment }} -or-create
 
       - name: DEBUG
         id: debug
