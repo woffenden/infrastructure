@@ -4,3 +4,5 @@ module "vpc" {
 
   name = "container-platform"
 }
+
+# module "eks" {}

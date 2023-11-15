@@ -56,7 +56,8 @@ jobs:
       - name: Initialise Terraform
         id: initialise_terraform
         shell: bash
-        run: terraform init -upgrade -input=false -no-color
+        run: |
+          terraform init -upgrade -input=false -no-color
 
       - name: Terraform Workspace
         id: terraform_workspace
@@ -69,6 +70,59 @@ jobs:
         shell: bash
         run: |
           terraform plan -out=${{ matrix.environment }}.tfplan -input=false -no-color
+
+      - name: Evaluate Terraform Plan
+        id: evaluate_terraform_plan
+        shell: bash
+        run: |
+          bash -x ${GITHUB_WORKSPACE}/scripts/terraform/plan-evaluator.sh ${{ matrix.environment }}.tfplan
+
+      - name: Check Approvers
+        id: check_approvers
+        if: ${{ steps.evaluate_terraform_plan.outputs.resources_found == 'true' }}
+        uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0 # v7.0.0
+        with:
+          github-token: ${{ secrets.WOFFENDEN_BOT_GITHUB_TOKEN }}
+          script: |
+            const orgName = 'woffenden';
+            const teamSlug = 'cloud-platform';
+
+            const {data: reviews} = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+
+            const {data: team_members} = await github.rest.teams.listMembersInOrg({
+              org: orgName,
+              team_slug: teamSlug
+            });
+
+            const teamMemberLogins = team_members.map(member => member.login);
+            const approved = reviews.some(review => review.state === 'APPROVED' && teamMemberLogins.includes(review.user.login));
+
+            if (approved) {
+              core.notice('Pull request approved by a member of @woffenden/cloud-platform');
+            } else {
+              core.setFailed('Terraform plan evalaution detected changes to resources that require approval from a member of @woffenden/cloud-platform');
+            }
+
+      - name: Comment if Pull Request Isn't Approved
+        id: comment_if_not_approved
+        if: failure() && steps.check_approvers.outcome == 'failure'
+        uses: actions/github-script@e69ef5462fd455e02edcaf4dd7708eda96b9eda0 # v7.0.0
+        with:
+          github-token: ${{ secrets.WOFFENDEN_BOT_GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            await github.rest.issues.createComment({
+              owner: owner,
+              repo: repo,
+              issue_number: context.payload.pull_request.number,
+              body: `@${context.actor} Terraform plan evalaution detected changes to resources that require approval from a member of @woffenden/cloud-platform`
+            });
 
   terraform-apply-non-production:
     if: github.ref != 'refs/heads/main'
