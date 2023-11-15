@@ -27,6 +27,7 @@ jobs:
       run:
         working-directory: terraform/aws/cloud-platform-tenants/container-platform
     strategy:
+      fail-fast: false
       matrix:
         environment: ["development", "production"]
     steps:
