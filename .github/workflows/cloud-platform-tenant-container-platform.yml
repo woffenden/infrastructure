@@ -59,8 +59,14 @@ jobs:
         shell: bash
         run: terraform init -upgrade
 
+      - name: Terraform Workspace
+        id: terraform_workspace
+        shell: bash
+        run: |
+          terraform workspace select ${{ matrix.enviroment }} || terraform workspace new ${{ matrix.enviroment }}
+
       - name: DEBUG
         id: debug
         shell: bash
         run: |
-          terraform workspace list
+          terraform workspace show
