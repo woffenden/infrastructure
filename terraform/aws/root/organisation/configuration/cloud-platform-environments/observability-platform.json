@@ -24,7 +24,7 @@
     },
     "tags": {
       "application": "observability-platform",
-      "business-unit": "platforms",
+      "business_unit": "platforms",
       "owner": "observability-platform@woffenden.io"
     }
   }
