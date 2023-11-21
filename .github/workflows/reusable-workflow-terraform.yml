@@ -132,26 +132,26 @@ jobs:
         id: initialise_terraform
         working-directory: ${{ env.working-directory }}
         shell: bash
-        run: terraform init -upgrade
+        run: terraform init -upgrade -input=false -no-color
 
       - name: Validate Terraform
         id: validate_terraform
         working-directory: ${{ env.working-directory }}
         shell: bash
-        run: terraform validate
+        run: terraform validate -no-color
 
       - name: Plan Terraform
         id: plan_terraform
         working-directory: ${{ env.working-directory }}
         shell: bash
-        run: terraform plan -input=false
+        run: terraform plan -input=false -no-color
 
       - name: Add Summary
         if: github.ref != 'refs/heads/main'
         id: add_summary
         shell: bash
         run: |
-          if grep -q "No changes. Your infrastructure matches the configuration." <<< "$${{ steps.plan_terraform.outputs.stdout }}" ; then
+          if grep -q "No changes. Your infrastructure matches the configuration." <<< "${{ steps.plan_terraform.outputs.stdout }}" ; then
             echo "Terraform Plan Summary: No changes detected." >>"${GITHUB_STEP_SUMMARY}"
           elif grep -q "No changes. Infrastructure is up-to-date." <<< "$${{ steps.plan_terraform.outputs.stdout }}"; then
             echo "Terraform Plan Summary: No changes detected." >>"${GITHUB_STEP_SUMMARY}"
@@ -179,4 +179,4 @@ jobs:
         id: apply_terraform
         working-directory: ${{ env.working-directory }}
         shell: bash
-        run: terraform apply -input=false -auto-approve
+        run: terraform apply -input=false -auto-approve -no-color
