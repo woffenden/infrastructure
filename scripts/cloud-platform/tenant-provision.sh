@@ -3,7 +3,7 @@
 ENVIRONMENT_CONFIGURATION_DIRECTORY="terraform/aws/root/organisation/configuration/cloud-platform-environments"
 CLOUD_PLATFORM_TENANT_DIRECTORY="terraform/aws/cloud-platform-tenants"
 
-cloudPlatformTenants=$(ls terraform/aws/root/organisation/configuration/cloud-platform-environments | sed 's/.json//')
+cloudPlatformTenants=$(find terraform/aws/root/organisation/configuration/cloud-platform-environments -type f -name "*.json" -exec basename {} .json \;)
 export cloudPlatformTenants
 
 for tenant in ${cloudPlatformTenants}; do
