@@ -1,3 +1,7 @@
+resource "random_id" "email_suffix" {
+  byte_length = 8
+}
+
 resource "aws_organizations_account" "this" {
   name                       = var.name
   parent_id                  = var.organisational_unit
