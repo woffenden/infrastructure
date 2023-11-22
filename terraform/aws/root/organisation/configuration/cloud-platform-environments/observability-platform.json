@@ -1,0 +1,30 @@
+{
+    "name": "observability-platform",
+    "environments": {
+      "development": {
+        "name": "development",
+        "github_team": "observability-platform",
+        "access": [
+          {
+            "google_group": "observability-platform",
+            "role": "administrator"
+          }
+        ]
+      },
+      "production": {
+        "name": "production",
+        "github_team": "observability-platform",
+        "access": [
+          {
+            "google_group": "observability-platform",
+            "role": "administrator"
+          }
+        ]
+      }
+    },
+    "tags": {
+      "application": "observability-platform",
+      "business_unit": "platforms",
+      "owner": "observability-platform@woffenden.io"
+    }
+  }

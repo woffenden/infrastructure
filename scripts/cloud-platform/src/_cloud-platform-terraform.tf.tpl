@@ -6,7 +6,7 @@
 terraform {
   backend "s3" {
     bucket               = "woffenden-terraform"
-    workspace_key_prefix = "cloud-platform-tenants/container-platform"
+    workspace_key_prefix = "cloud-platform-tenants/TENANT_NAME"
     key                  = "terraform.tfstate"
     dynamodb_table       = "terraform"
     encrypt              = true
@@ -52,11 +52,11 @@ provider "aws" {
   }
   default_tags {
     tags = {
-      "business-unit" = "platforms"
-      "application"   = "container-platform"
+      "business-unit" = "BUSINESS_UNIT"
+      "application"   = "APPLICATION"
       "component"     = "main"
-      "owner"         = "container-platform@woffenden.io"
-      "source-code"   = "github.com/woffenden/infrastructure/terraform/aws/cloud-platform-tenants/container-platform"
+      "owner"         = "OWNER"
+      "source-code"   = "github.com/woffenden/infrastructure/terraform/aws/cloud-platform-tenants/TENANT_NAME"
       "environment"   = terraform.workspace
       "is-production" = endswith(terraform.workspace, "-production") ? "true" : "false"
       "managed-by"    = "terraform"

@@ -24,7 +24,7 @@
   },
   "tags": {
     "application": "container-platform",
-    "business-unit": "platforms",
+    "business_unit": "platforms",
     "owner": "container-platform@woffenden.io"
   }
 }
