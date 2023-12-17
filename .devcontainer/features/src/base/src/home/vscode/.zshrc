@@ -27,15 +27,6 @@ for file in "${HOME}"/.devcontainer/feature-completion/*.sh; do
 done
 
 ####################
-# Dotfiles
-####################
-if [[ -z "${CODESPACES}" ]] && [[ -d "${HOME}/.dotfiles" ]]; then
-  for file in "${HOME}"/.dotfiles/*.sh; do
-    source "${file}"
-  done
-fi
-
-####################
 # First Notice
 ####################
 if [ -t 1 ] && [[ "${TERM_PROGRAM}" = "vscode" || "${TERM_PROGRAM}" = "codespaces" ]] && [ ! -f "$HOME/.config/vscode-dev-containers/first-run-notice-already-displayed" ]; then
