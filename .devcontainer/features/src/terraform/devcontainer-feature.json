@@ -4,14 +4,14 @@
   "name": "Terraform",
   "description": "Terraform functionality: Extensions and CLI",
   "options": {
-    "installTerraformCli": {
+    "installTerraform": {
       "type": "boolean",
-      "description": "Install the Terraform CLI (https://github.com/hashicorp/terraform)",
+      "description": "Install the Terraform (https://github.com/hashicorp/terraform)",
       "default": true
     },
-    "terraformCliVersion": {
+    "terraformVersion": {
       "type": "string",
-      "description": "Version of the Terraform CLI to install",
+      "description": "Version of the Terraform to install",
       "default": "latest"
     }
   },
