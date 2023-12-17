@@ -4,7 +4,7 @@
 # file not accessible until being built
 source /usr/local/bin/devcontainer-utils
 
-if [[ "${INSTALLTERRAFORMCLI}" == "true" ]]; then
-  logger "info" "Installing TERRAFORM CLI (version: ${TERRAFORMCLIVERSION})"
-  bash "$(dirname "${0}")"/install-terraform-cli.sh
+if [[ "${INSTALLTERRAFORM}" == "true" ]]; then
+  logger "info" "Installing Terraform (version: ${TERRAFORMVERSION})"
+  bash "$(dirname "${0}")"/install-terraform.sh
 fi

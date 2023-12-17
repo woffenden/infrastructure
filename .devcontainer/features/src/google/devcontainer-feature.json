@@ -1,0 +1,19 @@
+{
+  "id": "google",
+  "version": "1.0.0",
+  "name": "Google",
+  "description": "Google functionality: Cloud CLI",
+  "options": {
+    "installGcloudCli": {
+      "type": "boolean",
+      "description": "Install the Google Cloud CLI (https://cloud.google.com/cli)",
+      "default": true
+    },
+    "gcloudCliVersion": {
+      "type": "string",
+      "description": "Version of the Google Cloud CLI to install",
+      "default": "latest"
+    }
+  },
+  "installsAfter": ["./features/src/base"]
+}

@@ -93,3 +93,15 @@ resource "cloudflare_record" "woffenden_net_unifi_cname" {
   value   = cloudflare_tunnel.bny_woffenden_net.cname
   proxied = true
 }
+
+resource "cloudflare_record" "woffenden_net_bny_a" {
+  zone_id = module.woffenden_net_cloudflare_zone.id
+  name    = "bny"
+  type    = "A"
+  value   = "1.1.1.1"
+  comment = "This record is updated by the IP Update script"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}

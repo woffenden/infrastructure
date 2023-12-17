@@ -7,6 +7,7 @@
     "./features/src/editor": {},
     "./features/src/github": {},
     "./features/src/aws": {},
+    "./features/src/google": {},
     "./features/src/terraform": {},
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/node:1": {}
