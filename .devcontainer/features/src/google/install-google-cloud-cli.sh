@@ -8,7 +8,9 @@ source /usr/local/bin/devcontainer-utils
 
 get_system_architecture
 
-VERSION="${AWSCLIVERSION:-"latest"}"
+# Ignoring because we'll use this at a later date
+# shellcheck disable=SC2034
+VERSION="${GCLOUDCLIVERSION:-"latest"}"
 
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor --output /usr/share/keyrings/cloud.google.gpg
 
