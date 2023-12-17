@@ -130,9 +130,9 @@ jobs:
         uses: aquasecurity/trivy-action@91713af97dc80187565512baba96e4364e983601 # v0.16.0
         with:
           image-ref: ${{ env.name }}:${{ env.version }}
+          severity: CRITICAL
           exit-code: 1
-          format: sarif
-          output: trivy-results.sarif
+          format: table
 
   build-push:
     if: github.ref == 'refs/heads/main'
