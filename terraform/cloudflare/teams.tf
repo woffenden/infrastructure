@@ -23,6 +23,10 @@ resource "cloudflare_teams_account" "woffenden" {
     root_ca = false
   }
 
+  ssh_session_log {
+    public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBW3ifjrwEykLtSbEvXWULacMK2Tv1mP6cOLm2lsrVai"
+  }
+
   logging {
     redact_pii = false
     settings_by_rule_type {
