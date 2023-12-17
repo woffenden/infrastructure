@@ -131,8 +131,7 @@ jobs:
         with:
           image-ref: ${{ env.name }}:${{ env.version }}
           exit-code: 1
-          format: sarif
-          output: trivy-results.sarif
+          format: table
 
   build-push:
     if: github.ref == 'refs/heads/main'
