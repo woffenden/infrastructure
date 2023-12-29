@@ -14,6 +14,10 @@ resource "cloudflare_tunnel_config" "bny_woffenden_net" {
       }
     }
     ingress_rule {
+      hostname = "homeassistant.woffenden.net"
+      service  = "http://10.100.10.35:8123"
+    }
+    ingress_rule {
       service = "http_status:404"
     }
   }

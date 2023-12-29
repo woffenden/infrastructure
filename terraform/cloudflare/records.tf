@@ -94,6 +94,14 @@ resource "cloudflare_record" "woffenden_net_unifi_cname" {
   proxied = true
 }
 
+resource "cloudflare_record" "woffenden_net_homeassistant_cname" {
+  zone_id = module.woffenden_net_cloudflare_zone.id
+  name    = "homeassistant"
+  type    = "CNAME"
+  value   = cloudflare_tunnel.bny_woffenden_net.cname
+  proxied = true
+}
+
 resource "cloudflare_record" "woffenden_net_bny_a" {
   zone_id = module.woffenden_net_cloudflare_zone.id
   name    = "bny"

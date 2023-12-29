@@ -5,3 +5,11 @@ resource "cloudflare_tunnel_route" "int_bny_woffenden_net" {
   comment            = "int.bny.woffenden.net"
   virtual_network_id = cloudflare_tunnel_virtual_network.cloudflare_woffenden_net.id
 }
+
+resource "cloudflare_tunnel_route" "home_woffenden_io" {
+  account_id         = data.google_secret_manager_secret_version.cloudflare_account_id.secret_data
+  tunnel_id          = cloudflare_tunnel.bny_woffenden_net.id
+  network            = "10.100.10.0/24"
+  comment            = "home.woffenden.io"
+  virtual_network_id = cloudflare_tunnel_virtual_network.cloudflare_woffenden_net.id
+}
