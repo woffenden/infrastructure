@@ -19,3 +19,8 @@ jobs:
           organization: ${{ secrets.CLOUDFLARE_ZT_ORG }}
           auth_client_id: ${{ secrets.CLOUDFLARE_ZT_CLIENT_ID }}
           auth_client_secret: ${{ secrets.CLOUDFLARE_ZT_CLIENT_SECRET }}
+
+      - name: Test
+        run: |
+          warp-cli debug network
+          curl -s https://www.cloudflare.com/cdn-cgi/trace
