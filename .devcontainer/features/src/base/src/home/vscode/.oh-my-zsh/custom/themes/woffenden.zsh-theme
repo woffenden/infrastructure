@@ -23,17 +23,25 @@ __zsh_prompt() {
             fi; \
         fi`'
 
-    # AWS Vault Profile
-    if command -v aws-vault &> /dev/null; then
+    # Terraform
+    if command -v terraform &> /dev/null; then
       PROMPT+='`\
-          if [[ ${AWS_VAULT} == *"root"* || ${AWS_VAULT} == *"cloud-platform"* ]]; then \
-            echo -n "[ aws: %{$fg[yellow]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \
-          elif [[ ${AWS_VAULT} == *"development"* ]]; then \
-            echo -n "[ aws: %{$fg[green]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \
-          elif [[ ${AWS_VAULT} == *"production"* ]]; then \
-            echo -n "[ aws: %{$fg[red]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \
-          elif [[ ! -z ${AWS_VAULT} ]]; then \
-            echo -n "[ aws: %{$fg[blue]%}${AWS_VAULT}@${AWS_REGION}%{$reset_color%} ] "; \
+          terraformVersion=$(terraform -version | grep Terraform | cut -d " " -f 2 | sed "s/v//"); \
+          echo -n "[ terraform: %{$fg[blue]%}${terraformVersion}%{$reset_color%} ] " \
+      `'
+    fi
+
+    # AWS SSO
+    if command -v aws-sso &> /dev/null; then
+      PROMPT+='`\
+          if [[ ${AWS_SSO_PROFILE} == *"development"* || ${AWS_SSO_PROFILE} == *"test"* ]]; then \
+            echo -n "[ aws: %{$fg[green]%}${AWS_SSO_PROFILE}@${AWS_DEFAULT_REGION}%{$reset_color%} ] "; \
+          elif [[ ${AWS_SSO_PROFILE} == *"preproduction"* ]]; then \
+            echo -n "[ aws: %{$fg[yellow]%}${AWS_SSO_PROFILE}@${AWS_DEFAULT_REGION}%{$reset_color%} ] "; \
+          elif [[ ${AWS_SSO_PROFILE} == *"production"* || ${AWS_SSO_PROFILE} == *"root"* ]]; then \
+            echo -n "[ aws: %{$fg[red]%}${AWS_SSO_PROFILE}@${AWS_DEFAULT_REGION}%{$reset_color%} ] "; \
+          elif [[ ! -z ${AWS_SSO_PROFILE} ]]; then \
+            echo -n "[ aws: %{$fg[blue]%}${AWS_SSO_PROFILE}@${AWS_DEFAULT_REGION}%{$reset_color%} ] "; \
           fi`'
     fi
 
