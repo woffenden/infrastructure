@@ -19,7 +19,7 @@
       "description": "Install AWS SSO CLI (https://github.com/synfinatic/aws-sso-cli)",
       "default": true
     },
-    "awsSsoCli": {
+    "awsSsoCliVersion": {
       "type": "string",
       "description": "Version of AWS SSO CLI to install",
       "default": "latest"

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-export AWS_SSO_FILE_PASSWORD="aws_sso_123456789"
+export AWS_SSO_FILE_PASSWORD="REPLACE_ME"
