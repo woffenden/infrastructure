@@ -8,5 +8,5 @@ docker run -it --rm \
   --workdir /docs \
   --publish 8000:8000 \
   --entrypoint /bin/bash \
-  public.ecr.aws/docker/library/python:3.10-slim \
+  public.ecr.aws/docker/library/python:3.12-slim \
   /scripts/docs/preview.sh
