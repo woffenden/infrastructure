@@ -2,7 +2,7 @@
   "id": "aws",
   "version": "1.0.0",
   "name": "AWS",
-  "description": "AWS functionality: CLI, AWS Vault",
+  "description": "AWS functionality: CLI, SSO CLI",
   "options": {
     "installAwsCli": {
       "type": "boolean",
@@ -14,14 +14,14 @@
       "description": "Version of the AWS CLI to install",
       "default": "latest"
     },
-    "installAwsVault": {
+    "installAwsSsoCli": {
       "type": "boolean",
-      "description": "Install AWS Vault (https://github.com/99designs/aws-vault)",
+      "description": "Install AWS SSO CLI (https://github.com/synfinatic/aws-sso-cli)",
       "default": true
     },
-    "awsVaultVersion": {
+    "awsSsoCli": {
       "type": "string",
-      "description": "Version of AWS Vault to install",
+      "description": "Version of AWS SSO CLI to install",
       "default": "latest"
     }
   },

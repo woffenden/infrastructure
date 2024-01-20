@@ -7,5 +7,6 @@ set -e
 source dev-container-features-test-lib
 
 check "gcloud version" gcloud --version
+check "gcloud featurerc existence" stat /home/vscode/.devcontainer/featurerc.d/gcloud.sh
 
 reportResults

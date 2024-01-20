@@ -15,7 +15,7 @@ source /usr/local/bin/devcontainer-utils
 ##################################################
 
 install --owner=vscode --group=vscode --mode=644 "$(dirname "${0}")"/src/home/vscode/.zshrc /home/vscode/.zshrc
-install --directory --owner=vscode --group=vscode /home/vscode/.devcontainer/feature-completion
+install --directory --owner=vscode --group=vscode /home/vscode/.devcontainer/featurerc.d
 install --owner=vscode --group=vscode --mode=755 "$(dirname "${0}")"/src/home/vscode/.oh-my-zsh/custom/themes/woffenden.zsh-theme /home/vscode/.oh-my-zsh/custom/themes/woffenden.zsh-theme
 install --owner=vscode --group=vscode --mode=755 "$(dirname "${0}")"/src/usr/local/etc/vscode-dev-containers/first-run-notice.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt
 
