@@ -1,3 +1,4 @@
 * @woffenden/cloud-platform
+**/_cloud-platform-terraform.tf @woffenden/cloud-platform
 terraform/aws/cloud-platform-tenants/container-platform @woffenden/container-platform
 terraform/aws/cloud-platform-tenants/observability-platform @woffenden/observability-platform

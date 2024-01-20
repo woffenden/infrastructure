@@ -23,7 +23,7 @@ for tenant in ${cloudPlatformTenants}; do
   fi
 
   echo " -> Copying tenant configuration to: ${CLOUD_PLATFORM_TENANT_DIRECTORY}/${tenant}/_cloud-platform-terraform.tf"
-  cp scripts/cloud-platform/src/_cloud-platform-terraform.tf.tpl "${CLOUD_PLATFORM_TENANT_DIRECTORY}/${tenant}/_cloud-platform-terraform.tf"
+  cp scripts/cloud-platform/src/_cloud-platform-terraform.tf "${CLOUD_PLATFORM_TENANT_DIRECTORY}/${tenant}/_cloud-platform-terraform.tf"
 
   echo " -> Processing tenant configuration: ${ENVIRONMENT_CONFIGURATION_DIRECTORY}/${tenant}.json"
   sed -i "s/TENANT_NAME/${tenant}/g" "${CLOUD_PLATFORM_TENANT_DIRECTORY}/${tenant}/_cloud-platform-terraform.tf"
