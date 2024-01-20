@@ -17,3 +17,5 @@ curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor --out
 echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee --append /etc/apt/sources.list.d/google-cloud-sdk.list
 
 apt_install "google-cloud-cli"
+
+install --owner=vscode --group=vscode --mode=775 "$(dirname "${0}")"/src/home/vscode/.devcontainer/featurerc.d/gcloud.sh /home/vscode/.devcontainer/featurerc.d/gcloud.sh

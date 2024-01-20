@@ -29,4 +29,4 @@ install --owner=vscode --group=vscode --mode=775 terraform /usr/local/bin/terraf
 
 rm --recursive --force terraform "terraform_${VERSION_STRIP_V}_linux_${ARCHITECTURE}.zip"
 
-install --owner=vscode --group=vscode --mode=775 "$(dirname "${0}")"/src/home/vscode/.devcontainer/feature-completion/terraform.sh /home/vscode/.devcontainer/feature-completion/terraform.sh
+install --owner=vscode --group=vscode --mode=775 "$(dirname "${0}")"/src/home/vscode/.devcontainer/featurerc.d/terraform.sh /home/vscode/.devcontainer/featurerc.d/terraform.sh

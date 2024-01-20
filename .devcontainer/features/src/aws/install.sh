@@ -9,7 +9,7 @@ if [[ "${INSTALLAWSCLI}" == "true" ]]; then
   bash "$(dirname "${0}")"/install-aws-cli.sh
 fi
 
-if [[ "${INSTALLAWSVAULT}" == "true" ]]; then
-  logger "info" "Installing AWS Vault (version: ${AWSVAULTVERSION})"
-  bash "$(dirname "${0}")"/install-aws-vault.sh
+if [[ "${INSTALLAWSSSOCLI}" == "true" ]]; then
+  logger "info" "Installing AWS SSO CLI (version: ${AWSSSOCLIVERSION})"
+  bash "$(dirname "${0}")"/install-aws-sso-cli.sh
 fi
