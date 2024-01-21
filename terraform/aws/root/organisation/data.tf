@@ -30,6 +30,14 @@ data "aws_secretsmanager_secret_version" "aws_sso_sync_google_credentials" {
   secret_id = "aws-sso-sync/google-credentials"
 }
 
+data "aws_secretsmanager_secret_version" "aws_sso_sync_ignore_groups" {
+  secret_id = "aws-sso-sync/ignore-groups"
+}
+
+data "aws_secretsmanager_secret_version" "aws_sso_sync_ignore_users" {
+  secret_id = "aws-sso-sync/ignore-users"
+}
+
 data "aws_secretsmanager_secret_version" "github_token" {
   secret_id = "github-robot-token"
 }
