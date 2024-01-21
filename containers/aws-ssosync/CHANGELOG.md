@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.2] - 2024-01-21
+
+### Changed
+
+- Updated awslabs/ssosync to 2.1.2
+
+### Added
+
+- `--ignore-groups` flag
+
+- `--ignore-users` flag
+
 ## [2.1.0] - 2023-12-14
 
 ### Changed
