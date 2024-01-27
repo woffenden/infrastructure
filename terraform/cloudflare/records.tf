@@ -110,6 +110,9 @@ resource "cloudflare_record" "woffenden_net_bny_a" {
   comment = "This record is updated by the IP Update script"
 
   lifecycle {
-    ignore_changes = [value]
+    ignore_changes = [
+      comment,
+      value
+    ]
   }
 }
