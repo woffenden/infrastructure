@@ -18,7 +18,7 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "📌 github-actions"
+      prefix: ":dependabot: github-actions"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
@@ -29,7 +29,7 @@ updates:
       time: "09:00"
       timezone: "Europe/London"
     commit-message:
-      prefix: "📌 devcontainers"
+      prefix: ":dependabot: devcontainers"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
@@ -75,7 +75,7 @@ for ecosystem in docker pip terraform; do
       printf "      time: \"09:00\"\n"
       printf "      timezone: \"Europe/London\"\n"
       printf "    commit-message:\n"
-      printf "      prefix: \"📌 %s\"\n" "${ecosystem}"
+      printf "      prefix: \":dependabot: %s\"\n" "${ecosystem}"
       printf "      include: \"scope\"\n"
       printf "    reviewers:\n"
       printf "      - \"jacobwoffenden\"\n"
