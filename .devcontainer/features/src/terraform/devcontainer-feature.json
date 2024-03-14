@@ -22,8 +22,6 @@
         "*.hcl": "terraform"
       },
       "settings": {
-        "terraform.languageServer.enable": true,
-        "terraform.languageServer.args": ["serve"],
         "[terraform]": {
           "editor.defaultFormatter": "hashicorp.terraform",
           "editor.formatOnSave": true,
