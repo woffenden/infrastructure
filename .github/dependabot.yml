@@ -16,6 +16,17 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "📌 devcontainers"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
   - package-ecosystem: "pip"
     directory: "docs"
     schedule:
@@ -24,6 +35,17 @@ updates:
       timezone: "Europe/London"
     commit-message:
       prefix: "📌 pip"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+  - package-ecosystem: "terraform"
+    directory: "terraform/aws/cloud-platform-idam/team-idc-app"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "📌 terraform"
       include: "scope"
     reviewers:
       - "jacobwoffenden"
@@ -72,7 +94,7 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/root/sso"
+    directory: "terraform/cloudflare"
     schedule:
       interval: "daily"
       time: "09:00"
@@ -83,7 +105,7 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/cloudflare"
+    directory: "terraform/github"
     schedule:
       interval: "daily"
       time: "09:00"
