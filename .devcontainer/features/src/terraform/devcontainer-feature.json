@@ -20,6 +20,20 @@
       "extensions": ["hashicorp.terraform"],
       "files.associations": {
         "*.hcl": "terraform"
+      },
+      "settings": {
+        "terraform.languageServer.enable": true,
+        "terraform.languageServer.args": ["serve"],
+        "[terraform]": {
+          "editor.defaultFormatter": "hashicorp.terraform",
+          "editor.formatOnSave": true,
+          "editor.formatOnSaveMode": "file"
+        },
+        "[terraform-vars]": {
+          "editor.defaultFormatter": "hashicorp.terraform",
+          "editor.formatOnSave": true,
+          "editor.formatOnSaveMode": "file"
+        }
       }
     }
   },
