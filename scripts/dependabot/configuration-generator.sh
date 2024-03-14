@@ -22,6 +22,17 @@ updates:
       include: "scope"
     reviewers:
       - "jacobwoffenden"
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: "📌 devcontainers"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
 EOL
 
 for ecosystem in docker pip terraform; do
