@@ -1,6 +1,6 @@
 resource "github_team" "this" {
   name           = var.name
-  description    = join(" • ", [var.description, "This team is defined and managed in Terraform"])
+  description    = var.description
   privacy        = var.privacy
   parent_team_id = try(var.parent_team_id, null)
 
