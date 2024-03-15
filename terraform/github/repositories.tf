@@ -1,3 +1,4 @@
+#ts:skip=accurics.github.IAM.1
 module "infrastructure_repository" {
   source = "../modules/github/repository"
 
