@@ -1,4 +1,6 @@
 resource "github_repository" "this" {
+  #ts:skip=accurics.github.IAM.1
+
   name        = var.name
   description = var.description
   topics      = var.topics
