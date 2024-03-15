@@ -20,6 +20,18 @@
       "extensions": ["hashicorp.terraform"],
       "files.associations": {
         "*.hcl": "terraform"
+      },
+      "settings": {
+        "[terraform]": {
+          "editor.defaultFormatter": "hashicorp.terraform",
+          "editor.formatOnSave": true,
+          "editor.formatOnSaveMode": "file"
+        },
+        "[terraform-vars]": {
+          "editor.defaultFormatter": "hashicorp.terraform",
+          "editor.formatOnSave": true,
+          "editor.formatOnSaveMode": "file"
+        }
       }
     }
   },
