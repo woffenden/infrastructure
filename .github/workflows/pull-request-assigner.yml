@@ -1,5 +1,5 @@
 ---
-name: Pull request assigner
+name: Pull Request Assigner
 
 on:
   pull_request:
@@ -11,12 +11,12 @@ permissions: read-all
 jobs:
   pull-request-assigner:
     if: github.actor != 'dependabot[bot]'
-    name: Pull request assigner
+    name: Pull Request Assigner
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
-      - name: Pull request assigner
+      - name: Pull Request Assigner
         id: pull_request_assigner
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
