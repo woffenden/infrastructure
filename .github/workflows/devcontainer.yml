@@ -26,7 +26,7 @@ jobs:
         id: checkout
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
 
-      - name: Detect changes
+      - name: Detect Changes
         id: detect_changes
         uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
         with:
@@ -50,7 +50,7 @@ jobs:
         id: install_devcontainers_cli
         run: npm install -g @devcontainers/cli@${{ env.DEVCONTAINER_CLI_VERSION }}
 
-      - name: Build test image
+      - name: Build Test Image
         id: build_test_image
         uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5.3.0
         with:
@@ -67,7 +67,7 @@ jobs:
             --features ${{ matrix.feature }} \
             --base-image devcontainer-test
 
-      - name: Testing ${{ matrix.feature }} scenarios
+      - name: Testing ${{ matrix.feature }} Scenarios
         id: test_feature_scenarios
         run: |
           devcontainer features test \
