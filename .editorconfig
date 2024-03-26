@@ -9,7 +9,15 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
 
-[{*.sh,**/src/usr/local/bin/**,bootstrap}]
+[*.sh]
+indent_style = space
+indent_size = 2
+
+[**/src/usr/local/bin/**]
+indent_style = space
+indent_size = 2
+
+[bootstrap]
 indent_style = space
 indent_size = 2
 
