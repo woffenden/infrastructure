@@ -27,6 +27,10 @@ resource "cloudflare_teams_account" "woffenden" {
     public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBW3ifjrwEykLtSbEvXWULacMK2Tv1mP6cOLm2lsrVai"
   }
 
+  extended_email_matching {
+    enabled = true
+  }
+
   logging {
     redact_pii = false
     settings_by_rule_type {
