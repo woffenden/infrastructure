@@ -81,7 +81,7 @@ jobs:
       - name: Get GitHub Robot Token from AWS
         if: env.cloud-provider == 'aws'
         id: get_github_robot_token_aws
-        uses: aws-actions/aws-secretsmanager-get-secrets@f91b2a3e784edce744f972af1685eca7e24d2302 # v1.0.4
+        uses: aws-actions/aws-secretsmanager-get-secrets@98c2d6bf1dd67c2575fa2bb14294aa64103d426c # v1.0.4
         with:
           secret-ids: |
             GITHUB_ROBOT_TOKEN_AWS, github-robot-token
