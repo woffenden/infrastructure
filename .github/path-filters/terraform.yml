@@ -10,4 +10,4 @@ aws-root-route53: terraform/aws/root/route53/**
 cloudflare: terraform/cloudflare/**
 github: terraform/github/**
 google-woffenden-mta-sts: terraform/google/woffenden/mta-sts/**
-kubernetes-nuc01.int.bny.woffenden.net: terraform/kubernetes/nuc01.int.bny.woffenden.net/**
+kubernetes-nuc01-int-bny-woffenden-net: terraform/kubernetes/nuc01.int.bny.woffenden.net/**

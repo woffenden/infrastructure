@@ -46,7 +46,7 @@ for folder in ${folders}; do
   fi
 
   if [[ "${MODE}" == "terraform" ]]; then
-    baseName=$(echo "${folder}" | sed 's|/|-|g' | sed 's|terraform-||')
+    baseName=$(echo "${folder}" | sed 's|/|-|g' | sed 's|terraform-||' | sed 's|\.|-|g')
   else
     baseName=$(basename "${folder}")
   fi
