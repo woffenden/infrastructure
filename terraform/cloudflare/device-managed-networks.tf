@@ -1,4 +1,4 @@
-resource "cloudflare_device_managed_networks" "bny_woffenden_net" {
+resource "cloudflare_zero_trust_device_managed_networks" "bny_woffenden_net" {
   account_id = data.google_secret_manager_secret_version.cloudflare_account_id.secret_data
   name       = "bny.woffenden.net"
   type       = "tls"
