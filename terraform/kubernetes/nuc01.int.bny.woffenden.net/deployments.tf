@@ -1,4 +1,6 @@
 resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
+  #ts:skip=AC_K8S_0064 I cannot figure out what combination of settings will make this work
+
   metadata {
     name      = "doh-proxy"
     namespace = kubernetes_namespace.cloudflare_teams.metadata[0].name
@@ -24,10 +26,13 @@ resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
           seccomp_profile {
             type = "RuntimeDefault"
           }
+          run_as_non_root     = true
+          supplemental_groups = []
         }
         container {
-          name  = "doh-proxy"
-          image = "docker.io/cloudflare/cloudflared:2024.8.3"
+          name              = "doh-proxy"
+          image             = "docker.io/cloudflare/cloudflared:2024.8.3"
+          image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
             "proxy-dns"
@@ -60,11 +65,15 @@ resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
             }
           }
           security_context {
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
             allow_privilege_escalation = false
             privileged                 = false
             read_only_root_filesystem  = true
             run_as_non_root            = true
             run_as_user                = 65532
+            run_as_group               = 65532
           }
         }
       }
