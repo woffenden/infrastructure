@@ -20,6 +20,11 @@ resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
         }
       }
       spec {
+        security_context {
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+        }
         container {
           name  = "doh-proxy"
           image = "docker.io/cloudflare/cloudflared:2024.8.3"
@@ -53,6 +58,13 @@ resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
               cpu    = "100m"
               memory = "128Mi"
             }
+          }
+          security_context {
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = true
+            run_as_non_root            = true
+            run_as_user                = 65532
           }
         }
       }
