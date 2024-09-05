@@ -10,6 +10,11 @@
       "resolved": "ghcr.io/devcontainers/features/docker-in-docker@sha256:503f23cd692325b3cbb8c20a0ecfabb3444b0c786b363e0c82572bd7d71dc099",
       "integrity": "sha256:503f23cd692325b3cbb8c20a0ecfabb3444b0c786b363e0c82572bd7d71dc099"
     },
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "version": "1.2.0",
+      "resolved": "ghcr.io/devcontainers/features/kubectl-helm-minikube@sha256:ff50f0f68095dc2dadeb9bfd7e509b21b9fcfe012d708b303c55f7bedfa462d0",
+      "integrity": "sha256:ff50f0f68095dc2dadeb9bfd7e509b21b9fcfe012d708b303c55f7bedfa462d0"
+    },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "1.6.0",
       "resolved": "ghcr.io/devcontainers/features/node@sha256:902b97a02d04ffd3404579d793f3e101d1126d4d198929196c5872ed75a6d351",
