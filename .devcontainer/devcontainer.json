@@ -19,5 +19,5 @@
     "./features/src/base"
   ],
   "postCreateCommand": "npm install -g @devcontainers/cli",
-  "runArgs": ["--device=/dev/net/tun"] // Required for Tailscale
+  "runArgs": ["--device=/dev/net/tun"]
 }
