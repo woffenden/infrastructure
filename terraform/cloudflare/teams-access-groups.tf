@@ -4,7 +4,7 @@ resource "cloudflare_access_group" "google_group_ddat_sre" {
 
   include {
     gsuite {
-      identity_provider_id = data.cloudflare_access_identity_provider.google_workspace.id
+      identity_provider_id = data.cloudflare_zero_trust_access_identity_provider.google_workspace.id
       email                = ["ddat.sre@woffenden.io"]
     }
   }
@@ -16,7 +16,7 @@ resource "cloudflare_access_group" "google_group_home" {
 
   include {
     gsuite {
-      identity_provider_id = data.cloudflare_access_identity_provider.google_workspace.id
+      identity_provider_id = data.cloudflare_zero_trust_access_identity_provider.google_workspace.id
       email                = ["home@woffenden.io"]
     }
   }
