@@ -23,8 +23,3 @@ resource "kubernetes_service" "cloudflare_teams_doh_proxy" {
     }
   }
 }
-
-import {
-  to = kubernetes_service.cloudflare_teams_doh_proxy
-  id = "cloudflare-teams/doh-proxy"
-}
