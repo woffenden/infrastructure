@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.32.0"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.15.0"
+    }
   }
 }
 
@@ -21,10 +25,19 @@ provider "google" {
 }
 
 provider "kubernetes" {
-  host            = "https://nuc01.tailnet-9b65.ts.net:6443"
-  tls_server_name = "nuc01.int.bny.woffenden.net"
-
+  host                   = "https://nuc01.tailnet-9b65.ts.net:6443"
+  tls_server_name        = "nuc01.int.bny.woffenden.net"
   client_certificate     = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_client_certificate_data.secret_data)
   client_key             = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_client_key_data.secret_data)
   cluster_ca_certificate = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_certificate_authority_data.secret_data)
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = "https://nuc01.tailnet-9b65.ts.net:6443"
+    tls_server_name        = "nuc01.int.bny.woffenden.net"
+    client_certificate     = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_client_certificate_data.secret_data)
+    client_key             = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_client_key_data.secret_data)
+    cluster_ca_certificate = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_certificate_authority_data.secret_data)
+  }
 }
