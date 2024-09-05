@@ -46,12 +46,6 @@ resource "cloudflare_zone_settings_override" "this" {
     websockets               = "on"
     zero_rtt                 = "on"
 
-    minify {
-      css  = "on"
-      html = "off"
-      js   = "on"
-    }
-
     security_header {
       enabled            = false
       include_subdomains = false

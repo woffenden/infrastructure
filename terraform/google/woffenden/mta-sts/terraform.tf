@@ -10,9 +10,10 @@ terraform {
     }
     google = {
       source  = "hashicorp/google"
-      version = "6.0.1"
+      version = "6.1.0"
     }
   }
+  required_version = "~> 1.5"
 }
 
 provider "cloudflare" {

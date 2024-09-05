@@ -4,6 +4,7 @@ variable "aws_service_access_principals" {
   default = [
     "access-analyzer.amazonaws.com",
     "account.amazonaws.com",
+    "billing-cost-management.amazonaws.com",
     "cloudtrail.amazonaws.com",
     "compute-optimizer.amazonaws.com",
     "config.amazonaws.com",
