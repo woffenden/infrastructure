@@ -29,8 +29,3 @@ resource "kubernetes_manifest" "metallb_l2_advertisement_bny_woffenden_net" {
     }
   }
 }
-
-import {
-  to = kubernetes_manifest.metallb_l2_advertisement_bny_woffenden_net
-  id = "apiVersion=metallb.io/v1beta1,kind=L2Advertisement,namespace=metallb-system,name=bny-woffenden-net"
-}

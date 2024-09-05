@@ -9,3 +9,7 @@ data "google_secret_manager_secret_version" "k8s_nuc01_client_certificate_data" 
 data "google_secret_manager_secret_version" "k8s_nuc01_client_key_data" {
   secret = "k8s-nuc01-client-key-data"
 }
+
+data "google_secret_manager_secret_version" "cloudflare_teams_doh_bny_woffenden_net" {
+  secret = "cloudflare-teams-doh-bny-woffenden-net"
+}
