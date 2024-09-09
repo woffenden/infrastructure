@@ -18,6 +18,6 @@
     "ghcr.io/devcontainers/features/common-utils",
     "./features/src/base"
   ],
-  "postCreateCommand": "npm install -g @devcontainers/cli",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
   "runArgs": ["--device=/dev/net/tun"]
 }
