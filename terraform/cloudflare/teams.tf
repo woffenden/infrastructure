@@ -18,10 +18,11 @@ resource "cloudflare_teams_account" "woffenden" {
   }
 
   proxy {
-    tcp        = true
-    udp        = true
-    root_ca    = false
-    virtual_ip = false
+    tcp              = true
+    udp              = true
+    root_ca          = false
+    virtual_ip       = false
+    disable_for_time = 0
   }
 
   ssh_session_log {
