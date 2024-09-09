@@ -14,11 +14,12 @@ This project requires [signed commits](https://docs.github.com/en/authentication
 
 You can enable this in GitHub Codespaces by following [GitHub's guidance](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-gpg-verification-for-github-codespaces#enabling-or-disabling-gpg-verification)
 
-You can also enable this locally by following GitHub's guidance for [GPG](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification#gpg-commit-signature-verification) or [SSH](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification#ssh-commit-signature-verification) commit signature verification
+You can also enable this locally by following GitHub's guidance for [GPG](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification#gpg-commit-signature-verification)
+or [SSH](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification#ssh-commit-signature-verification) commit signature verification
 
 ## Super-Linter
 
-[![Super-Linter](https://github.com/woffenden/infrastructure/actions/workflows/super-linter.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![Super-Linter](https://github.com/woffenden/infrastructure/actions/workflows/super-linter.yml/badge.svg)](https://github.com/woffenden/infrastructure/actions/workflows/super-linter.yml)
 
 This project has Super-Linter [configured](https://github.com/woffenden/infrastructure/blob/main/.github/workflows/super-linter.yml) to run on pull requests to `main` branch
 
@@ -80,6 +81,6 @@ The dev container includes [`ghcr.io/tailscale/codespace/tailscale`](https://git
 
 To connect to the tailnet, run the following command, and follow the provided URL to authenticate with Tailscale using your Google Workspace account
 
-    ```bash
-    sudo tailscale up
-    ```
+```bash
+sudo tailscale up
+```
