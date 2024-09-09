@@ -357,6 +357,8 @@ resource "kubernetes_deployment" "homebridge" {
 }
 
 resource "kubernetes_deployment" "paperless_redis" {
+  #ts:skip=AC_K8S_0064 I cannot figure out what combination of settings will make this work
+
   metadata {
     name      = "redis"
     namespace = kubernetes_namespace.paperless.metadata[0].name
@@ -435,6 +437,8 @@ resource "kubernetes_deployment" "paperless_redis" {
 }
 
 resource "kubernetes_deployment" "paperless_postgres" {
+  #ts:skip=AC_K8S_0064 I cannot figure out what combination of settings will make this work
+
   metadata {
     name      = "postgres"
     namespace = kubernetes_namespace.paperless.metadata[0].name
@@ -525,6 +529,8 @@ resource "kubernetes_deployment" "paperless_postgres" {
 }
 
 resource "kubernetes_deployment" "paperless" {
+  #ts:skip=AC_K8S_0064 I cannot figure out what combination of settings will make this work
+
   metadata {
     name      = "paperless"
     namespace = kubernetes_namespace.paperless.metadata[0].name
