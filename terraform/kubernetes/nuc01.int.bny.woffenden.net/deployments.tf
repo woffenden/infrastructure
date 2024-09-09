@@ -433,3 +433,93 @@ resource "kubernetes_deployment" "paperless_redis" {
     }
   }
 }
+
+resource "kubernetes_deployment" "paperless_postgres" {
+  metadata {
+    name      = "postgres"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+    labels = {
+      app = "postgres"
+    }
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "postgres"
+      }
+    }
+    strategy {
+      type = "Recreate"
+    }
+    template {
+      metadata {
+        labels = {
+          app = "postgres"
+        }
+      }
+      spec {
+        security_context {
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+          run_as_non_root     = false
+          supplemental_groups = []
+        }
+        container {
+          name              = "postgres"
+          image             = "docker.io/postgres:15.8-alpine3.20"
+          image_pull_policy = "Always"
+          env {
+            name  = "POSTGRES_USER"
+            value = "paperless"
+          }
+          env {
+            name  = "POSTGRES_PASSWORD"
+            value = "paperless"
+          }
+          env {
+            name  = "POSTGRES_DB"
+            value = "paperless"
+          }
+          port {
+            name           = "postgres"
+            container_port = 5432
+            protocol       = "TCP"
+          }
+          resources {
+            limits = {
+              cpu    = "200m"
+              memory = "500Mi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "256Mi"
+            }
+          }
+          security_context {
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = false
+            run_as_user                = 0
+            run_as_group               = 0
+          }
+          volume_mount {
+            name       = "postgres-data"
+            mount_path = "/var/lib/postgresql/data"
+          }
+        }
+        volume {
+          name = "postgres-data"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.paperless_postgres.metadata[0].name
+          }
+        }
+      }
+    }
+  }
+}

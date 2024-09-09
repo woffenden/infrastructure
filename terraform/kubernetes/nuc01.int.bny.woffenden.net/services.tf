@@ -71,3 +71,25 @@ resource "kubernetes_service" "paperless_redis" {
     }
   }
 }
+
+resource "kubernetes_service" "paperless_postgres" {
+  metadata {
+    name      = "postgres"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+    labels = {
+      app = "postgres"
+    }
+  }
+  spec {
+    type = "ClusterIP"
+    selector = {
+      app = "postgres"
+    }
+    port {
+      name        = "postgres"
+      port        = 5432
+      target_port = "postgres"
+      protocol    = "TCP"
+    }
+  }
+}

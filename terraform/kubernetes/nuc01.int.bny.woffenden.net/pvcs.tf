@@ -29,3 +29,19 @@ resource "kubernetes_persistent_volume_claim" "paperless_redis" {
     }
   }
 }
+
+resource "kubernetes_persistent_volume_claim" "paperless_postgres" {
+  metadata {
+    name      = "postgres-pvc"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+  }
+  spec {
+    storage_class_name = "local-path"
+    access_modes       = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "1Gi"
+      }
+    }
+  }
+}
