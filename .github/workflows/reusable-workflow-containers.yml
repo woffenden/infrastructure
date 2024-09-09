@@ -165,7 +165,7 @@ jobs:
         id: login_ecr
         uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2.0.1
         with:
-          mask-password: 'true'
+          mask-password: "true"
 
       - name: Prepare Environment
         id: prepare_environment
