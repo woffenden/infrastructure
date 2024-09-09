@@ -355,3 +355,81 @@ resource "kubernetes_deployment" "homebridge" {
     }
   }
 }
+
+resource "kubernetes_deployment" "paperless_redis" {
+  metadata {
+    name      = "redis"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+    labels = {
+      app = "redis"
+    }
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "redis"
+      }
+    }
+    strategy {
+      type = "Recreate"
+    }
+    template {
+      metadata {
+        labels = {
+          app = "redis"
+        }
+      }
+      spec {
+        security_context {
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+          run_as_non_root     = false
+          supplemental_groups = []
+        }
+        container {
+          name              = "redis"
+          image             = "docker.io/redis:7.4.0-alpine3.20"
+          image_pull_policy = "Always"
+          port {
+            name           = "redis"
+            container_port = 6379
+            protocol       = "TCP"
+          }
+          resources {
+            limits = {
+              cpu    = "200m"
+              memory = "500Mi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "256Mi"
+            }
+          }
+          security_context {
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = false
+            run_as_user                = 0
+            run_as_group               = 0
+          }
+          volume_mount {
+            name       = "redis-data"
+            mount_path = "/data"
+          }
+        }
+        volume {
+          name = "redis-data"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.paperless_redis.metadata[0].name
+          }
+        }
+      }
+    }
+  }
+}

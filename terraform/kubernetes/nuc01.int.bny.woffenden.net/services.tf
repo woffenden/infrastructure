@@ -49,3 +49,25 @@ resource "kubernetes_service" "cloudflare_teams_managed_network" {
     }
   }
 }
+
+resource "kubernetes_service" "paperless_redis" {
+  metadata {
+    name      = "redis"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+    labels = {
+      app = "redis"
+    }
+  }
+  spec {
+    type = "ClusterIP"
+    selector = {
+      app = "redis"
+    }
+    port {
+      name        = "redis"
+      port        = 6379
+      target_port = "redis"
+      protocol    = "TCP"
+    }
+  }
+}
