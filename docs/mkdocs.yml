@@ -8,11 +8,11 @@ nav:
   - Home: index.md
   - Developing: developing/index.md
   - Architecture:
-    - architecture/index.md
+      - architecture/index.md
   - Cloud Provider Bootstrap:
-    - cloud-provider-bootstrap/index.md
-    - AWS : cloud-provider-bootstrap/aws.md
-    - Google : cloud-provider-bootstrap/google.md
+      - cloud-provider-bootstrap/index.md
+      - AWS: cloud-provider-bootstrap/aws.md
+      - Google: cloud-provider-bootstrap/google.md
 theme:
   name: material
   palette:
