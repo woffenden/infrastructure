@@ -14,3 +14,15 @@ resource "kubernetes_secret" "cloudflare_teams_warp_tunnel" {
     )
   }
 }
+
+resource "kubernetes_secret" "cloudflare_teams_managed_network" {
+  metadata {
+    name      = "managed-network"
+    namespace = kubernetes_namespace.cloudflare_teams.metadata[0].name
+  }
+  type = "Opaque"
+  data = {
+    "tls.key" = tls_private_key.cloudflare_managed_network.private_key_pem
+    "tls.pem" = tls_self_signed_cert.cloudflare_managed_network.cert_pem
+  }
+}

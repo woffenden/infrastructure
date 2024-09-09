@@ -4,6 +4,6 @@ resource "cloudflare_zero_trust_device_managed_networks" "bny_woffenden_net" {
   type       = "tls"
   config {
     tls_sockaddr = "managed-network.cloudflare.bny.woffenden.net:443"
-    sha256       = "B562DBC547E7F92B681EB03DC7B67D2584AECBE9571A997128FA72C10D717671"
+    sha256       = "59860E240B1C62E87A8E27418F71E8F7445DCBCBFAA63E6F1F03E56365C5DC49"
   }
 }
