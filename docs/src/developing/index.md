@@ -27,9 +27,9 @@ The dev container aims to provide automatic linting where possible, but if you n
 
 1. `run-local` mode, which runs Super-Linter similar to how GitHub Actions does, but makes some changes to run locally as per [their guidance](https://github.com/super-linter/super-linter/blob/main/docs/run-linter-locally.md#run-super-linter-locally)
 
-    ```bash
-    bash scripts/super-linter/local.sh
-    ```
+   ```bash
+   bash scripts/super-linter/local.sh
+   ```
 
 1. `interactive` mode, which drops you into a bash shell in the Super-Linter container to run any of the binaries you require against the offending file(s)
 
