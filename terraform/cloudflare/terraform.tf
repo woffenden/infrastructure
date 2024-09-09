@@ -8,6 +8,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "4.40.0"
     }
+    google = {
+      source  = "hashicorp/google"
+      version = "6.1.0"
+    }
     random = {
       source  = "hashicorp/random"
       version = "3.6.2"
