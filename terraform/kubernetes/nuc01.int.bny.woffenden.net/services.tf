@@ -49,8 +49,3 @@ resource "kubernetes_service" "cloudflare_teams_managed_network" {
     }
   }
 }
-
-import {
-  to = kubernetes_service.cloudflare_teams_managed_network
-  id = "cloudflare-teams/managed-network"
-}

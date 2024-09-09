@@ -2,7 +2,7 @@ resource "google_secret_manager_secret" "bny_woffenden_net_tunnel_id" {
   secret_id = "cloudflare-teams-tunnel-bny-woffenden-net-id"
 
   replication {
-    automatic = true
+    auto {}
   }
 }
 
@@ -16,7 +16,7 @@ resource "google_secret_manager_secret" "bny_woffenden_net_tunnel_secret" {
   secret_id = "cloudflare-teams-tunnel-bny-woffenden-net-secret"
 
   replication {
-    automatic = true
+    auto {}
   }
 }
 
@@ -30,7 +30,7 @@ resource "google_secret_manager_secret" "paperless_woffenden_family_tunnel_id" {
   secret_id = "cloudflare-teams-tunnel-paperless-woffenden-family-id"
 
   replication {
-    automatic = true
+    auto {}
   }
 }
 
@@ -44,7 +44,7 @@ resource "google_secret_manager_secret" "paperless_woffenden_family_tunnel_secre
   secret_id = "cloudflare-teams-tunnel-paperless-woffenden-family-secret"
 
   replication {
-    automatic = true
+    auto {}
   }
 }
 
