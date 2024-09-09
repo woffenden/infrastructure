@@ -268,3 +268,90 @@ resource "kubernetes_deployment" "cloudflare_teams_managed_network" {
     }
   }
 }
+
+resource "kubernetes_deployment" "homebridge" {
+  #ts:skip=AC_K8S_0064 I cannot figure out what combination of settings will make this work
+
+  metadata {
+    name      = "homebridge"
+    namespace = kubernetes_namespace.homebridge.metadata[0].name
+    labels = {
+      app = "homebridge"
+    }
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "homebridge"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "homebridge"
+        }
+      }
+      spec {
+        security_context {
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+          run_as_non_root     = false
+          supplemental_groups = []
+        }
+        host_network = true
+        container {
+          name              = "homebridge"
+          image             = "ghcr.io/homebridge/homebridge:2024-09-03"
+          image_pull_policy = "Always"
+          env {
+            name  = "TZ"
+            value = "Europe/London"
+          }
+          env {
+            name  = "ENABLE_AVAHI"
+            value = "1"
+          }
+          port {
+            name           = "homebridge"
+            container_port = 8581
+            host_port      = 8581
+            protocol       = "TCP"
+          }
+          resources {
+            limits = {
+              cpu    = "200m"
+              memory = "4Gi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "2Gi"
+            }
+          }
+          security_context {
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = false
+            run_as_user                = 0
+            run_as_group               = 0
+          }
+          volume_mount {
+            name       = "homebridge-data"
+            mount_path = "/homebridge"
+          }
+        }
+        volume {
+          name = "homebridge-data"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.homebridge.metadata[0].name
+          }
+        }
+      }
+    }
+  }
+}
