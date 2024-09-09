@@ -22,7 +22,7 @@ run-local)
     --volume "${PWD}":/tmp/lint \
     "ghcr.io/super-linter/super-linter:slim-${superLinterVersion}"
 
-    sudo chown "$(id --user):$(id --group)" super-linter.log
+  sudo chown "$(id --user):$(id --group)" super-linter.log
   ;;
 interactive)
   echo "Running Super-Linter in interactive mode"
