@@ -29,12 +29,10 @@ jobs:
 
       - name: Load Super-Linter Variables
         id: load_super_linter_variables
-        run: cat .github/super-linter.env >>"${GITHUB_ENV}"
+        run: grep -v '^#' .github/super-linter.env >>"${GITHUB_ENV}"
 
-      - name: Super-Linter
-        id: super_linter
+      - name: Run Super-Linter
+        id: run_super_linter
         uses: super-linter/super-linter/slim@b92721f792f381cedc002ecdbb9847a15ece5bb8 # v7.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BRANCH: main
-          VALIDATE_CHECKOV: false # This will get reenabled when SCA is done

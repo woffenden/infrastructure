@@ -45,8 +45,16 @@ jobs:
           cloudProvider=$(jq -r '.cloud_provider' "${workingDirectory}"/config.json)
           export cloudProvider
 
+          tailscaleEnabled=$(jq -r '.tailscale.enabled' "${workingDirectory}"/config.json)
+          export tailscaleEnabled
+
           echo "working-directory=${workingDirectory}" >>"${GITHUB_ENV}"
           echo "cloud-provider=${cloudProvider}" >>"${GITHUB_ENV}"
+          if [[ "${tailscaleEnabled}" == "true" ]]; then
+            echo "tailscale-enabled=true" >>"${GITHUB_ENV}"
+          else
+            echo "tailscale-enabled=false" >>"${GITHUB_ENV}"
+          fi
 
           if [[ "${cloudProvider}" == "aws" ]]; then
             awsRegion=$(jq -r '.aws.region' "${workingDirectory}"/config.json)
@@ -115,6 +123,21 @@ jobs:
             echo "::add-mask::${github_robot_token}"
             echo "github_robot_token=${github_robot_token}" >>"${GITHUB_ENV}"
           fi
+
+      - name: Get Tailscale Auth Key from Google
+        if: env.tailscale-enabled == 'true'
+        id: get_tailscale_auth_key
+        uses: google-github-actions/get-secretmanager-secrets@b655b87fa10e527c5c5a3abfd795c6f46e0399b1 # v2.1.1
+        with:
+          secrets: |-
+            token:woffenden/tailscale-auth-key
+
+      - name: Configure Tailscale
+        if: inputs.component == 'kubernetes-nuc01-int-bny-woffenden-net'
+        id: configure_tailscale
+        uses: tailscale/github-action@4e4c49acaa9818630ce0bd7a564372c17e33fb4d # v2
+        with:
+          authkey: ${{ steps.get_tailscale_auth_key.outputs.token }}
 
       - name: Install Terraform
         id: install_terraform
