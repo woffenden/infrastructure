@@ -25,3 +25,15 @@ data "google_secret_manager_secret_version" "cloudflare_teams_tunnel_bny_woffend
 data "google_secret_manager_secret_version" "cloudflare_teams_tunnel_bny_woffenden_net_secret" {
   secret = "cloudflare-teams-tunnel-bny-woffenden-net-secret"
 }
+
+data "google_secret_manager_secret_version" "paperless_admin_password" {
+  secret = "paperless-admin-password"
+}
+
+data "google_secret_manager_secret_version" "paperless_db_password" {
+  secret = "paperless-db-password"
+}
+
+data "google_secret_manager_secret_version" "paperless_secret_key" {
+  secret = "paperless-secret-key"
+}

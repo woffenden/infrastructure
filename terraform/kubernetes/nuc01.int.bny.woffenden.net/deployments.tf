@@ -476,7 +476,7 @@ resource "kubernetes_deployment" "paperless_postgres" {
           }
           env {
             name  = "POSTGRES_PASSWORD"
-            value = "paperless"
+            value = data.google_secret_manager_secret_version.paperless_db_password.secret_data
           }
           env {
             name  = "POSTGRES_DB"
@@ -517,6 +517,267 @@ resource "kubernetes_deployment" "paperless_postgres" {
           name = "postgres-data"
           persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim.paperless_postgres.metadata[0].name
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_deployment" "paperless" {
+  metadata {
+    name      = "paperless"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+    labels = {
+      app = "paperless"
+    }
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "paperless"
+      }
+    }
+    strategy {
+      type = "Recreate"
+    }
+    template {
+      metadata {
+        labels = {
+          app = "paperless"
+        }
+      }
+      spec {
+        security_context {
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+        }
+        container {
+          name              = "paperless"
+          image             = "ghcr.io/paperless-ngx/paperless-ngx:2.12.0"
+          image_pull_policy = "Always"
+          env {
+            name  = "USERMAP_UID"
+            value = "1000"
+          }
+          env {
+            name  = "USERMAP_GID"
+            value = "1000"
+          }
+          env {
+            name  = "PAPERLESS_REDIS"
+            value = "redis://redis.paperless.svc.cluster.local:6379"
+          }
+          env {
+            name  = "PAPERLESS_DBHOST"
+            value = "postgres.paperless.svc.cluster.local"
+          }
+          env {
+            name  = "PAPERLESS_DBPORT"
+            value = "5432"
+          }
+          env {
+            name  = "PAPERLESS_DBUSER"
+            value = "paperless"
+          }
+          env {
+            name  = "PAPERLESS_DBPASS"
+            value = data.google_secret_manager_secret_version.paperless_db_password.secret_data
+          }
+          env {
+            name  = "PAPERLESS_DBNAME"
+            value = "paperless"
+          }
+          env {
+            name  = "PAPERLESS_PORT"
+            value = "8000"
+          }
+          env {
+            name  = "PAPERLESS_TIMEZONE"
+            value = "Europe/London"
+          }
+          env {
+            name  = "PAPERLESS_SECRET_KEY"
+            value = data.google_secret_manager_secret_version.paperless_secret_key.secret_data
+          }
+          env {
+            name  = "PAPERLESS_URL"
+            value = "https://paperless.woffenden.family"
+          }
+          env {
+            name  = "PAPERLESS_ADMIN_USER"
+            value = "jacob@woffenden.io"
+          }
+          env {
+            name  = "PAPERLESS_ADMIN_PASSWORD"
+            value = data.google_secret_manager_secret_version.paperless_admin_password.secret_data
+          }
+          env {
+            name  = "PAPERLESS_ADMIN_EMAIL"
+            value = "jacob@woffenden.io"
+          }
+          env {
+            name  = "PAPERLESS_ENABLE_HTTP_REMOTE_USER"
+            value = "true"
+          }
+          env {
+            name  = "PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME"
+            value = "HTTP_CF_ACCESS_AUTHENTICATED_USER_EMAIL"
+          }
+          env {
+            name  = "PAPERLESS_LOGOUT_REDIRECT_URL"
+            value = "https://woffenden.cloudflareaccess.com/cdn-cgi/access/logout"
+          }
+          env {
+            name  = "PAPERLESS_OCR_LANGUAGE"
+            value = "eng"
+          }
+          env {
+            name  = "PAPERLESS_TIKA_ENABLED"
+            value = "1"
+          }
+          env {
+            name  = "PAPERLESS_TIKA_GOTENBERG_ENDPOINT"
+            value = "http://gotenberg:3000"
+          }
+          env {
+            name  = "PAPERLESS_TIKA_ENDPOINT"
+            value = "http://tika:9998"
+          }
+          port {
+            name           = "paperless"
+            container_port = 8000
+            protocol       = "TCP"
+          }
+          resources {
+            limits = {
+              cpu    = "500m"
+              memory = "4Gi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "2Gi"
+            }
+          }
+          security_context {
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = false
+            run_as_user                = 0
+            run_as_group               = 0
+          }
+          volume_mount {
+            name       = "paperless-consume"
+            mount_path = "/usr/src/paperless/consume"
+          }
+          volume_mount {
+            name       = "paperless-data"
+            mount_path = "/usr/src/paperless/data"
+          }
+          volume_mount {
+            name       = "paperless-export"
+            mount_path = "/usr/src/paperless/export"
+          }
+          volume_mount {
+            name       = "paperless-media"
+            mount_path = "/usr/src/paperless/media"
+          }
+        }
+        container {
+          name              = "gotenberg"
+          image             = "docker.io/gotenberg/gotenberg:8.9.2"
+          image_pull_policy = "Always"
+          command           = ["gotenberg"]
+          args = [
+            "--chromium-disable-javascript=true",
+            "--chromium-allow-list=file:///tmp/.*"
+          ]
+          port {
+            name           = "gotenberg"
+            container_port = 3000
+            protocol       = "TCP"
+          }
+          resources {
+            limits = {
+              cpu    = "200m"
+              memory = "500Mi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "256Mi"
+            }
+          }
+          security_context {
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = true
+            run_as_user                = 1001
+            run_as_group               = 1001
+          }
+        }
+        container {
+          name              = "tika"
+          image             = "docker.io/apache/tika:2.9.2.1"
+          image_pull_policy = "Always"
+          port {
+            name           = "tika"
+            container_port = 9998
+            protocol       = "TCP"
+          }
+          resources {
+            limits = {
+              cpu    = "200m"
+              memory = "500Mi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "256Mi"
+            }
+          }
+          security_context {
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = true
+            run_as_user                = 35002
+            run_as_group               = 35002
+          }
+        }
+        volume {
+          name = "paperless-consume"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.paperless_consume.metadata[0].name
+          }
+        }
+        volume {
+          name = "paperless-data"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.paperless_data.metadata[0].name
+          }
+        }
+        volume {
+          name = "paperless-export"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.paperless_export.metadata[0].name
+          }
+        }
+        volume {
+          name = "paperless-media"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.paperless_media.metadata[0].name
           }
         }
       }
