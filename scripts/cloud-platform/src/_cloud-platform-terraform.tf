@@ -1,6 +1,6 @@
 /*
   This file is managed by @woffenden/cloud-platform
-  Any changes will be overwritten
+  Any changes will be overwritten by scripts/cloud-platform/tenant-provision.sh
 */
 
 terraform {
@@ -15,9 +15,10 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.30"
+      version = "~> 5.60"
     }
   }
+  required_version = "~> 1.5"
 }
 
 provider "aws" {
