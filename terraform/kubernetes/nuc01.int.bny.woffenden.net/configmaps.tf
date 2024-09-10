@@ -32,3 +32,13 @@ resource "kubernetes_config_map" "paperless_backup" {
     "script.sh" = file("${path.module}/src/paperless/paperless-backup/script.sh")
   }
 }
+
+resource "kubernetes_config_map" "paperless_r2_cleanup" {
+  metadata {
+    name      = "r2-cleanup"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+  }
+  data = {
+    "script.sh" = file("${path.module}/src/paperless/r2-cleanup/script.sh")
+  }
+}

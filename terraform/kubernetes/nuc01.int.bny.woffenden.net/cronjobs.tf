@@ -116,3 +116,67 @@ resource "kubernetes_cron_job_v1" "paperless_backup" {
     }
   }
 }
+
+resource "kubernetes_cron_job_v1" "paperless_r2_cleanup" {
+  metadata {
+    name      = "r2-cleanup"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+  }
+  spec {
+    schedule                      = "0 2 * * *"
+    successful_jobs_history_limit = 3
+    job_template {
+      metadata {
+        annotations = {}
+      }
+      spec {
+        completions                = "1"
+        ttl_seconds_after_finished = "86400"
+        template {
+          metadata {
+            annotations = {}
+          }
+          spec {
+            restart_policy = "Never"
+            container {
+              name    = "r2-cleanup"
+              image   = "docker.io/amazon/aws-cli:latest"
+              command = ["/bin/bash", "-c", "/config/script.sh"]
+              env {
+                name  = "AWS_ACCESS_KEY_ID"
+                value = data.google_secret_manager_secret_version.cloudflare_r2_paperless_woffenden_family_access_key_id.secret_data
+              }
+              env {
+                name  = "AWS_SECRET_ACCESS_KEY"
+                value = data.google_secret_manager_secret_version.cloudflare_r2_paperless_woffenden_family_secret_access_key.secret_data
+              }
+              env {
+                name  = "AWS_ENDPOINT_URL"
+                value = data.google_secret_manager_secret_version.cloudflare_r2_paperless_woffenden_family_endpoint.secret_data
+              }
+              env {
+                name  = "CLOUDFLARE_R2_BUCKET"
+                value = "paperless-woffenden-family"
+              }
+              volume_mount {
+                name       = "config"
+                mount_path = "/config"
+              }
+            }
+            volume {
+              name = "config"
+              config_map {
+                name = kubernetes_config_map.paperless_r2_cleanup.metadata[0].name
+                items {
+                  key  = "script.sh"
+                  path = "script.sh"
+                  mode = "0777"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
