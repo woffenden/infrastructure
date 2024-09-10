@@ -26,6 +26,14 @@ data "google_secret_manager_secret_version" "cloudflare_teams_tunnel_bny_woffend
   secret = "cloudflare-teams-tunnel-bny-woffenden-net-secret"
 }
 
+data "google_secret_manager_secret_version" "cloudflare_teams_tunnel_paperless_woffenden_family_id" {
+  secret = "cloudflare-teams-tunnel-paperless-woffenden-family-id"
+}
+
+data "google_secret_manager_secret_version" "cloudflare_teams_tunnel_paperless_woffenden_family_secret" {
+  secret = "cloudflare-teams-tunnel-paperless-woffenden-family-secret"
+}
+
 data "google_secret_manager_secret_version" "paperless_admin_password" {
   secret = "paperless-admin-password"
 }

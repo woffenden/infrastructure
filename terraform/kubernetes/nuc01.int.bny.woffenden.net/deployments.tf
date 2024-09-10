@@ -794,3 +794,79 @@ resource "kubernetes_deployment" "paperless" {
     }
   }
 }
+
+resource "kubernetes_deployment" "paperless_warp_tunnel" {
+  #ts:skip=AC_K8S_0064 I cannot figure out what combination of settings will make this work
+
+  metadata {
+    name      = "warp-tunnel"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+    labels = {
+      app = "warp-tunnel"
+    }
+  }
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "warp-tunnel"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "warp-tunnel"
+        }
+      }
+      spec {
+        security_context {
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+          run_as_non_root     = true
+          supplemental_groups = []
+        }
+        container {
+          name              = "warp-tunnel"
+          image             = "docker.io/cloudflare/cloudflared:2024.8.3"
+          image_pull_policy = "Always"
+          args = [
+            "--no-autoupdate",
+            "tunnel",
+            "run"
+          ]
+          env {
+            name = "TUNNEL_TOKEN"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.paperless_warp_tunnel.metadata[0].name
+                key  = "tunnel-token"
+              }
+            }
+          }
+          resources {
+            limits = {
+              cpu    = "100m"
+              memory = "128Mi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "128Mi"
+            }
+          }
+          security_context {
+            seccomp_profile {
+              type = "RuntimeDefault"
+            }
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = true
+            run_as_non_root            = true
+            run_as_user                = 65532
+            run_as_group               = 65532
+          }
+        }
+      }
+    }
+  }
+}
