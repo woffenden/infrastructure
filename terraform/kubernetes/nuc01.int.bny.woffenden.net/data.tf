@@ -34,6 +34,18 @@ data "google_secret_manager_secret_version" "cloudflare_teams_tunnel_paperless_w
   secret = "cloudflare-teams-tunnel-paperless-woffenden-family-secret"
 }
 
+data "google_secret_manager_secret_version" "cloudflare_r2_paperless_woffenden_family_access_key_id" {
+  secret = "cloudflare-r2-paperless-woffenden-family-access-key-id"
+}
+
+data "google_secret_manager_secret_version" "cloudflare_r2_paperless_woffenden_family_secret_access_key" {
+  secret = "cloudflare-r2-paperless-woffenden-family-secret-access-key"
+}
+
+data "google_secret_manager_secret_version" "cloudflare_r2_paperless_woffenden_family_endpoint" {
+  secret = "cloudflare-r2-paperless-woffenden-family-endpoint"
+}
+
 data "google_secret_manager_secret_version" "paperless_admin_password" {
   secret = "paperless-admin-password"
 }
