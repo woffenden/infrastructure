@@ -31,7 +31,7 @@ resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
         }
         container {
           name              = "doh-proxy"
-          image             = "docker.io/cloudflare/cloudflared:2024.8.3"
+          image             = "docker.io/cloudflare/cloudflared:2024.9.1"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
@@ -114,7 +114,7 @@ resource "kubernetes_deployment" "cloudflare_teams_warp_tunnel" {
         }
         container {
           name              = "warp-tunnel"
-          image             = "docker.io/cloudflare/cloudflared:2024.8.3"
+          image             = "docker.io/cloudflare/cloudflared:2024.9.1"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
@@ -828,7 +828,7 @@ resource "kubernetes_deployment" "paperless_warp_tunnel" {
         }
         container {
           name              = "warp-tunnel"
-          image             = "docker.io/cloudflare/cloudflared:2024.8.3"
+          image             = "docker.io/cloudflare/cloudflared:2024.9.1"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
