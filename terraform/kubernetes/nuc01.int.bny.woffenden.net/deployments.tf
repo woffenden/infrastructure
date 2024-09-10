@@ -652,6 +652,10 @@ resource "kubernetes_deployment" "paperless" {
             name  = "PAPERLESS_TIKA_ENDPOINT"
             value = "http://tika:9998"
           }
+          env {
+            name  = "PAPERLESS_APP_TITLE"
+            value = "Woffenden Paperless"
+          }
           port {
             name           = "paperless"
             container_port = 8000
