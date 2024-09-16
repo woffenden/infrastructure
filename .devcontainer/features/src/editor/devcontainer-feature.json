@@ -5,7 +5,7 @@
   "description": "Editor functionality",
   "customizations": {
     "vscode": {
-      "extensions": ["EditorConfig.EditorConfig"]
+      "extensions": ["EditorConfig.EditorConfig", "timonwong.shellcheck"]
     }
   },
   "installsAfter": ["./features/src/base"]

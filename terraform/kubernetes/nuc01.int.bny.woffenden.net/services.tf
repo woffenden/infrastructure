@@ -49,3 +49,69 @@ resource "kubernetes_service" "cloudflare_teams_managed_network" {
     }
   }
 }
+
+resource "kubernetes_service" "paperless_redis" {
+  metadata {
+    name      = "redis"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+    labels = {
+      app = "redis"
+    }
+  }
+  spec {
+    type = "ClusterIP"
+    selector = {
+      app = "redis"
+    }
+    port {
+      name        = "redis"
+      port        = 6379
+      target_port = "redis"
+      protocol    = "TCP"
+    }
+  }
+}
+
+resource "kubernetes_service" "paperless_postgres" {
+  metadata {
+    name      = "postgres"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+    labels = {
+      app = "postgres"
+    }
+  }
+  spec {
+    type = "ClusterIP"
+    selector = {
+      app = "postgres"
+    }
+    port {
+      name        = "postgres"
+      port        = 5432
+      target_port = "postgres"
+      protocol    = "TCP"
+    }
+  }
+}
+
+resource "kubernetes_service" "paperless" {
+  metadata {
+    name      = "paperless"
+    namespace = kubernetes_namespace.paperless.metadata[0].name
+    labels = {
+      app = "paperless"
+    }
+  }
+  spec {
+    type = "ClusterIP"
+    selector = {
+      app = "paperless"
+    }
+    port {
+      name        = "paperless"
+      port        = 80
+      target_port = "paperless"
+      protocol    = "TCP"
+    }
+  }
+}
