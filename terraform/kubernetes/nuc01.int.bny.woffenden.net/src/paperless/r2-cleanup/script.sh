@@ -4,9 +4,9 @@ BACKUP_RETENTION_DAYS="7"
 
 backupRetentionEpoch=$(date --date "${BACKUP_RETENTION_DAYS} days ago" +"%s")
 
-for backup in $(aws --endpoint-url ${AWS_ENDPOINT_URL} s3 ls s3://${CLOUDFLARE_R2_BUCKET}/backups/ | awk '{ print $2 }'); do
+for backup in $(aws --endpoint-url "${AWS_ENDPOINT_URL}" s3 ls "s3://${CLOUDFLARE_R2_BUCKET}/backups/" | awk '{ print $2 }'); do
 
-  backup=$(echo "${backup}" | sed 's|/||') # strip of trailing slash
+  backup=${backup//\//} # strip of trailing slash
 
   echo "Processing backup [ ${backup} ]"
 
@@ -16,7 +16,7 @@ for backup in $(aws --endpoint-url ${AWS_ENDPOINT_URL} s3 ls s3://${CLOUDFLARE_R
 
     echo "--> Backup [ ${backup} ] is older than cutoff, deleting."
 
-    aws --endpoint-url ${AWS_ENDPOINT_URL} s3 rm s3://${CLOUDFLARE_R2_BUCKET}/backups/${backup}/ --recursive
+    aws --endpoint-url "${AWS_ENDPOINT_URL}" s3 rm "s3://${CLOUDFLARE_R2_BUCKET}/backups/${backup}/" --recursive
 
   else
 

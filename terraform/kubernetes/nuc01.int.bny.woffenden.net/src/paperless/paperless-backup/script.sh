@@ -4,7 +4,8 @@
 # IT IS ESSENTIAL THAT THIS DEPLOYMENT HAS THE PVCS MAPPED TO THE SAME LOCATION
 #
 
-readonly _RUNTIME_ISO8601="$(date -I'seconds')"
+readonly _RUNTIME_ISO8601
+_RUNTIME_ISO8601="$(date -I'seconds')"
 
 ############################# Install Tools
 
@@ -22,11 +23,11 @@ for deployment in paperless postgres; do
   echo "Processing Deployment: ${deployment}"
 
   # Scale down deployment
-  kubectl --namespace ${KUBERNETES_NAMESPACE} scale deployment/${deployment} --replicas=0
+  kubectl --namespace "${KUBERNETES_NAMESPACE}" scale deployment/${deployment} --replicas=0
 
   # Wait for it to go down down down
   while true; do
-    if [[ "$(kubectl --namespace ${KUBERNETES_NAMESPACE} get deployment/${deployment} --output json | jq -r '.status.replicas')" != "1" ]]; then
+    if [ "$(kubectl --namespace "${KUBERNETES_NAMESPACE}" get deployment/${deployment} --output json | jq -r '.status.replicas')" != "1" ]; then
       echo "Deployment has 0 replicas, waiting 10 seconds just incase things need to clean up"
       sleep 10
       break
@@ -40,22 +41,23 @@ for deployment in paperless postgres; do
   for volumeMount in $(kubectl --namespace ${KUBERNETES_NAMESPACE} get deployment/${deployment} --output json | jq -r --arg CONTAINER_NAME "${deployment}" '.spec.template.spec.containers[] | select( .name==$CONTAINER_NAME ) | .volumeMounts[].mountPath'); do
     echo "  Processing volume mount: ${volumeMount}"
 
-    export volumeMountShort=$(basename ${volumeMount})
+    volumeMountShort=$(basename ${volumeMount})
+    export volumeMountShort
     export archiveName="${deployment}-${volumeMountShort}"
 
-    tar -zcvf /tmp/${archiveName}.tar.gz ${volumeMount}
+    tar -zcvf "/tmp/${archiveName}.tar.gz" "${volumeMount}"
 
-    rclone copy /tmp/${archiveName}.tar.gz ${RCLONE_FS}/backups/${_RUNTIME_ISO8601}/
+    rclone copy "/tmp/${archiveName}.tar.gz" "${RCLONE_FS}/backups/${_RUNTIME_ISO8601}/"
   done
 
 done
 
 for deployment in postgres paperless; do
   # Scale up
-  kubectl --namespace ${KUBERNETES_NAMESPACE} scale deployment/${deployment} --replicas=1
+  kubectl --namespace "${KUBERNETES_NAMESPACE}" scale deployment/${deployment} --replicas=1
 
   # Wait for it to be up
-  kubectl --namespace ${KUBERNETES_NAMESPACE} wait pods -l app=${deployment} --for condition=Ready --timeout=120s
+  kubectl --namespace "${KUBERNETES_NAMESPACE}" wait pods -l app=${deployment} --for condition=Ready --timeout=120s
 
   # Pause for a little bit
   sleep 60

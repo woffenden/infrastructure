@@ -8,16 +8,6 @@ resource "kubernetes_config_map" "cloudflare_teams_managed_network" {
   }
 }
 
-resource "kubernetes_config_map" "paperless_shared_library" {
-  metadata {
-    name      = "shared-library"
-    namespace = kubernetes_namespace.paperless.metadata[0].name
-  }
-  data = {
-    "shared-library.sh" = file("${path.module}/src/shared-library/shared-library.sh")
-  }
-}
-
 resource "kubernetes_config_map" "paperless_backup" {
   metadata {
     name      = "paperless-backup"
