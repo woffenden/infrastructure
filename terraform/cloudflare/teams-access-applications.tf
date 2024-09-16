@@ -20,3 +20,15 @@ resource "cloudflare_access_application" "unifi_woffenden_net" {
   http_only_cookie_attribute = true
   allowed_idps               = [data.cloudflare_zero_trust_access_identity_provider.google_workspace.id]
 }
+
+resource "cloudflare_access_application" "homebridge_woffenden_net" {
+  account_id                 = data.google_secret_manager_secret_version.cloudflare_account_id.secret_data
+  name                       = "Homebridge"
+  domain                     = "homebridge.woffenden.net"
+  type                       = "self_hosted"
+  session_duration           = "24h"
+  auto_redirect_to_identity  = true
+  logo_url                   = "https://cdn.woffenden.io/zero-trust-assets/homebridge.png"
+  http_only_cookie_attribute = true
+  allowed_idps               = [data.cloudflare_zero_trust_access_identity_provider.google_workspace.id]
+}

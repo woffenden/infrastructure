@@ -18,6 +18,10 @@ resource "cloudflare_tunnel_config" "bny_woffenden_net" {
       service  = "http://10.100.10.35:8123"
     }
     ingress_rule {
+      hostname = "homebridge.woffenden.net"
+      service  = "http://10.100.0.50:8581"
+    }
+    ingress_rule {
       service = "http_status:404"
     }
   }
