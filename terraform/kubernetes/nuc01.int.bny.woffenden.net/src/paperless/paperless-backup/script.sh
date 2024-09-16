@@ -26,7 +26,7 @@ for deployment in paperless postgres; do
 
   # Wait for it to go down down down
   while true; do
-    if [[ "$(kubectl --namespace ${KUBERNETES_NAMESPACE} get deployment/${deployment} --output json | jq -r '.status.replicas')"  != "1" ]]; then
+    if [[ "$(kubectl --namespace ${KUBERNETES_NAMESPACE} get deployment/${deployment} --output json | jq -r '.status.replicas')" != "1" ]]; then
       echo "Deployment has 0 replicas, waiting 10 seconds just incase things need to clean up"
       sleep 10
       break

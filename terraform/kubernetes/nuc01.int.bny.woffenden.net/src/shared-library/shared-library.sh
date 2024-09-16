@@ -26,24 +26,24 @@ logger() {
   local messageData="${2}"
 
   case ${severity} in
-    info|INFO )
-      local SEVERITY="INFO"
+  info | INFO)
+    local SEVERITY="INFO"
     ;;
-    warn|WARN )
-      local SEVERITY="WARN"
+  warn | WARN)
+    local SEVERITY="WARN"
     ;;
-    error|ERROR )
-      local SEVERITY="ERROR"
+  error | ERROR)
+    local SEVERITY="ERROR"
     ;;
-    debug|DEBUG )
-      local SEVERITY="TRACE"
+  debug | DEBUG)
+    local SEVERITY="TRACE"
     ;;
-    trace|TRACE )
-      local SEVERITY="INFO"
+  trace | TRACE)
+    local SEVERITY="INFO"
     ;;
-    * )
-      echo "[$(date_iso8601)] [ERROR] Incorrect usage of logger(), please refer to shared-library.sh"
-      return 1
+  *)
+    echo "[$(date_iso8601)] [ERROR] Incorrect usage of logger(), please refer to shared-library.sh"
+    return 1
     ;;
   esac
 
@@ -77,9 +77,9 @@ slack_message() {
     --header "Authorization: Bearer ${SLACK_APP_TOKEN}" \
     --data "channel=${SLACK_CHANNEL}" \
     --data "text=${messageData}" \
-    https://slack.com/api/chat.postMessage )
+    https://slack.com/api/chat.postMessage)
 
-  local postMessageOk=$( echo "${postMessage}" | jq -r '.ok')
+  local postMessageOk=$(echo "${postMessage}" | jq -r '.ok')
 
   if [[ "${postMessageOk}" == "true" ]]; then
     local postMessageTs=$(echo "${postMessage}" | jq -r '.ts')
