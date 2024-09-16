@@ -38,10 +38,10 @@ for deployment in paperless postgres; do
   done
 
   # Process volume mounts
-  for volumeMount in $(kubectl --namespace ${KUBERNETES_NAMESPACE} get deployment/${deployment} --output json | jq -r --arg CONTAINER_NAME "${deployment}" '.spec.template.spec.containers[] | select( .name==$CONTAINER_NAME ) | .volumeMounts[].mountPath'); do
+  for volumeMount in $(kubectl --namespace "${KUBERNETES_NAMESPACE}" get deployment/${deployment} --output json | jq -r --arg CONTAINER_NAME "${deployment}" '.spec.template.spec.containers[] | select( .name==$CONTAINER_NAME ) | .volumeMounts[].mountPath'); do
     echo "  Processing volume mount: ${volumeMount}"
 
-    volumeMountShort=$(basename ${volumeMount})
+    volumeMountShort=$(basename "${volumeMount}")
     export volumeMountShort
     export archiveName="${deployment}-${volumeMountShort}"
 
