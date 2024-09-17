@@ -18,14 +18,6 @@ data "google_secret_manager_secret_version" "cloudflare_teams_doh_bny_woffenden_
   secret = "cloudflare-teams-doh-bny-woffenden-net"
 }
 
-data "google_secret_manager_secret_version" "cloudflare_teams_tunnel_bny_woffenden_net_id" {
-  secret = "cloudflare-teams-tunnel-bny-woffenden-net-id"
-}
-
-data "google_secret_manager_secret_version" "cloudflare_teams_tunnel_bny_woffenden_net_secret" {
-  secret = "cloudflare-teams-tunnel-bny-woffenden-net-secret"
-}
-
 data "google_secret_manager_secret_version" "cloudflare_teams_tunnel_paperless_woffenden_family_id" {
   secret = "cloudflare-teams-tunnel-paperless-woffenden-family-id"
 }
