@@ -36,3 +36,16 @@ resource "cloudflare_access_policy" "homebridge_woffenden_net" {
     group = [cloudflare_access_group.google_group_ddat_sre.id]
   }
 }
+
+resource "cloudflare_access_policy" "ssh_woffenden_net" {
+  account_id       = data.google_secret_manager_secret_version.cloudflare_account_id.secret_data
+  application_id   = cloudflare_access_application.ssh_woffenden_net.id
+  name             = "allow"
+  precedence       = "1"
+  decision         = "allow"
+  session_duration = "24h"
+
+  include {
+    group = [cloudflare_access_group.google_group_ddat_sre.id]
+  }
+}

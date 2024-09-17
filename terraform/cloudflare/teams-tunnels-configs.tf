@@ -22,6 +22,10 @@ resource "cloudflare_tunnel_config" "bny_woffenden_net" {
       service  = "http://10.100.0.50:8581"
     }
     ingress_rule {
+      hostname = "ssh.woffenden.net"
+      service  = "ssh://10.100.0.50"
+    }
+    ingress_rule {
       service = "http_status:404"
     }
   }
