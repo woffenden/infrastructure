@@ -562,7 +562,7 @@ resource "kubernetes_deployment" "paperless" {
         }
         container {
           name              = "paperless"
-          image             = "ghcr.io/paperless-ngx/paperless-ngx:2.12.0"
+          image             = "ghcr.io/paperless-ngx/paperless-ngx:2.12.1"
           image_pull_policy = "Always"
           env {
             name  = "USERMAP_UID"
