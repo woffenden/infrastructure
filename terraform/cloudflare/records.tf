@@ -110,6 +110,14 @@ resource "cloudflare_record" "woffenden_net_homebridge_cname" {
   proxied = true
 }
 
+resource "cloudflare_record" "woffenden_net_ssh_cname" {
+  zone_id = module.woffenden_net_cloudflare_zone.id
+  name    = "ssh"
+  type    = "CNAME"
+  content = cloudflare_tunnel.bny_woffenden_net.cname
+  proxied = true
+}
+
 resource "cloudflare_record" "woffenden_net_bny_a" {
   zone_id = module.woffenden_net_cloudflare_zone.id
   name    = "bny"
