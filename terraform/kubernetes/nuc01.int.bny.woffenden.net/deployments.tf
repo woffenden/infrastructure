@@ -31,7 +31,7 @@ resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
         }
         container {
           name              = "doh-proxy"
-          image             = "docker.io/cloudflare/cloudflared:2024.9.1"
+          image             = "docker.io/cloudflare/cloudflared:2024.10.0"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
@@ -227,7 +227,7 @@ resource "kubernetes_deployment" "homebridge" {
         host_network = true
         container {
           name              = "homebridge"
-          image             = "ghcr.io/homebridge/homebridge:2024-09-03"
+          image             = "ghcr.io/homebridge/homebridge:2024-10-09"
           image_pull_policy = "Always"
           env {
             name  = "TZ"
@@ -316,7 +316,7 @@ resource "kubernetes_deployment" "paperless_redis" {
         }
         container {
           name              = "redis"
-          image             = "docker.io/redis:7.4.0-alpine3.20"
+          image             = "docker.io/redis:7.4.1-alpine3.20"
           image_pull_policy = "Always"
           port {
             name           = "redis"
@@ -625,7 +625,7 @@ resource "kubernetes_deployment" "paperless" {
         }
         container {
           name              = "gotenberg"
-          image             = "docker.io/gotenberg/gotenberg:8.9.2"
+          image             = "docker.io/gotenberg/gotenberg:8.12.0"
           image_pull_policy = "Always"
           command           = ["gotenberg"]
           args = [
@@ -752,7 +752,7 @@ resource "kubernetes_deployment" "paperless_warp_tunnel" {
         }
         container {
           name              = "warp-tunnel"
-          image             = "docker.io/cloudflare/cloudflared:2024.9.1"
+          image             = "docker.io/cloudflare/cloudflared:2024.10.0"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
