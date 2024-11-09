@@ -20,19 +20,19 @@ resource "aws_ssoadmin_account_assignment" "cloud_platform_cloud_platform_admini
   target_id   = data.aws_organizations_organization.main.master_account_id
 }
 
-resource "aws_ssoadmin_account_assignment" "cloud_platform_cloud_platform_administrator_organisation" {
-  for_each = {
-    for account in data.aws_organizations_organization.main.non_master_accounts :
-    account.id => account
-    if account.status == "ACTIVE"
-  }
+# resource "aws_ssoadmin_account_assignment" "cloud_platform_cloud_platform_administrator_organisation" {
+#   for_each = {
+#     for account in data.aws_organizations_organization.main.non_master_accounts :
+#     account.id => account
+#     if account.status == "ACTIVE"
+#   }
 
-  instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
-  permission_set_arn = aws_ssoadmin_permission_set.cloud_platform_administrator.arn
+#   instance_arn       = tolist(data.aws_ssoadmin_instances.main.arns)[0]
+#   permission_set_arn = aws_ssoadmin_permission_set.cloud_platform_administrator.arn
 
-  principal_type = "GROUP"
-  principal_id   = data.aws_identitystore_group.cloud_platform.group_id
+#   principal_type = "GROUP"
+#   principal_id   = data.aws_identitystore_group.cloud_platform.group_id
 
-  target_type = "AWS_ACCOUNT"
-  target_id   = each.value.id
-}
+#   target_type = "AWS_ACCOUNT"
+#   target_id   = each.value.id
+# }

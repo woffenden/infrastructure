@@ -1,3 +1,3 @@
-module "organisation_config" {
-  source = "../../../modules/aws/organisation/modules/config"
-}
+# module "organisation_config" {
+#   source = "../../../modules/aws/organisation/modules/config"
+# }
