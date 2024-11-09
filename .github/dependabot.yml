@@ -39,28 +39,6 @@ updates:
     reviewers:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
-    directory: "terraform/aws/cloud-platform-idam/team-idc-app"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: ":dependabot: terraform"
-      include: "scope"
-    reviewers:
-      - "jacobwoffenden"
-  - package-ecosystem: "terraform"
-    directory: "terraform/aws/cloud-platform-shared-services/ecr"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-      timezone: "Europe/London"
-    commit-message:
-      prefix: ":dependabot: terraform"
-      include: "scope"
-    reviewers:
-      - "jacobwoffenden"
-  - package-ecosystem: "terraform"
     directory: "terraform/aws/root/iam"
     schedule:
       interval: "daily"
@@ -117,6 +95,17 @@ updates:
       - "jacobwoffenden"
   - package-ecosystem: "terraform"
     directory: "terraform/google/woffenden/mta-sts"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/London"
+    commit-message:
+      prefix: ":dependabot: terraform"
+      include: "scope"
+    reviewers:
+      - "jacobwoffenden"
+  - package-ecosystem: "terraform"
+    directory: "terraform/kubernetes/nuc01.int.bny.woffenden.net"
     schedule:
       interval: "daily"
       time: "09:00"

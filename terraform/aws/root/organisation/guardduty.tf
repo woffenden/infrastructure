@@ -1,5 +1,5 @@
-module "organisation_guardduty" {
-  source = "../../../modules/aws/organisation/modules/guardduty"
+# module "organisation_guardduty" {
+#   source = "../../../modules/aws/organisation/modules/guardduty"
 
-  depends_on = [module.organisation]
-}
+#   depends_on = [module.organisation]
+# }
