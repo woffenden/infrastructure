@@ -625,7 +625,7 @@ resource "kubernetes_deployment" "paperless" {
         }
         container {
           name              = "gotenberg"
-          image             = "docker.io/gotenberg/gotenberg:8.12.0"
+          image             = "docker.io/gotenberg/gotenberg:8.13.0"
           image_pull_policy = "Always"
           command           = ["gotenberg"]
           args = [
@@ -661,7 +661,7 @@ resource "kubernetes_deployment" "paperless" {
         }
         container {
           name              = "tika"
-          image             = "docker.io/apache/tika:2.9.2.1"
+          image             = "docker.io/apache/tika:3.0.0.0"
           image_pull_policy = "Always"
           port {
             name           = "tika"
