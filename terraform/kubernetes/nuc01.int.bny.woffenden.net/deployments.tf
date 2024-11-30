@@ -31,7 +31,7 @@ resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
         }
         container {
           name              = "doh-proxy"
-          image             = "docker.io/cloudflare/cloudflared:2024.11.0"
+          image             = "docker.io/cloudflare/cloudflared:2024.11.1"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
@@ -227,7 +227,7 @@ resource "kubernetes_deployment" "homebridge" {
         host_network = true
         container {
           name              = "homebridge"
-          image             = "ghcr.io/homebridge/homebridge:2024-10-25"
+          image             = "ghcr.io/homebridge/homebridge:2024-11-29"
           image_pull_policy = "Always"
           env {
             name  = "TZ"
@@ -486,7 +486,7 @@ resource "kubernetes_deployment" "paperless" {
         }
         container {
           name              = "paperless"
-          image             = "ghcr.io/paperless-ngx/paperless-ngx:2.13.4"
+          image             = "ghcr.io/paperless-ngx/paperless-ngx:2.13.5"
           image_pull_policy = "Always"
           env {
             name  = "USERMAP_UID"
@@ -625,7 +625,7 @@ resource "kubernetes_deployment" "paperless" {
         }
         container {
           name              = "gotenberg"
-          image             = "docker.io/gotenberg/gotenberg:8.13.0"
+          image             = "docker.io/gotenberg/gotenberg:8.14.1"
           image_pull_policy = "Always"
           command           = ["gotenberg"]
           args = [
@@ -752,7 +752,7 @@ resource "kubernetes_deployment" "paperless_warp_tunnel" {
         }
         container {
           name              = "warp-tunnel"
-          image             = "docker.io/cloudflare/cloudflared:2024.11.0"
+          image             = "docker.io/cloudflare/cloudflared:2024.11.1"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
