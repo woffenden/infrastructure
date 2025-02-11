@@ -18,14 +18,14 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::749019155605:role/github-actions
 
       - name: Assume Cloud Platform Shared Services Organisation Administrator Role
         id: assume_platform_services_organisation_administrator_role
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::126246520815:role/organisation-administrator-role
@@ -145,14 +145,14 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::749019155605:role/github-actions
 
       - name: Assume Cloud Platform Shared Services Organisation Administrator Role
         id: assume_platform_services_organisation_administrator_role
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::126246520815:role/organisation-administrator-role
