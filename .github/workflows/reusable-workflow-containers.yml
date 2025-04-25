@@ -18,14 +18,14 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::749019155605:role/github-actions
 
       - name: Assume Cloud Platform Shared Services Organisation Administrator Role
         id: assume_platform_services_organisation_administrator_role
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::126246520815:role/organisation-administrator-role
@@ -117,7 +117,7 @@ jobs:
 
       - name: Build
         id: build
-        uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6.13.0
+        uses: docker/build-push-action@14487ce63c7a62a4a324b0bfb37086795e31c6c1 # v6.16.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Containerfile
@@ -127,7 +127,7 @@ jobs:
 
       - name: Scan
         id: scan
-        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
+        uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # v0.30.0
         with:
           image-ref: ${{ env.name }}:${{ env.version }}
           severity: CRITICAL
@@ -145,14 +145,14 @@ jobs:
 
       - name: Configure AWS Credentials
         id: configure_aws_credentials
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::749019155605:role/github-actions
 
       - name: Assume Cloud Platform Shared Services Organisation Administrator Role
         id: assume_platform_services_organisation_administrator_role
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           aws-region: eu-west-2
           role-to-assume: arn:aws:iam::126246520815:role/organisation-administrator-role
@@ -175,7 +175,7 @@ jobs:
 
       - name: Build
         id: build
-        uses: docker/build-push-action@ca877d9245402d1537745e0e356eab47c3520991 # v6.13.0
+        uses: docker/build-push-action@14487ce63c7a62a4a324b0bfb37086795e31c6c1 # v6.16.0
         with:
           context: containers/${{ inputs.image }}
           file: containers/${{ inputs.image }}/Containerfile
