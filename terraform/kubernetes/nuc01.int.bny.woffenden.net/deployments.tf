@@ -114,7 +114,7 @@ resource "kubernetes_deployment" "cloudflare_teams_managed_network" {
         }
         container {
           name              = "nginx"
-          image             = "docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine3.21"
+          image             = "docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine3.21-slim"
           image_pull_policy = "Always"
           port {
             name           = "https"
