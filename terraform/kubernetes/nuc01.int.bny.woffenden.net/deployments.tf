@@ -31,7 +31,7 @@ resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
         }
         container {
           name              = "doh-proxy"
-          image             = "docker.io/cloudflare/cloudflared:2024.11.1"
+          image             = "docker.io/cloudflare/cloudflared:2025.4.0"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
@@ -114,7 +114,7 @@ resource "kubernetes_deployment" "cloudflare_teams_managed_network" {
         }
         container {
           name              = "nginx"
-          image             = "docker.io/nginxinc/nginx-unprivileged:1.26.2-alpine3.20"
+          image             = "docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine3.21"
           image_pull_policy = "Always"
           port {
             name           = "https"
@@ -227,7 +227,7 @@ resource "kubernetes_deployment" "homebridge" {
         host_network = true
         container {
           name              = "homebridge"
-          image             = "ghcr.io/homebridge/homebridge:2024-11-29"
+          image             = "ghcr.io/homebridge/homebridge:2025-02-26"
           image_pull_policy = "Always"
           env {
             name  = "TZ"
@@ -752,7 +752,7 @@ resource "kubernetes_deployment" "paperless_warp_tunnel" {
         }
         container {
           name              = "warp-tunnel"
-          image             = "docker.io/cloudflare/cloudflared:2024.11.1"
+          image             = "docker.io/cloudflare/cloudflared:2025.4.0"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
