@@ -21,5 +21,6 @@
     "./features/src/base"
   ],
   "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "runArgs": ["--device=/dev/net/tun"]
+  "runArgs": ["--device=/dev/net/tun"],
+  "privileged": true
 }

@@ -6,19 +6,19 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "6.14.1"
+      version = "6.32.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.35.1"
+      version = "2.36.0"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.16.1"
+      version = "2.17.0"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "4.0.6"
+      version = "4.1.0"
     }
   }
   required_version = "~> 1.5"
@@ -30,7 +30,7 @@ provider "google" {
 }
 
 provider "kubernetes" {
-  host                   = "https://nuc01.tailnet-9b65.ts.net:6443"
+  host                   = "https://100.76.160.122:6443"
   tls_server_name        = "nuc01.int.bny.woffenden.net"
   client_certificate     = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_client_certificate_data.secret_data)
   client_key             = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_client_key_data.secret_data)
@@ -39,7 +39,7 @@ provider "kubernetes" {
 
 provider "helm" {
   kubernetes {
-    host                   = "https://nuc01.tailnet-9b65.ts.net:6443"
+    host                   = "https://100.76.160.122:6443"
     tls_server_name        = "nuc01.int.bny.woffenden.net"
     client_certificate     = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_client_certificate_data.secret_data)
     client_key             = base64decode(data.google_secret_manager_secret_version.k8s_nuc01_client_key_data.secret_data)
