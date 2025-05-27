@@ -58,3 +58,76 @@ resource "github_repository" "good_repo" {
     ]
   }
 }
+
+
+resource "github_repository_dependabot_security_updates" "good_repo" {
+  repository = github_repository.good_repo.name
+  enabled    = true
+}
+
+resource "github_repository_ruleset" "good_repo" {
+  name        = "main"
+  repository  = github_repository.good_repo.name
+  target      = "branch"
+  enforcement = "active"
+
+  conditions {
+    ref_name {
+      exclude = []
+      include = ["~DEFAULT_BRANCH"]
+    }
+  }
+
+  rules {
+    creation                      = false # Required
+    deletion                      = false # Required
+    non_fast_forward              = false # Required
+    required_linear_history       = true  # Required
+    required_signatures           = true  # Required
+    update                        = false # Required
+    update_allows_fetch_and_merge = false # Required
+
+    pull_request {
+      dismiss_stale_reviews_on_push     = true # Required
+      require_code_owner_review         = true # Required
+      require_last_push_approval        = true # Required
+      required_approving_review_count   = 1    # Required
+      required_review_thread_resolution = true # Required
+    }
+
+    # required_deployments {}
+
+    required_status_checks {
+      do_not_enforce_on_create = true # Required
+      # These checks are come from the GitHub Actions workflows
+      required_check {
+        context        = "CodeQL"
+        integration_id = "57789" # CodeQL Analysis
+      }
+      required_check {
+        context        = "Dependency Review"
+        integration_id = "15368" # GitHub Actions
+      }
+      required_check {
+        context        = "Super Linter"
+        integration_id = "15368" # GitHub Actions
+      }
+    }
+
+    /*
+    # This does not work properly, it continously tries to create the rule.
+    required_code_scanning {
+      required_code_scanning_tool {
+        tool                      = "CodeQL"         # Required
+        alerts_threshold          = "errors"         # Required
+        security_alerts_threshold = "high_or_higher" # Required
+      }
+    }
+    */
+  }
+}
+
+import {
+  to = github_repository_ruleset.good_repo
+  id = "good-repo:5666891"
+}

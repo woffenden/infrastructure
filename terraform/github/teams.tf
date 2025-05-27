@@ -3,5 +3,6 @@ module "cloud_platform_team" {
 
   name        = "cloud-platform"
   description = "Cloud Platform Team"
-  members     = ["jacobwoffenden"]
+  maintainers = ["jacobwoffenden"]
+  members     = []
 }
