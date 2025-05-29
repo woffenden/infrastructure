@@ -95,8 +95,6 @@ resource "github_repository_ruleset" "good_repo" {
       required_review_thread_resolution = true # Required
     }
 
-    # required_deployments {}
-
     required_status_checks {
       do_not_enforce_on_create = true # Required
       # These checks are come from the GitHub Actions workflows
@@ -114,8 +112,6 @@ resource "github_repository_ruleset" "good_repo" {
       }
     }
 
-    /*
-    # This does not work properly, it continously tries to create the rule.
     required_code_scanning {
       required_code_scanning_tool {
         tool                      = "CodeQL"         # Required
@@ -123,11 +119,9 @@ resource "github_repository_ruleset" "good_repo" {
         security_alerts_threshold = "high_or_higher" # Required
       }
     }
-    */
   }
-}
 
-import {
-  to = github_repository_ruleset.good_repo
-  id = "good-repo:5666891"
+  lifecycle {
+    ignore_changes = [rules[0].required_code_scanning] # required_code_scanning tries to continously update
+  }
 }
