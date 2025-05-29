@@ -1,4 +1,6 @@
 resource "github_repository" "good_repo" {
+  #ts:skip=accurics.github.IAM.1
+
   name            = "good-repo"
   description     = "Proof of Concept of a good repository"  # Optional (but recommended)
   homepage_url    = "https://github.com/woffenden/good-repo" # Optional (but recommended)
