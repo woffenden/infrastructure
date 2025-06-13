@@ -16,6 +16,12 @@ variable "parent_team_id" {
   default = null
 }
 
+variable "maintainers" {
+  type    = list(string)
+  default = []
+}
+
+
 variable "members" {
   type    = list(string)
   default = []
