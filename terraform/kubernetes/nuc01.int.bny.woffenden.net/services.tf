@@ -3,7 +3,7 @@ resource "kubernetes_service" "cloudflare_teams_doh_proxy" {
     name      = "doh-proxy"
     namespace = kubernetes_namespace.cloudflare_teams.metadata[0].name
     annotations = {
-      "metallb.universe.tf/ip-allocated-from-pool" = "bny-woffenden-net"
+      "metallb.io/ip-allocated-from-pool" = "bny-woffenden-net"
     }
     labels = {
       app = "doh-proxy"
@@ -29,7 +29,7 @@ resource "kubernetes_service" "cloudflare_teams_managed_network" {
     name      = "managed-network"
     namespace = kubernetes_namespace.cloudflare_teams.metadata[0].name
     annotations = {
-      "metallb.universe.tf/ip-allocated-from-pool" = "bny-woffenden-net"
+      "metallb.io/ip-allocated-from-pool" = "bny-woffenden-net"
     }
     labels = {
       app = "managed-network"
