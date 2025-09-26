@@ -136,7 +136,7 @@ jobs:
       - name: Configure Tailscale
         if: inputs.component == 'kubernetes-nuc01-int-bny-woffenden-net'
         id: configure_tailscale
-        uses: tailscale/github-action@5d536117a7378beffcd6d8523ce73c50fa98684d # v3.2.1
+        uses: tailscale/github-action@6cae46e2d796f265265cfcf628b72a32b4d7cade # v3.3.0
         with:
           oauth-client-id: ${{ steps.get_tailscale_auth_key.outputs.oauth-client-id }}
           oauth-secret: ${{ steps.get_tailscale_auth_key.outputs.oauth-secret }}
