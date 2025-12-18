@@ -31,7 +31,7 @@ resource "kubernetes_deployment" "cloudflare_teams_doh_proxy" {
         }
         container {
           name              = "doh-proxy"
-          image             = "docker.io/cloudflare/cloudflared:2025.4.0"
+          image             = "docker.io/cloudflare/cloudflared:2025.5.0"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
@@ -114,7 +114,7 @@ resource "kubernetes_deployment" "cloudflare_teams_managed_network" {
         }
         container {
           name              = "nginx"
-          image             = "docker.io/nginxinc/nginx-unprivileged:1.26.2-alpine3.20"
+          image             = "docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine3.21"
           image_pull_policy = "Always"
           port {
             name           = "https"
@@ -227,7 +227,7 @@ resource "kubernetes_deployment" "homebridge" {
         host_network = true
         container {
           name              = "homebridge"
-          image             = "ghcr.io/homebridge/homebridge:2025-02-26"
+          image             = "ghcr.io/homebridge/homebridge:2025-05-16"
           image_pull_policy = "Always"
           env {
             name  = "TZ"
@@ -316,7 +316,7 @@ resource "kubernetes_deployment" "paperless_redis" {
         }
         container {
           name              = "redis"
-          image             = "docker.io/redis:7.4.1-alpine3.20"
+          image             = "docker.io/redis:7.4.3-alpine3.21"
           image_pull_policy = "Always"
           port {
             name           = "redis"
@@ -396,7 +396,7 @@ resource "kubernetes_deployment" "paperless_postgres" {
         }
         container {
           name              = "postgres"
-          image             = "docker.io/postgres:15.8-alpine3.20"
+          image             = "docker.io/postgres:15.13-alpine3.21"
           image_pull_policy = "Always"
           env {
             name  = "POSTGRES_USER"
@@ -486,7 +486,7 @@ resource "kubernetes_deployment" "paperless" {
         }
         container {
           name              = "paperless"
-          image             = "ghcr.io/paperless-ngx/paperless-ngx:2.13.5"
+          image             = "ghcr.io/paperless-ngx/paperless-ngx:2.16.2"
           image_pull_policy = "Always"
           env {
             name  = "USERMAP_UID"
@@ -625,7 +625,7 @@ resource "kubernetes_deployment" "paperless" {
         }
         container {
           name              = "gotenberg"
-          image             = "docker.io/gotenberg/gotenberg:8.14.1"
+          image             = "docker.io/gotenberg/gotenberg:8.21.0"
           image_pull_policy = "Always"
           command           = ["gotenberg"]
           args = [
@@ -661,7 +661,7 @@ resource "kubernetes_deployment" "paperless" {
         }
         container {
           name              = "tika"
-          image             = "docker.io/apache/tika:3.0.0.0"
+          image             = "docker.io/apache/tika:3.1.0.0"
           image_pull_policy = "Always"
           port {
             name           = "tika"
@@ -752,7 +752,7 @@ resource "kubernetes_deployment" "paperless_warp_tunnel" {
         }
         container {
           name              = "warp-tunnel"
-          image             = "docker.io/cloudflare/cloudflared:2025.4.0"
+          image             = "docker.io/cloudflare/cloudflared:2025.5.0"
           image_pull_policy = "Always"
           args = [
             "--no-autoupdate",
